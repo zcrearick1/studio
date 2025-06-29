@@ -73,10 +73,10 @@ Carefully place each part back in its designated spot in the case.`
     setupGuide: [
       {
         title: "Assembly",
-        content: `1. **Reed Prep:** Moisten the reed in your mouth for a minute.
-2. **Grease:** If joints are tight, apply a small amount of cork grease to the tenon corks.
-3. **Assemble:** Assemble from the bell up to the barrel (Bell -> Lower Joint -> Upper Joint -> Barrel -> Mouthpiece).
-4. **Ligature and Reed:** Place the reed on the mouthpiece so you can just see a tiny sliver of the mouthpiece tip over the reed. Slide the ligature on and tighten the screws just enough to hold the reed firmly.
+        content: `1. Reed Prep: Moisten the reed in your mouth for a minute.
+2. Grease: If joints are tight, apply a small amount of cork grease to the tenon corks.
+3. Assemble: Assemble from the bell up to the barrel (Bell -> Lower Joint -> Upper Joint -> Barrel -> Mouthpiece).
+4. Ligature and Reed: Place the reed on the mouthpiece so you can just see a tiny sliver of the mouthpiece tip over the reed. Slide the ligature on and tighten the screws just enough to hold the reed firmly.
 
 *Warning: Reeds are fragile. Handle them by the thicker end to avoid chipping the tip.*`
       },
@@ -114,10 +114,10 @@ Disassemble the pieces and place them in the case.`
     setupGuide: [
       {
         title: "Assembly",
-        content: `1. **Neck Strap:** Put the neck strap on first.
-2. **Body and Neck:** Carefully insert the neck into the body of the saxophone and tighten the neck screw just enough to hold it.
-3. **Mouthpiece:** Prepare the reed and mouthpiece just like a clarinet. Push the mouthpiece onto the cork on the neck. It should go on about halfway.
-4. **Strap Up:** Attach the neck strap to the ring on the back of the saxophone.
+        content: `1. Neck Strap: Put the neck strap on first.
+2. Body and Neck: Carefully insert the neck into the body of the saxophone and tighten the neck screw just enough to hold it.
+3. Mouthpiece: Prepare the reed and mouthpiece just like a clarinet. Push the mouthpiece onto the cork on the neck. It should go on about halfway.
+4. Strap Up: Attach the neck strap to the ring on the back of the saxophone.
 
 *Warning: The octave key mechanism on the neck is delicate. Be very careful not to bend it.*`
       },
@@ -239,8 +239,8 @@ Engage the slide lock before putting it in the case to prevent the outer slide f
     setupGuide: [
       {
         title: "Setup",
-        content: `1. **Shoulder Rest:** Attach the shoulder rest to the back of the violin. Adjust its position and height for comfort.
-2. **Rosin the Bow:** Tighten the bow hair (just enough so a pencil can fit between the hair and the stick). Rub the block of rosin up and down the length of the hair 10-15 times. You'll need to do this more for a new bow.
+        content: `1. Shoulder Rest: Attach the shoulder rest to the back of the violin. Adjust its position and height for comfort.
+2. Rosin the Bow: Tighten the bow hair (just enough so a pencil can fit between the hair and the stick). Rub the block of rosin up and down the length of the hair 10-15 times. You'll need to do this more for a new bow.
 
 *Warning: Over-tightening the bow can warp the stick. Always loosen the hair after playing.*`
       },
@@ -277,9 +277,9 @@ Place the violin and bow securely in their case.`
     setupGuide: [
       {
         title: "Setup",
-        content: `1. **Endpin:** While seated, adjust the endpin so the cello rests at a comfortable height. The top of the cello body should be near your sternum, and the C-peg (lowest peg) should be near your left ear.
-2. **Rosin the Bow:** Rosin the bow just as you would a violin bow.
-3. **Rock Stop:** Place a rock stop or rubber endpin stopper on the floor to prevent the endpin from slipping.
+        content: `1. Endpin: While seated, adjust the endpin so the cello rests at a comfortable height. The top of the cello body should be near your sternum, and the C-peg (lowest peg) should be near your left ear.
+2. Rosin the Bow: Rosin the bow just as you would a violin bow.
+3. Rock Stop: Place a rock stop or rubber endpin stopper on the floor to prevent the endpin from slipping.
 
 *Warning: Ensure the endpin is securely tightened to prevent it from collapsing while playing.*`
       },
@@ -309,9 +309,9 @@ Secure the cello and bow in their case. If it's a soft case, be extra careful no
     setupGuide: [
       {
         title: "Assembly",
-        content: `1. **Stand:** Open the tripod base of the snare stand. Adjust the height so the top of the drum will be around your waist level when standing or seated.
-2. **Drum Placement:** Open the basket of the stand and place the snare drum inside it. Gently tighten the basket's clutch to hold the drum securely, but don't overtighten, as this can choke the sound.
-3. **Engage Snares:** Find the throw-off lever on the side of the drum. Flip it to the "on" position to engage the snare wires against the bottom head for that classic "snap" sound.`
+        content: `1. Stand: Open the tripod base of the snare stand. Adjust the height so the top of the drum will be around your waist level when standing or seated.
+2. Drum Placement: Open the basket of the stand and place the snare drum inside it. Gently tighten the basket's clutch to hold the drum securely, but don't overtighten, as this can choke the sound.
+3. Engage Snares: Find the throw-off lever on the side of the drum. Flip it to the "on" position to engage the snare wires against the bottom head for that classic "snap" sound.`
       },
       {
         title: "Basic Grip & Stroke",
@@ -342,9 +342,9 @@ If transporting, it's best to use a case or bag to protect the drum from dents a
     setupGuide: [
       {
         title: "Assembly",
-        content: `1. **Frame:** Assemble the frame according to the manufacturer's instructions. On many portable models, the frame simply unfolds. Ensure all legs are locked and stable.
-2. **Bars:** Carefully place the two sets of bars (naturals and accidentals) onto the frame. They rest on support posts, which have small pegs that fit into holes on the underside of each bar.
-3. **Resonators:** Attach the resonator tubes underneath the bars. They are usually grouped by register and simply hook onto the frame.
+        content: `1. Frame: Assemble the frame according to the manufacturer's instructions. On many portable models, the frame simply unfolds. Ensure all legs are locked and stable.
+2. Bars: Carefully place the two sets of bars (naturals and accidentals) onto the frame. They rest on support posts, which have small pegs that fit into holes on the underside of each bar.
+3. Resonators: Attach the resonator tubes underneath the bars. They are usually grouped by register and simply hook onto the frame.
 
 *Warning: The wooden bars of a marimba or xylophone can be cracked if dropped or mishandled. Always lift and carry them with care.*`
       },
