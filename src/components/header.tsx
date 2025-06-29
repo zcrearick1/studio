@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { href: "/", label: "Home" },
+  { href: "/ai-setup-guide", label: "Instrument Guides" },
   {
     label: "Fingering Charts",
     hrefPrefix: "/fingering-charts",
@@ -34,7 +35,6 @@ const navLinks = [
       { href: "/fingering-charts/study", label: "Study" },
     ],
   },
-  { href: "/ai-setup-guide", label: "Instrument Guides" },
 ];
 
 export function Header() {
