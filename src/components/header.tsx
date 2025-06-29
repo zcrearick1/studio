@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Menu, ChevronDown, Settings } from "lucide-react";
+import { Menu, ChevronDown, Settings, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import {
   Accordion,
@@ -47,6 +48,7 @@ export function Header() {
   const [isMounted, setIsMounted] = useState(false);
   const [selectedInstrument, setSelectedInstrument] = useState<Instrument | null>(null);
   const [isInstrumentDialogOpen, setIsInstrumentDialogOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -153,7 +155,7 @@ export function Header() {
                   <ChevronDown className="h-4 w-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem asChild>
+                   <DropdownMenuItem asChild>
                     <Link href="/fingering-charts">Fingering Chart</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
@@ -172,6 +174,32 @@ export function Header() {
             </nav>
           </div>
 
+          <div className="ml-auto hidden items-center gap-2 md:flex">
+            {isMounted && isLoggedIn ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="secondary" size="icon" className="rounded-full">
+                    <User className="h-5 w-5" />
+                    <span className="sr-only">Toggle user menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild><Link href="/profile">Profile</Link></DropdownMenuItem>
+                  <DropdownMenuItem asChild><Link href="/settings">Settings</Link></DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => setIsLoggedIn(false)}>Log out</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Button asChild variant="ghost"><Link href="/login">Log In</Link></Button>
+                <Button asChild><Link href="/signup">Sign Up</Link></Button>
+              </>
+            )}
+          </div>
+
           <div className="flex flex-1 items-center justify-between space-x-2 md:hidden">
               <Link href="/" className="flex items-center space-x-2">
                   <Logo />
@@ -183,19 +211,38 @@ export function Header() {
                         <span className="sr-only">Toggle Menu</span>
                     </Button>
                   </SheetTrigger>
-                  <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                  <div className="flex flex-col h-full">
-                      <div className="flex items-center justify-between p-4 border-b">
-                          <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
-                              <Logo />
-                          </Link>
-                      </div>
-                      <nav className="flex flex-col gap-4 p-4">
-                        <NavLink href="/">Home</NavLink>
-                        <NavLink href="/ai-setup-guide">Instrument Guides</NavLink>
-                        <MyInstrumentMobileMenu />
-                      </nav>
-                  </div>
+                  <SheetContent side="right" className="w-[300px] sm:w-[400px] flex flex-col p-0">
+                    <div className="flex items-center justify-between p-4 border-b">
+                        <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
+                            <Logo />
+                        </Link>
+                    </div>
+                    <nav className="flex flex-col gap-4 p-4 flex-1">
+                      <NavLink href="/">Home</NavLink>
+                      <NavLink href="/ai-setup-guide">Instrument Guides</NavLink>
+                      <MyInstrumentMobileMenu />
+                    </nav>
+                     <div className="p-4 border-t">
+                      {isMounted && isLoggedIn ? (
+                        <div className="flex flex-col gap-4">
+                            <Link href="/profile" className="flex items-center gap-2 font-medium" onClick={() => setIsMobileMenuOpen(false)}>
+                              <User className="h-5 w-5" />
+                              <span>Profile</span>
+                            </Link>
+                            <Link href="/settings" className="flex items-center gap-2 font-medium text-muted-foreground hover:text-primary" onClick={() => setIsMobileMenuOpen(false)}>
+                              <Settings className="h-5 w-5" />
+                              <span>Settings</span>
+                            </Link>
+                            <DropdownMenuSeparator />
+                            <Button variant="ghost" className="justify-start -ml-2 text-muted-foreground" onClick={() => { setIsLoggedIn(false); setIsMobileMenuOpen(false); }}>Log Out</Button>
+                        </div>
+                      ) : (
+                          <div className="flex flex-col gap-2">
+                            <Button asChild className="w-full" onClick={() => setIsMobileMenuOpen(false)}><Link href="/login">Log In</Link></Button>
+                            <Button asChild variant="outline" className="w-full" onClick={() => setIsMobileMenuOpen(false)}><Link href="/signup">Sign Up</Link></Button>
+                          </div>
+                      )}
+                    </div>
                   </SheetContent>
               </Sheet>
           </div>
