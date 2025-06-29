@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, ChevronDown, Settings, User } from "lucide-react";
+import { signOut } from "firebase/auth";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -48,14 +49,18 @@ import {
 import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 import { instruments, type Instrument } from "@/lib/instrument-data";
+import { useAuth } from "@/contexts/auth-context";
+import { auth } from "@/lib/firebase";
 
 export function Header() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user } = useAuth();
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [selectedInstrument, setSelectedInstrument] = useState<Instrument | null>(null);
   const [isInstrumentDialogOpen, setIsInstrumentDialogOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -65,6 +70,11 @@ export function Header() {
       setSelectedInstrument(found || null);
     }
   }, []);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    router.push('/');
+  };
 
   const handleInstrumentSelect = (slug: string) => {
     const instrument = instruments.find((i) => i.slug === slug);
@@ -182,7 +192,7 @@ export function Header() {
           </div>
 
           <div className="ml-auto hidden items-center gap-2 md:flex">
-            {isMounted && isLoggedIn ? (
+            {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="secondary" size="icon" className="rounded-full">
@@ -196,7 +206,7 @@ export function Header() {
                   <DropdownMenuItem asChild><Link href="/profile">Profile</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link href="/settings">Settings</Link></DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => setIsLoggedIn(false)}>Log out</DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
@@ -219,22 +229,20 @@ export function Header() {
                     </Button>
                   </SheetTrigger>
                   <SheetContent side="right" className="w-[300px] sm:w-[400px] flex flex-col p-0">
-                    <SheetHeader className="sr-only">
-                      <SheetTitle>Mobile Menu</SheetTitle>
-                      <SheetDescription>A list of navigation links for the MusicMate app.</SheetDescription>
-                    </SheetHeader>
-                    <div className="flex items-center justify-between p-4 border-b">
-                        <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
+                    <SheetHeader className="p-4 border-b">
+                      <SheetTitle className="sr-only">Mobile Menu</SheetTitle>
+                      <SheetDescription className="sr-only">A list of navigation links for the MusicMate app.</SheetDescription>
+                       <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
                             <Logo />
                         </Link>
-                    </div>
+                    </SheetHeader>
                     <nav className="flex flex-col gap-4 p-4 flex-1">
                       <NavLink href="/">Home</NavLink>
                       <NavLink href="/ai-setup-guide">Instrument Guides</NavLink>
                       <MyInstrumentMobileMenu />
                     </nav>
                      <div className="p-4 border-t">
-                      {isMounted && isLoggedIn ? (
+                      {user ? (
                         <div className="flex flex-col gap-4">
                             <Link href="/profile" className="flex items-center gap-2 font-medium" onClick={() => setIsMobileMenuOpen(false)}>
                               <User className="h-5 w-5" />
@@ -245,7 +253,7 @@ export function Header() {
                               <span>Settings</span>
                             </Link>
                             <DropdownMenuSeparator />
-                            <Button variant="ghost" className="justify-start -ml-2 text-muted-foreground" onClick={() => { setIsLoggedIn(false); setIsMobileMenuOpen(false); }}>Log Out</Button>
+                            <Button variant="ghost" className="justify-start -ml-2 text-muted-foreground" onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}>Log Out</Button>
                         </div>
                       ) : (
                           <div className="flex flex-col gap-2">
