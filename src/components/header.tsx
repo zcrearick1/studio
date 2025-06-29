@@ -37,7 +37,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 import { instruments, type Instrument } from "@/lib/instrument-data";
@@ -212,6 +219,10 @@ export function Header() {
                     </Button>
                   </SheetTrigger>
                   <SheetContent side="right" className="w-[300px] sm:w-[400px] flex flex-col p-0">
+                    <SheetHeader className="sr-only">
+                      <SheetTitle>Mobile Menu</SheetTitle>
+                      <SheetDescription>A list of navigation links for the MusicMate app.</SheetDescription>
+                    </SheetHeader>
                     <div className="flex items-center justify-between p-4 border-b">
                         <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
                             <Logo />
