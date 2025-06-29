@@ -39,7 +39,7 @@ export default function SetupGuidesPage() {
                 <CardDescription>Select an instrument category, then choose your instrument to see the setup guide.</CardDescription>
             </CardHeader>
             <CardContent>
-                <Accordion type="multiple" className="w-full">
+                <Accordion type="single" collapsible className="w-full">
                     {sortedCategories.map((category) => (
                         <AccordionItem value={category} key={category}>
                             <AccordionTrigger className="text-xl font-semibold text-primary">{category}</AccordionTrigger>
