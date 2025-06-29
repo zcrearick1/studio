@@ -51,8 +51,8 @@ export function Header() {
       href={href}
       onClick={() => setIsMobileMenuOpen(false)}
       className={cn(
-        "text-sm font-medium transition-colors hover:text-primary",
-        isMounted && pathname === href ? "text-primary" : "text-muted-foreground"
+        "text-sm font-medium transition-colors hover:text-primary text-muted-foreground",
+        isMounted && pathname === href && "text-primary"
       )}
     >
       {label}
@@ -72,8 +72,8 @@ export function Header() {
                 <DropdownMenu key={link.label}>
                   <DropdownMenuTrigger
                     className={cn(
-                      "flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary data-[state=open]:text-primary focus-visible:outline-none",
-                      isMounted && pathname.startsWith(link.hrefPrefix!) ? "text-primary" : "text-muted-foreground"
+                      "flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary data-[state=open]:text-primary focus-visible:outline-none text-muted-foreground",
+                      isMounted && pathname.startsWith(link.hrefPrefix!) && "text-primary"
                     )}
                   >
                     {link.label}
@@ -107,7 +107,7 @@ export function Header() {
                 </SheetTrigger>
                 <SheetContent side="right" className="w-[300px] sm:w-[400px]">
                 <SheetHeader>
-                    <SheetTitle className="sr-only">Mobile Menu</SheetTitle>
+                    <SheetTitle>Menu</SheetTitle>
                     <SheetDescription className="sr-only">A list of pages to navigate to.</SheetDescription>
                 </SheetHeader>
                 <div className="flex flex-col h-full">
@@ -122,8 +122,8 @@ export function Header() {
                           <Accordion type="single" collapsible className="w-full" key={link.label}>
                             <AccordionItem value={link.label} className="border-b-0">
                               <AccordionTrigger className={cn(
-                                "py-1 text-sm font-medium transition-colors hover:text-primary hover:no-underline",
-                                isMounted && pathname.startsWith(link.hrefPrefix!) ? "text-primary" : "text-muted-foreground"
+                                "py-1 text-sm font-medium transition-colors hover:text-primary hover:no-underline text-muted-foreground",
+                                isMounted && pathname.startsWith(link.hrefPrefix!) && "text-primary"
                               )}>
                                 {link.label}
                               </AccordionTrigger>
