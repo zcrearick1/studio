@@ -11,6 +11,17 @@ import { instruments } from "@/lib/instrument-data";
 import { Wrench } from "lucide-react";
 
 export default function SetupGuidesPage() {
+  const instrumentCategories = [...new Set(instruments.map(i => i.category))];
+  
+  const categoryOrder = ["Woodwind", "Brass", "Percussion", "String"];
+  const sortedCategories = instrumentCategories.sort((a, b) => {
+    const indexA = categoryOrder.indexOf(a);
+    const indexB = categoryOrder.indexOf(b);
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  });
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-3xl mx-auto">
@@ -25,17 +36,26 @@ export default function SetupGuidesPage() {
         <Card>
             <CardHeader>
                 <CardTitle>Setup Guides</CardTitle>
-                <CardDescription>Select your instrument to see the setup guide.</CardDescription>
+                <CardDescription>Select an instrument category, then choose your instrument to see the setup guide.</CardDescription>
             </CardHeader>
             <CardContent>
-                <Accordion type="single" collapsible className="w-full">
-                    {instruments.map((instrument) => (
-                        <AccordionItem value={instrument.name} key={instrument.name}>
-                            <AccordionTrigger>{instrument.name}</AccordionTrigger>
+                <Accordion type="multiple" className="w-full">
+                    {sortedCategories.map((category) => (
+                        <AccordionItem value={category} key={category}>
+                            <AccordionTrigger className="text-xl font-semibold text-primary">{category}</AccordionTrigger>
                             <AccordionContent>
-                                <div className="space-y-4 whitespace-pre-line text-foreground/90">
-                                    {instrument.setupGuide}
-                                </div>
+                                <Accordion type="single" collapsible className="w-full pl-4 border-l">
+                                    {instruments.filter(instrument => instrument.category === category).map((instrument) => (
+                                        <AccordionItem value={instrument.name} key={instrument.name}>
+                                            <AccordionTrigger>{instrument.name}</AccordionTrigger>
+                                            <AccordionContent>
+                                                <div className="space-y-4 whitespace-pre-line text-foreground/90 pl-4">
+                                                    {instrument.setupGuide}
+                                                </div>
+                                            </AccordionContent>
+                                        </AccordionItem>
+                                    ))}
+                                </Accordion>
                             </AccordionContent>
                         </AccordionItem>
                     ))}
