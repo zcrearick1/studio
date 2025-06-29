@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -40,6 +40,11 @@ const navLinks = [
 export function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const NavLink = ({ href, label }: { href: string; label: string }) => (
     <Link
@@ -47,7 +52,7 @@ export function Header() {
       onClick={() => setIsMobileMenuOpen(false)}
       className={cn(
         "text-sm font-medium transition-colors hover:text-primary",
-        pathname === href ? "text-primary" : "text-muted-foreground"
+        isMounted && pathname === href ? "text-primary" : "text-muted-foreground"
       )}
     >
       {label}
@@ -68,7 +73,7 @@ export function Header() {
                   <DropdownMenuTrigger
                     className={cn(
                       "flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary data-[state=open]:text-primary focus-visible:outline-none",
-                      pathname.startsWith(link.hrefPrefix!) ? "text-primary" : "text-muted-foreground"
+                      isMounted && pathname.startsWith(link.hrefPrefix!) ? "text-primary" : "text-muted-foreground"
                     )}
                   >
                     {link.label}
@@ -118,7 +123,7 @@ export function Header() {
                             <AccordionItem value={link.label} className="border-b-0">
                               <AccordionTrigger className={cn(
                                 "py-1 text-sm font-medium transition-colors hover:text-primary hover:no-underline",
-                                pathname.startsWith(link.hrefPrefix!) ? "text-primary" : "text-muted-foreground"
+                                isMounted && pathname.startsWith(link.hrefPrefix!) ? "text-primary" : "text-muted-foreground"
                               )}>
                                 {link.label}
                               </AccordionTrigger>
