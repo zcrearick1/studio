@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Music, Bot } from 'lucide-react';
+import { ArrowRight, Music, BookOpen } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -15,13 +15,13 @@ export default function Home() {
                   Unlock Your Musical Potential with MusicMate
                 </h1>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                  Your essential companion for mastering any instrument. Explore comprehensive fingering charts and get instant setup help with our AI assistant.
+                  Your essential companion for mastering any instrument. Explore comprehensive fingering charts and get helpful setup guides.
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
                 <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
                   <Link href="/ai-setup-guide">
-                    Get Started with AI
+                    View Setup Guides
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -73,17 +73,17 @@ export default function Home() {
               <Card className="h-full hover:shadow-lg transition-shadow duration-300">
                 <CardHeader className="flex flex-row items-center gap-4">
                   <div className="bg-accent/10 p-3 rounded-full">
-                    <Bot className="h-6 w-6 text-accent" />
+                    <BookOpen className="h-6 w-6 text-accent" />
                   </div>
                   <div className="grid gap-1">
-                    <CardTitle>AI Beginner Assistance</CardTitle>
+                    <CardTitle>Beginner Setup Guides</CardTitle>
                     <CardDescription>
-                      Get your instrument ready to play with AI-powered guidance.
+                      Get your instrument ready to play with our helpful guides.
                     </CardDescription>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p>Our AI provides step-by-step instructions for instrument setup, maintenance, and producing your first sounds. Ideal for complete beginners.</p>
+                  <p>Our guides provide step-by-step instructions for instrument setup and maintenance. Ideal for complete beginners.</p>
                 </CardContent>
               </Card>
             </Link>
