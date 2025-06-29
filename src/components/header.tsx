@@ -154,68 +154,69 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <Dialog open={isInstrumentDialogOpen} onOpenChange={setIsInstrumentDialogOpen}>
         <div className="container flex h-14 items-center">
-          <div className="mr-4 hidden md:flex">
-            <Link href="/" className="mr-6 flex items-center space-x-2">
-              <Logo />
-            </Link>
-            <nav className="flex items-center space-x-6 text-sm font-medium">
-              <NavLink href="/">Home</NavLink>
-              <NavLink href="/ai-setup-guide">Instrument Guides</NavLink>
-              
-              <DropdownMenu>
-                <DropdownMenuTrigger
-                  className={cn(
-                    "flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary data-[state=open]:text-primary focus-visible:outline-none",
-                    isMounted && pathname.startsWith("/fingering-charts") ? "text-primary" : "text-muted-foreground"
-                  )}
-                >
-                  {isMounted && selectedInstrument ? selectedInstrument.name : "My Instrument"}
-                  <ChevronDown className="h-4 w-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                   <DropdownMenuItem asChild>
-                    <Link href="/fingering-charts">Fingering Chart</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/fingering-charts/quizzes">Quizzes</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DialogTrigger asChild>
-                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                      <Settings className="mr-2 h-4 w-4" />
-                      {selectedInstrument ? "Change Instrument" : "Select Instrument"}
+          
+          <div className="hidden flex-1 items-center justify-between md:flex">
+            <div className="flex items-center gap-x-6">
+              <Link href="/" className="flex items-center space-x-2">
+                <Logo />
+              </Link>
+              <nav className="flex items-center space-x-6 text-sm font-medium">
+                <NavLink href="/">Home</NavLink>
+                <NavLink href="/ai-setup-guide">Instrument Guides</NavLink>
+                <DropdownMenu>
+                  <DropdownMenuTrigger
+                    className={cn(
+                      "flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary data-[state=open]:text-primary focus-visible:outline-none",
+                      isMounted && pathname.startsWith("/fingering-charts") ? "text-primary" : "text-muted-foreground"
+                    )}
+                  >
+                    {isMounted && selectedInstrument ? selectedInstrument.name : "My Instrument"}
+                    <ChevronDown className="h-4 w-4" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                     <DropdownMenuItem asChild>
+                      <Link href="/fingering-charts">Fingering Chart</Link>
                     </DropdownMenuItem>
-                  </DialogTrigger>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                    <DropdownMenuItem asChild>
+                      <Link href="/fingering-charts/quizzes">Quizzes</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DialogTrigger asChild>
+                      <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                        <Settings className="mr-2 h-4 w-4" />
+                        {selectedInstrument ? "Change Instrument" : "Select Instrument"}
+                      </DropdownMenuItem>
+                    </DialogTrigger>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </nav>
+            </div>
 
-            </nav>
-          </div>
-
-          <div className="ml-auto hidden items-center gap-2 md:flex">
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="secondary" size="icon" className="rounded-full">
-                    <User className="h-5 w-5" />
-                    <span className="sr-only">Toggle user menu</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild><Link href="/profile">Profile</Link></DropdownMenuItem>
-                  <DropdownMenuItem asChild><Link href="/settings">Settings</Link></DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <>
-                <Button asChild variant="ghost"><Link href="/login">Log In</Link></Button>
-                <Button asChild><Link href="/signup">Sign Up</Link></Button>
-              </>
-            )}
+            <div className="flex items-center gap-2">
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="secondary" size="icon" className="rounded-full">
+                      <User className="h-5 w-5" />
+                      <span className="sr-only">Toggle user menu</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild><Link href="/profile">Profile</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/settings">Settings</Link></DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <>
+                  <Button asChild variant="ghost"><Link href="/login">Log In</Link></Button>
+                  <Button asChild><Link href="/signup">Sign Up</Link></Button>
+                </>
+              )}
+            </div>
           </div>
 
           <div className="flex flex-1 items-center justify-between space-x-2 md:hidden">
