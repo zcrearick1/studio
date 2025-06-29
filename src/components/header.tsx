@@ -3,16 +3,37 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Menu, Music, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from "@/components/ui/sheet";
 import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/fingering-charts", label: "Fingering Charts" },
+  {
+    label: "Fingering Charts",
+    hrefPrefix: "/fingering-charts",
+    sublinks: [
+      { href: "/fingering-charts", label: "Note Lookup" },
+      { href: "/fingering-charts/pdf-downloads", label: "PDF Downloads" },
+      { href: "/fingering-charts/quizzes", label: "Quizzes" },
+      { href: "/fingering-charts/study", label: "Study" },
+    ],
+  },
   { href: "/ai-setup-guide", label: "Setup Guides" },
 ];
 
@@ -41,9 +62,30 @@ export function Header() {
             <Logo />
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
-            {navLinks.map((link) => (
-              <NavLink key={link.href} {...link} />
-            ))}
+            {navLinks.map((link) =>
+              link.sublinks ? (
+                <DropdownMenu key={link.label}>
+                  <DropdownMenuTrigger
+                    className={cn(
+                      "flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary data-[state=open]:text-primary focus-visible:outline-none",
+                      pathname.startsWith(link.hrefPrefix!) ? "text-primary" : "text-muted-foreground"
+                    )}
+                  >
+                    {link.label}
+                    <ChevronDown className="h-4 w-4" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    {link.sublinks.map((sublink) => (
+                      <DropdownMenuItem key={sublink.href} asChild>
+                        <Link href={sublink.href}>{sublink.label}</Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <NavLink key={link.href} href={link.href!} label={link.label} />
+              )
+            )}
           </nav>
         </div>
 
@@ -69,10 +111,30 @@ export function Header() {
                             <Logo />
                         </Link>
                     </div>
-                    <nav className="flex flex-col gap-6 p-4">
-                        {navLinks.map((link) => (
-                            <NavLink key={link.href} {...link} />
-                        ))}
+                    <nav className="flex flex-col gap-4 p-4">
+                      {navLinks.map((link) =>
+                        link.sublinks ? (
+                          <Accordion type="single" collapsible className="w-full" key={link.label}>
+                            <AccordionItem value={link.label} className="border-b-0">
+                              <AccordionTrigger className={cn(
+                                "py-1 text-sm font-medium transition-colors hover:text-primary hover:no-underline",
+                                pathname.startsWith(link.hrefPrefix!) ? "text-primary" : "text-muted-foreground"
+                              )}>
+                                {link.label}
+                              </AccordionTrigger>
+                              <AccordionContent className="pt-2 pl-6">
+                                <div className="flex flex-col gap-4">
+                                  {link.sublinks.map((sublink) => (
+                                    <NavLink key={sublink.href} href={sublink.href} label={sublink.label} />
+                                  ))}
+                                </div>
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Accordion>
+                        ) : (
+                          <NavLink key={link.href} href={link.href!} label={link.label} />
+                        )
+                      )}
                     </nav>
                 </div>
                 </SheetContent>
