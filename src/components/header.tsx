@@ -34,7 +34,7 @@ const navLinks = [
       { href: "/fingering-charts/study", label: "Study" },
     ],
   },
-  { href: "/ai-setup-guide", label: "Setup Guides" },
+  { href: "/ai-setup-guide", label: "Instrument Guides" },
 ];
 
 export function Header() {

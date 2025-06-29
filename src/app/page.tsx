@@ -21,7 +21,7 @@ export default function Home() {
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
                 <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
                   <Link href="/ai-setup-guide">
-                    View Setup Guides
+                    View Instrument Guides
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -76,7 +76,7 @@ export default function Home() {
                     <BookOpen className="h-6 w-6 text-accent" />
                   </div>
                   <div className="grid gap-1">
-                    <CardTitle>Beginner Setup Guides</CardTitle>
+                    <CardTitle>Instrument Guides</CardTitle>
                     <CardDescription>
                       Get your instrument ready to play with our helpful guides.
                     </CardDescription>
