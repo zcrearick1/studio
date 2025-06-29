@@ -98,7 +98,7 @@ export function Header() {
 
     const menuContent = (
       <div className="flex flex-col gap-4">
-        <NavLink href="/fingering-charts">Note Lookup</NavLink>
+        <NavLink href="/fingering-charts">Fingering Chart</NavLink>
         <NavLink href="/fingering-charts/quizzes">Quizzes</NavLink>
         <div
           onClick={() => {
@@ -154,7 +154,7 @@ export function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem asChild>
-                    <Link href="/fingering-charts">Note Lookup</Link>
+                    <Link href="/fingering-charts">Fingering Chart</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/fingering-charts/quizzes">Quizzes</Link>
