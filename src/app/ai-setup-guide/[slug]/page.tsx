@@ -44,16 +44,25 @@ export default function InstrumentSetupPage({ params }: { params: { slug: string
                         Back to All Guides
                     </Link>
                 </Button>
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-3xl font-bold font-headline">{instrument.name}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="space-y-4 whitespace-pre-line text-foreground/90">
-                           {instrument.setupGuide}
-                        </div>
-                    </CardContent>
-                </Card>
+                
+                <div className="text-center mb-12">
+                    <h1 className="text-5xl font-bold font-headline text-accent">{instrument.name}</h1>
+                </div>
+                
+                <div className="space-y-6">
+                    {instrument.setupGuide.map((section, index) => (
+                        <Card key={index}>
+                            <CardHeader>
+                                <CardTitle className="text-2xl font-semibold text-primary">{section.title}</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="whitespace-pre-line text-foreground/90">
+                                   {section.content}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
             </div>
         </div>
     );
