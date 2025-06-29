@@ -12,7 +12,7 @@ export function generateStaticParams() {
     }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { slug:string } }): Promise<Metadata> {
     const instrument = instruments.find((i) => i.slug === params.slug);
 
     if (!instrument) {
@@ -56,9 +56,32 @@ export default function InstrumentSetupPage({ params }: { params: { slug: string
                                 <CardTitle className="text-2xl font-semibold text-primary">{section.title}</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="whitespace-pre-line text-foreground/90">
-                                   {section.content}
-                                </div>
+                                {(() => {
+                                    const lines = section.content.split('\n').filter(line => line.trim());
+                                    const warningLine = lines.find(line => line.trim().startsWith('*Warning:'));
+                                    const mainLines = lines.filter(line => !line.trim().startsWith('*Warning:'));
+                                    
+                                    const isNumberedList = mainLines.length > 0 && mainLines[0].trim().startsWith('1.');
+
+                                    return (
+                                        <>
+                                            {isNumberedList ? (
+                                                <ol className="list-decimal list-outside pl-5 space-y-2 text-foreground/90">
+                                                    {mainLines.map((line, idx) => (
+                                                        <li key={idx}>{line.replace(/^\d+\.\s*/, '')}</li>
+                                                    ))}
+                                                </ol>
+                                            ) : (
+                                                <ul className="list-disc list-outside pl-5 space-y-2 text-foreground/90">
+                                                    {mainLines.map((line, idx) => (
+                                                        <li key={idx}>{line}</li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                            {warningLine && <p className="mt-4 text-muted-foreground">{warningLine}</p>}
+                                        </>
+                                    );
+                                })()}
                             </CardContent>
                         </Card>
                     ))}
