@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Menu, Music, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 
@@ -59,6 +59,10 @@ export function Header() {
                 </Button>
                 </SheetTrigger>
                 <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                <SheetHeader className="sr-only">
+                    <SheetTitle>Mobile Menu</SheetTitle>
+                    <SheetDescription>A list of pages to navigate to.</SheetDescription>
+                </SheetHeader>
                 <div className="flex flex-col h-full">
                     <div className="flex items-center justify-between p-4 border-b">
                         <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
