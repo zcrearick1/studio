@@ -5,6 +5,7 @@ export type Fingering = {
 
 export type Instrument = {
   name: string;
+  slug: string;
   category: "Woodwind" | "String" | "Brass" | "Percussion";
   fingerings: Fingering[];
   setupGuide: string;
@@ -13,6 +14,7 @@ export type Instrument = {
 export const instruments: Instrument[] = [
   {
     name: "Flute",
+    slug: "flute",
     category: "Woodwind",
     fingerings: [
       { note: "C4", positions: ["T", "1", "2", "3", "|", "1", "2", "3", "C#"] },
@@ -30,6 +32,7 @@ export const instruments: Instrument[] = [
   },
   {
     name: "Clarinet",
+    slug: "clarinet",
     category: "Woodwind",
     fingerings: [
       { note: "E3", positions: ["T", "1", "2", "3", "4", "5", "6"] },
@@ -46,6 +49,7 @@ export const instruments: Instrument[] = [
   },
   {
     name: "Saxophone",
+    slug: "saxophone",
     category: "Woodwind",
     fingerings: [
         { note: "C4", positions: ["Middle C key"] },
@@ -63,6 +67,7 @@ export const instruments: Instrument[] = [
   },
   {
     name: "Trumpet",
+    slug: "trumpet",
     category: "Brass",
     fingerings: [
         { note: "C4", positions: ["1", "2", "3"] },
@@ -80,6 +85,7 @@ export const instruments: Instrument[] = [
   },
    {
     name: "Trombone",
+    slug: "trombone",
     category: "Brass",
     fingerings: [
         { note: "Bb2", positions: ["1st Position"] },
@@ -97,6 +103,7 @@ export const instruments: Instrument[] = [
   },
   {
     name: "Violin",
+    slug: "violin",
     category: "String",
     fingerings: [
       { note: "G3", positions: ["Open G string"] },
@@ -114,6 +121,7 @@ export const instruments: Instrument[] = [
   },
     {
     name: "Cello",
+    slug: "cello",
     category: "String",
     fingerings: [
       { note: "C2", positions: ["Open C string"] },
@@ -128,6 +136,7 @@ export const instruments: Instrument[] = [
   },
   {
     name: "Snare Drum",
+    slug: "snare-drum",
     category: "Percussion",
     fingerings: [],
     setupGuide: `1. **Stand Setup:** Open the tripod base of the snare stand and adjust the height to a comfortable playing level (usually around waist height).
@@ -138,6 +147,7 @@ export const instruments: Instrument[] = [
   },
   {
     name: "Mallet Percussion (Xylophone/Marimba)",
+    slug: "mallet-percussion",
     category: "Percussion",
     fingerings: [],
     setupGuide: `1. **Frame Assembly:** Assemble the frame according to the manufacturer's instructions. Ensure all bolts are securely tightened.

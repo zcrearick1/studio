@@ -6,9 +6,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { instruments } from "@/lib/instrument-data";
 import { Wrench } from "lucide-react";
+import Link from "next/link";
 
 export default function SetupGuidesPage() {
   const instrumentCategories = [...new Set(instruments.map(i => i.category))];
@@ -44,18 +46,15 @@ export default function SetupGuidesPage() {
                         <AccordionItem value={category} key={category}>
                             <AccordionTrigger className="text-xl font-semibold text-primary">{category}</AccordionTrigger>
                             <AccordionContent>
-                                <Accordion type="single" collapsible className="w-full pl-4 border-l">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 pl-4 border-l ml-1 py-2">
                                     {instruments.filter(instrument => instrument.category === category).map((instrument) => (
-                                        <AccordionItem value={instrument.name} key={instrument.name}>
-                                            <AccordionTrigger>{instrument.name}</AccordionTrigger>
-                                            <AccordionContent>
-                                                <div className="space-y-4 whitespace-pre-line text-foreground/90 pl-4">
-                                                    {instrument.setupGuide}
-                                                </div>
-                                            </AccordionContent>
-                                        </AccordionItem>
+                                        <Button asChild variant="ghost" className="justify-start font-normal" key={instrument.slug}>
+                                            <Link href={`/ai-setup-guide/${instrument.slug}`}>
+                                                {instrument.name}
+                                            </Link>
+                                        </Button>
                                     ))}
-                                </Accordion>
+                                </div>
                             </AccordionContent>
                         </AccordionItem>
                     ))}
