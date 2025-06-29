@@ -55,6 +55,15 @@ export default function LoginPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
+    if (!auth) {
+      toast({
+        variant: 'destructive',
+        title: 'Firebase not configured.',
+        description: 'Please add your Firebase credentials to the .env file to enable authentication.',
+      });
+      setIsLoading(false);
+      return;
+    }
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password);
       router.push('/');
@@ -71,6 +80,15 @@ export default function LoginPage() {
 
   async function handleGoogleSignIn() {
     setIsLoading(true);
+    if (!auth) {
+      toast({
+        variant: 'destructive',
+        title: 'Firebase not configured.',
+        description: 'Please add your Firebase credentials to the .env file to enable authentication.',
+      });
+      setIsLoading(false);
+      return;
+    }
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
