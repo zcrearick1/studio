@@ -27,7 +27,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -153,14 +152,14 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <Dialog open={isInstrumentDialogOpen} onOpenChange={setIsInstrumentDialogOpen}>
-        <div className="container flex h-14 items-center">
+        <div className="container flex h-14 items-center px-4 md:px-6">
           
-          <div className="hidden flex-1 items-center justify-between md:flex">
+          <div className="flex flex-1 items-center justify-between">
             <div className="flex items-center gap-x-6">
               <Link href="/" className="flex items-center space-x-2">
                 <Logo />
               </Link>
-              <nav className="flex items-center space-x-6 text-sm font-medium">
+              <nav className="hidden items-center space-x-6 text-sm font-medium md:flex">
                 <NavLink href="/">Home</NavLink>
                 <NavLink href="/ai-setup-guide">Instrument Guides</NavLink>
                 <DropdownMenu>
@@ -192,7 +191,7 @@ export function Header() {
               </nav>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="hidden items-center gap-2 md:flex">
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -217,12 +216,8 @@ export function Header() {
                 </>
               )}
             </div>
-          </div>
-
-          <div className="flex flex-1 items-center justify-between space-x-2 md:hidden">
-              <Link href="/" className="flex items-center space-x-2">
-                  <Logo />
-              </Link>
+          
+            <div className="flex items-center md:hidden">
               <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                   <SheetTrigger asChild>
                     <Button variant="ghost" className="px-2">
@@ -266,7 +261,9 @@ export function Header() {
                     </div>
                   </SheetContent>
               </Sheet>
+            </div>
           </div>
+
         </div>
         <DialogContent>
           <DialogHeader>
