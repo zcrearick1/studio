@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: { slug:string } }):
     }
 
     return {
-        title: `${instrument.name} Setup Guide | MusicMate`,
+        title: `${instrument.name} Startup Guide | MusicMate`,
         description: `Learn how to set up your ${instrument.name}.`,
     };
 }
@@ -41,7 +41,7 @@ export default function InstrumentSetupPage({ params }: { params: { slug: string
                 <Button asChild variant="ghost" className="mb-4 -ml-4">
                     <Link href="/ai-setup-guide">
                         <ChevronLeft className="mr-2 h-4 w-4" />
-                        Back to All Guides
+                        Back to All Startup Guides
                     </Link>
                 </Button>
                 

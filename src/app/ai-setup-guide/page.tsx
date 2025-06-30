@@ -29,16 +29,16 @@ export default function SetupGuidesPage() {
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-8">
             <Wrench className="mx-auto h-12 w-12 text-accent mb-4" />
-            <h1 className="text-4xl font-bold font-headline">Instrument Setup Guides</h1>
+            <h1 className="text-4xl font-bold font-headline">Instrument Startup Guides</h1>
             <p className="text-muted-foreground mt-2">
-                Step-by-step guides to help you get your instrument ready to play.
+                Step-by-step startup guides to help you get your instrument ready to play.
             </p>
         </div>
 
         <Card>
             <CardHeader>
-                <CardTitle>Instrument Guides</CardTitle>
-                <CardDescription>Select an instrument category, then choose your instrument to see the setup guide.</CardDescription>
+                <CardTitle>Instrument Startup Guides</CardTitle>
+                <CardDescription>Select an instrument category, then choose your instrument to see the startup guide.</CardDescription>
             </CardHeader>
             <CardContent>
                 <Accordion type="single" collapsible className="w-full">
