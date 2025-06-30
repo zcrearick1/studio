@@ -91,7 +91,7 @@ export function Header() {
           ? "border-b bg-card shadow-sm" 
           : "border-b border-transparent"
       )}>
-      <div className="container flex h-14 items-center justify-between px-4 md:px-6">
+      <div className="container flex h-14 items-center px-4 md:px-6">
         
         {/* LEFT SIDE */}
         <div className="flex items-center gap-x-6">
@@ -125,7 +125,7 @@ export function Header() {
         </div>
 
         {/* RIGHT SIDE */}
-        <div className="flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-2">
           {/* Desktop Auth */}
           <div className="hidden items-center gap-2 md:flex">
             {user ? (
