@@ -70,7 +70,7 @@ export default function LoginPage() {
     } catch (error: any) {
       toast({
         variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
+        title: 'Login Failed',
         description: 'Invalid credentials. Please try again.',
       });
     } finally {
@@ -94,10 +94,16 @@ export default function LoginPage() {
       await signInWithPopup(auth, provider);
       router.push('/');
     } catch (error: any) {
+      let description = "An unexpected error occurred. Please try again.";
+      if (error.code === 'auth/unauthorized-domain') {
+        description = "This domain is not authorized for authentication. Please add it to the Firebase Console under Authentication > Settings > Authorized Domains.";
+      } else if (error.message) {
+        description = error.message;
+      }
       toast({
         variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: error.message,
+        title: 'Login Failed',
+        description: description,
       });
     } finally {
       setIsLoading(false);

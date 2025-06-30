@@ -68,10 +68,16 @@ export default function SignupPage() {
       await createUserWithEmailAndPassword(auth, values.email, values.password);
       router.push('/');
     } catch (error: any) {
+      let description = "An unexpected error occurred. Please try again.";
+      if (error.code === 'auth/email-already-in-use') {
+        description = "An account with this email address already exists. Please try logging in.";
+      } else if (error.message) {
+        description = error.message;
+      }
       toast({
         variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: error.message,
+        title: 'Sign Up Failed',
+        description,
       });
     } finally {
       setIsLoading(false);
@@ -94,10 +100,16 @@ export default function SignupPage() {
       await signInWithPopup(auth, provider);
       router.push('/');
     } catch (error: any) {
+      let description = "An unexpected error occurred. Please try again.";
+      if (error.code === 'auth/unauthorized-domain') {
+        description = "This domain is not authorized for authentication. Please add it to the Firebase Console under Authentication > Settings > Authorized Domains.";
+      } else if (error.message) {
+        description = error.message;
+      }
       toast({
         variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: error.message,
+        title: 'Sign Up Failed',
+        description: description,
       });
     } finally {
       setIsLoading(false);
