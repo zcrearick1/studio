@@ -5,18 +5,53 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/auth-context';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { instruments, type Instrument } from '@/lib/instrument-data';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 
 export default function ProfilePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const [selectedInstrument, setSelectedInstrument] = useState<Instrument | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
     }
+    const storedInstrumentSlug = localStorage.getItem("primaryInstrument");
+    if (storedInstrumentSlug) {
+      const found = instruments.find((i) => i.slug === storedInstrumentSlug);
+      setSelectedInstrument(found || null);
+    }
   }, [user, loading, router]);
+
+  const handleInstrumentSelect = (slug: string) => {
+    const instrument = instruments.find((i) => i.slug === slug);
+    if (instrument) {
+      setSelectedInstrument(instrument);
+      localStorage.setItem("primaryInstrument", instrument.slug);
+    }
+  };
+
+  const instrumentCategories = [...new Set(instruments.map(i => i.category))];
+  const categoryOrder = ["Woodwind", "Brass", "Percussion", "String"];
+  const sortedCategories = instrumentCategories.sort((a, b) => {
+    const indexA = categoryOrder.indexOf(a);
+    const indexB = categoryOrder.indexOf(b);
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  });
 
   if (loading || !user) {
     return (
@@ -39,9 +74,9 @@ export default function ProfilePage() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-center">My Profile</CardTitle>
-           <CardDescription className="text-center">Your account details.</CardDescription>
+           <CardDescription className="text-center">Your account details and preferences.</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
             <div>
                 <h3 className="text-sm font-medium text-muted-foreground">Email</h3>
                 <p>{user.email}</p>
@@ -50,7 +85,27 @@ export default function ProfilePage() {
                 <h3 className="text-sm font-medium text-muted-foreground">User ID</h3>
                 <p className="text-xs">{user.uid}</p>
             </div>
-          <Button asChild className="w-full">
+            <div className="space-y-2">
+                <Label htmlFor="instrument-select">My Primary Instrument</Label>
+                <Select onValueChange={handleInstrumentSelect} value={selectedInstrument?.slug ?? ''}>
+                    <SelectTrigger id="instrument-select">
+                        <SelectValue placeholder="Select an instrument..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {sortedCategories.map(category => (
+                        <SelectGroup key={category}>
+                            <SelectLabel>{category}</SelectLabel>
+                            {instruments.filter(i => i.category === category).map(instrument => (
+                            <SelectItem key={instrument.slug} value={instrument.slug}>
+                                {instrument.name}
+                            </SelectItem>
+                            ))}
+                        </SelectGroup>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+          <Button asChild className="w-full !mt-8">
             <Link href="/">Return to Home</Link>
           </Button>
         </CardContent>
