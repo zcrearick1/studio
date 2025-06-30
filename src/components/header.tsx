@@ -99,7 +99,6 @@ export function Header() {
               <Logo />
             </Link>
             <nav className="hidden items-center space-x-6 text-sm font-medium md:flex">
-              <NavLink href="/">Home</NavLink>
               
               <DropdownMenu>
                 <DropdownMenuTrigger
@@ -170,7 +169,6 @@ export function Header() {
                       </Link>
                   </SheetHeader>
                   <nav className="flex flex-col gap-4 p-4 flex-1">
-                    <NavLink href="/">Home</NavLink>
                     
                     <Accordion type="single" collapsible className="w-full">
                       <AccordionItem value="instrument-resources" className="border-b-0">
