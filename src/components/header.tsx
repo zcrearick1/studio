@@ -91,41 +91,42 @@ export function Header() {
           ? "border-b bg-card shadow-sm" 
           : "border-b border-transparent"
       )}>
-      <div className="container flex h-14 items-center px-4 md:px-6">
+      <div className="container flex h-14 items-center justify-between px-4 md:px-6">
         
-        <div className="flex flex-1 items-center justify-between">
-          <div className="flex items-center gap-x-6">
-            <Link href="/" className="flex items-center space-x-2">
-              <Logo />
-            </Link>
-            <nav className="hidden items-center space-x-6 text-sm font-medium md:flex">
-              
-              <DropdownMenu>
-                <DropdownMenuTrigger
-                  className={cn(
-                    "flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary data-[state=open]:text-primary focus-visible:outline-none",
-                    resourcesActive ? "text-primary" : "text-muted-foreground"
-                  )}
-                >
-                  Instrument Resources
-                  <ChevronDown className="h-4 w-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                    <DropdownMenuItem asChild>
-                    <Link href="/ai-setup-guide">Startup Guides</Link>
-                  </DropdownMenuItem>
+        {/* LEFT SIDE */}
+        <div className="flex items-center gap-x-6">
+          <Link href="/" className="flex items-center space-x-2">
+            <Logo />
+          </Link>
+          <nav className="hidden items-center space-x-6 text-sm font-medium md:flex">
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className={cn(
+                  "flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary data-[state=open]:text-primary focus-visible:outline-none",
+                  resourcesActive ? "text-primary" : "text-muted-foreground"
+                )}
+              >
+                Instrument Resources
+                <ChevronDown className="h-4 w-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
                   <DropdownMenuItem asChild>
-                    <Link href="/fingering-charts">Fingering Charts</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/fingering-charts/quizzes">Quizzes</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                  <Link href="/ai-setup-guide">Startup Guides</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/fingering-charts">Fingering Charts</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/fingering-charts/quizzes">Quizzes</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </nav>
+        </div>
 
-            </nav>
-          </div>
-
+        {/* RIGHT SIDE */}
+        <div className="flex items-center gap-2">
+          {/* Desktop Auth */}
           <div className="hidden items-center gap-2 md:flex">
             {user ? (
               <DropdownMenu>
@@ -152,6 +153,7 @@ export function Header() {
             )}
           </div>
         
+          {/* Mobile Menu */}
           <div className="flex items-center md:hidden">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                 <SheetTrigger asChild>
@@ -214,7 +216,6 @@ export function Header() {
             </Sheet>
           </div>
         </div>
-
       </div>
     </header>
   );
