@@ -34,6 +34,7 @@ import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/auth-context";
 import { auth } from "@/lib/firebase";
+import { instruments, type Instrument } from "@/lib/instrument-data";
 
 export function Header() {
   const pathname = usePathname();
@@ -43,6 +44,7 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [selectedInstrument, setSelectedInstrument] = useState<Instrument | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -58,6 +60,22 @@ export function Header() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      const storedInstrumentSlug = localStorage.getItem('primaryInstrument');
+      if (storedInstrumentSlug) {
+        const foundInstrument = instruments.find(
+          (i) => i.slug === storedInstrumentSlug
+        );
+        setSelectedInstrument(foundInstrument || null);
+      } else {
+        setSelectedInstrument(null);
+      }
+    } else {
+      setSelectedInstrument(null);
+    }
+  }, [user, pathname]);
 
 
   const handleLogout = async () => {
@@ -128,6 +146,25 @@ export function Header() {
         <div className="ml-auto flex items-center gap-2">
           {/* Desktop Auth */}
           <div className="hidden items-center gap-2 md:flex">
+            {user && selectedInstrument && (
+              <DropdownMenu>
+                <DropdownMenuTrigger className={cn(
+                    "flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary data-[state=open]:text-primary focus-visible:outline-none text-muted-foreground"
+                )}>
+                    My Instrument <ChevronDown className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuLabel>{selectedInstrument.name}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                        <Link href={`/fingering-charts?instrument=${selectedInstrument.slug}`}>Fingering Chart</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href={`/fingering-charts/quizzes/${selectedInstrument.slug}`}>Quiz Yourself</Link>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -173,6 +210,21 @@ export function Header() {
                   <nav className="flex flex-col gap-4 p-4 flex-1">
                     
                     <Accordion type="single" collapsible className="w-full">
+                       {user && selectedInstrument && (
+                        <AccordionItem value="my-instrument" className="border-b-0">
+                          <AccordionTrigger
+                            className={cn(
+                              "py-1 text-sm font-medium transition-colors hover:text-primary hover:no-underline text-muted-foreground",
+                            )}
+                          >
+                            My Instrument ({selectedInstrument.name})
+                          </AccordionTrigger>
+                          <AccordionContent className="pt-2 pl-6 flex flex-col gap-4">
+                            <NavLink href={`/fingering-charts?instrument=${selectedInstrument.slug}`}>Fingering Chart</NavLink>
+                            <NavLink href={`/fingering-charts/quizzes/${selectedInstrument.slug}`}>Quiz Yourself</NavLink>
+                          </AccordionContent>
+                        </AccordionItem>
+                      )}
                       <AccordionItem value="instrument-resources" className="border-b-0">
                         <AccordionTrigger
                           className={cn(

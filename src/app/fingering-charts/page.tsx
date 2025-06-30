@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { instruments, Instrument } from "@/lib/instrument-data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,13 +13,28 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Music } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 export default function FingeringChartsPage() {
+  const searchParams = useSearchParams();
   const [activeCategory, setActiveCategory] = useState<string>("Woodwind");
-  const [selectedInstrumentName, setSelectedInstrumentName] = useState<string>(
-    instruments.find(i => i.category === "Woodwind")?.name || ""
-  );
+  const [selectedInstrumentName, setSelectedInstrumentName] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const instrumentSlug = searchParams.get('instrument');
+    const targetInstrument = instruments.find(i => i.slug === instrumentSlug);
+
+    if (targetInstrument) {
+      setActiveCategory(targetInstrument.category);
+      setSelectedInstrumentName(targetInstrument.name);
+    } else if (!selectedInstrumentName) {
+      const firstWoodwind = instruments.find(i => i.category === "Woodwind");
+      if (firstWoodwind) {
+        setSelectedInstrumentName(firstWoodwind.name);
+      }
+    }
+  }, [searchParams, selectedInstrumentName]);
 
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
@@ -60,7 +75,7 @@ export default function FingeringChartsPage() {
       <Card className="max-w-4xl mx-auto">
         <CardContent className="p-6">
           <Tabs value={activeCategory} onValueChange={handleCategoryChange} className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-4">
+            <TabsList className="grid w-full grid-cols-4 mb-4">
               {instrumentCategories.map(category => (
                 <TabsTrigger key={category} value={category}>{category}</TabsTrigger>
               ))}
