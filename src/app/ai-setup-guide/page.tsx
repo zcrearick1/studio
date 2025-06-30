@@ -37,7 +37,7 @@ export default function SetupGuidesPage() {
 
         <Card>
             <CardHeader>
-                <CardTitle>Instrument Startup Guides</CardTitle>
+                <CardTitle>Instrument Selection</CardTitle>
                 <CardDescription>Select an instrument category, then choose your instrument to see the startup guide.</CardDescription>
             </CardHeader>
             <CardContent>
