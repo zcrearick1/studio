@@ -42,10 +42,23 @@ export function Header() {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
 
   const handleLogout = async () => {
     if (!auth) return;
@@ -72,7 +85,12 @@ export function Header() {
   const resourcesActive = isMounted && (pathname.startsWith('/ai-setup-guide') || pathname.startsWith('/fingering-charts'));
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className={cn(
+        "sticky top-0 z-50 w-full transition-all duration-200",
+        isScrolled 
+          ? "border-b bg-card shadow-sm" 
+          : "border-b border-transparent"
+      )}>
       <div className="container flex h-14 items-center px-4 md:px-6">
         
         <div className="flex flex-1 items-center justify-between">
