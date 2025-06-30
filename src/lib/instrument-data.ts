@@ -9,7 +9,7 @@ export type SetupGuideSection = {
 };
 
 export type Instrument = {
-  name: string;
+  name:string;
   slug: string;
   category: "Woodwind" | "String" | "Brass" | "Percussion";
   fingerings: Fingering[];
@@ -420,7 +420,46 @@ Place the violin and bow securely in their case.`
       }
     ]
   },
-    {
+  {
+    name: "Viola",
+    slug: "viola",
+    category: "String",
+    fingerings: [
+      { note: "C3", positions: ["Open C string"] },
+      { note: "D3", positions: ["1st finger on C string"] },
+      { note: "E3", positions: ["2nd finger on C string"] },
+      { note: "F3", positions: ["3rd finger on C string"] },
+      { note: "G3", positions: ["Open G string"] },
+      { note: "A3", positions: ["1st finger on G string"] },
+      { note: "B3", positions: ["2nd finger on G string"] },
+    ],
+    setupGuide: [
+      {
+        title: "Setup",
+        content: `1. Shoulder Rest: Attach a viola-sized shoulder rest to the back. Adjust it for a comfortable fit between your shoulder and chin.
+2. Rosin the Bow: Tighten the bow hair so it's about a pencil's width from the stick. Rub rosin along the hair to create grip.
+
+*Warning: As with a violin, do not overtighten the bow. Always loosen it after playing.*`
+      },
+      {
+        title: "Making Your First Sound",
+        content: `The viola is held just like a violin. It's larger, so it may require a slightly wider reach.
+Rest the bow on the C or G string (the two lowest strings). Draw the bow smoothly, using the natural weight of your arm to produce a rich, deep tone.`
+      },
+      {
+        title: "Tuning",
+        content: `The open strings are C, G, D, A, from lowest to highest.
+Use the large tuning pegs for big adjustments and the fine tuners for small adjustments. It's often easier to tune using the fine tuners.`
+      },
+      {
+        title: "Teardown and Maintenance",
+        content: `Loosen the bow hair completely after each session.
+Use a soft cloth to wipe rosin dust off the instrument's body and strings.
+Store the viola and bow securely in their case.`
+      }
+    ]
+  },
+  {
     name: "Cello",
     slug: "cello",
     category: "String",
@@ -454,6 +493,45 @@ Like the violin, use the large pegs for big changes and fine tuners for small on
         content: `Wipe down the strings and body to remove rosin dust.
 Loosen the hair on your bow.
 Secure the cello and bow in their case. If it's a soft case, be extra careful not to bump the bridge.`
+      }
+    ]
+  },
+  {
+    name: "Double Bass",
+    slug: "double-bass",
+    category: "String",
+    fingerings: [
+      { note: "E1", positions: ["Open E string"] },
+      { note: "F1", positions: ["1st finger on E string"] },
+      { note: "G1", positions: ["4th finger on E string"] },
+      { note: "A1", positions: ["Open A string"] },
+      { note: "B1", positions: ["2nd finger on A string"] },
+      { note: "C2", positions: ["4th finger on A string"] },
+    ],
+    setupGuide: [
+      {
+        title: "Setup",
+        content: `1. Endpin Height: Whether standing or sitting on a tall stool, adjust the endpin so the nut of the fingerboard is roughly at your eyebrow level.
+2. Rosin: Use bass-specific rosin, which is often softer and stickier than violin rosin. Tighten the bow (French or German style) and apply a good coat.
+3. Stance: Stand with feet shoulder-width apart, with the bass angled slightly into your body for stability.
+
+*Warning: The bass is large and can be awkward. Be mindful of your posture to avoid back strain.*`
+      },
+      {
+        title: "Making Your First Sound",
+        content: `The large strings require significant arm weight to activate. Let your arm hang heavily from the shoulder as you draw the bow across the string.
+Focus on producing a big, open, and clear sound without a "crunchy" or scratchy attack.`
+      },
+      {
+        title: "Tuning",
+        content: `The strings are tuned in fourths: E, A, D, G, from lowest to highest.
+Use the large machine tuners on the scroll to adjust the pitch. Due to the string thickness, make slow and careful adjustments.`
+      },
+      {
+        title: "Teardown and Maintenance",
+        content: `Always loosen the bow hair after playing.
+Wipe down the strings to remove rosin buildup, which can be heavy.
+Most basses are transported in a padded soft case or "gig bag". Be extremely careful of the bridge and endpin.`
       }
     ]
   },
