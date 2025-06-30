@@ -12,6 +12,7 @@ export type Instrument = {
   name:string;
   slug: string;
   category: "Woodwind" | "String" | "Brass" | "Percussion";
+  clef: "treble" | "bass" | "alto" | "percussion";
   fingerings: Fingering[];
   setupGuide: SetupGuideSection[];
 };
@@ -21,6 +22,7 @@ export const instruments: Instrument[] = [
     name: "Flute",
     slug: "flute",
     category: "Woodwind",
+    clef: "treble",
     fingerings: [
       { note: "C4", positions: ["T", "1", "2", "3", "|", "1", "2", "3", "C#"] },
       { note: "C#4/Db4", positions: ["T", "1", "2", "3", "|", "1", "2", "3"] },
@@ -62,6 +64,7 @@ Carefully place each part back in its designated spot in the case.`
     name: "Clarinet",
     slug: "clarinet",
     category: "Woodwind",
+    clef: "treble",
     fingerings: [
       { note: "E3", positions: ["T", "1", "2", "3", "4", "5", "6"] },
       { note: "F3", positions: ["T", "1", "2", "3", "4", "5"] },
@@ -103,6 +106,7 @@ Disassemble the pieces and place them in the case.`
     name: "Alto Saxophone",
     slug: "alto-saxophone",
     category: "Woodwind",
+    clef: "treble",
     fingerings: [
         { note: "C4", positions: ["Middle C key"] },
         { note: "C#4/Db4", positions: ["All open"] },
@@ -143,6 +147,7 @@ Wipe down the exterior. Place the end cap on the top of the body before putting 
     name: "Tenor Saxophone",
     slug: "tenor-saxophone",
     category: "Woodwind",
+    clef: "treble",
     fingerings: [
         { note: "C4", positions: ["Middle C key"] },
         { note: "C#4/Db4", positions: ["All open"] },
@@ -183,6 +188,7 @@ Wipe down the exterior. Place the end cap on the top of the body before putting 
     name: "Baritone Saxophone",
     slug: "baritone-saxophone",
     category: "Woodwind",
+    clef: "treble",
     fingerings: [
         { note: "C4", positions: ["Middle C key"] },
         { note: "C#4/Db4", positions: ["All open"] },
@@ -223,6 +229,7 @@ Wipe down the exterior. Place the end cap on the top of the body before putting 
     name: "Trumpet",
     slug: "trumpet",
     category: "Brass",
+    clef: "treble",
     fingerings: [
         { note: "C4", positions: ["1", "2", "3"] },
         { note: "C#4/Db4", positions: ["1", "2"] },
@@ -264,6 +271,7 @@ Store the trumpet and mouthpiece in the case. Give your trumpet a full bath ever
     name: "Trombone",
     slug: "trombone",
     category: "Brass",
+    clef: "bass",
     fingerings: [
         { note: "Bb2", positions: ["1st Position"] },
         { note: "A2", positions: ["2nd Position"] },
@@ -306,6 +314,7 @@ Engage the slide lock before putting it in the case to prevent the outer slide f
     name: "French Horn",
     slug: "french-horn",
     category: "Brass",
+    clef: "treble",
     fingerings: [
         { note: "G3", positions: ["Open"] },
         { note: "A3", positions: ["1", "2"] },
@@ -345,6 +354,7 @@ Store the horn carefully in its case.`
     name: "Baritone B.C.",
     slug: "baritone-bc",
     category: "Brass",
+    clef: "bass",
     fingerings: [
         { note: "Bb2", positions: ["Open"] },
         { note: "C3", positions: ["1", "3"] },
@@ -384,6 +394,7 @@ Store the baritone and mouthpiece in their case.`
     name: "Baritone T.C.",
     slug: "baritone-tc",
     category: "Brass",
+    clef: "treble",
     fingerings: [
         { note: "C4", positions: ["Open"] },
         { note: "D4", positions: ["1", "3"] },
@@ -423,6 +434,7 @@ Store the baritone and mouthpiece in their case.`
     name: "Tuba",
     slug: "tuba",
     category: "Brass",
+    clef: "bass",
     fingerings: [
         { note: "Bb1", positions: ["Open"] },
         { note: "C2", positions: ["1", "3"] },
@@ -462,6 +474,7 @@ Wipe down the exterior of the tuba to remove fingerprints.`
     name: "Violin",
     slug: "violin",
     category: "String",
+    clef: "treble",
     fingerings: [
       { note: "G3", positions: ["Open G string"] },
       { note: "A3", positions: ["1st finger on G string"] },
@@ -503,6 +516,7 @@ Place the violin and bow securely in their case.`
     name: "Viola",
     slug: "viola",
     category: "String",
+    clef: "alto",
     fingerings: [
       { note: "C3", positions: ["Open C string"] },
       { note: "D3", positions: ["1st finger on C string"] },
@@ -542,6 +556,7 @@ Store the viola and bow securely in their case.`
     name: "Cello",
     slug: "cello",
     category: "String",
+    clef: "bass",
     fingerings: [
       { note: "C2", positions: ["Open C string"] },
       { note: "D2", positions: ["1st finger on C string"] },
@@ -579,6 +594,7 @@ Secure the cello and bow in their case. If it's a soft case, be extra careful no
     name: "Double Bass",
     slug: "double-bass",
     category: "String",
+    clef: "bass",
     fingerings: [
       { note: "E1", positions: ["Open E string"] },
       { note: "F1", positions: ["1st finger on E string"] },
@@ -618,6 +634,7 @@ Most basses are transported in a padded soft case or "gig bag". Be extremely car
     name: "Snare Drum",
     slug: "snare-drum",
     category: "Percussion",
+    clef: "percussion",
     fingerings: [],
     setupGuide: [
       {
@@ -651,11 +668,12 @@ If transporting, it's best to use a case or bag to protect the drum from dents a
     name: "Mallet Percussion (Xylophone/Marimba)",
     slug: "mallet-percussion",
     category: "Percussion",
+    clef: "treble",
     fingerings: [],
     setupGuide: [
       {
         title: "Assembly",
-        content: `1. Frame: Assemble the frame according to the manufacturer's instructions. On many portable models, the frame simply unfolds. Ensure all legs are locked and stable.
+        content: `1. Frame: Assemble the frame according to the manufacturer's instructions. On many portable models, the frame simply unfolds.
 2. Bars: Carefully place the two sets of bars (naturals and accidentals) onto the frame. They rest on support posts, which have small pegs that fit into holes on the underside of each bar.
 3. Resonators: Attach the resonator tubes underneath the bars. They are usually grouped by register and simply hook onto the frame.
 
