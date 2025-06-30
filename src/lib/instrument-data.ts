@@ -174,7 +174,7 @@ Play a written C (no valves pressed) and check it with a tuner. Pulling the slid
       },
       {
         title: "Teardown and Maintenance",
-        content: `After playing, remove the mouthpiece.
+        content: `Remove the mouthpiece.
 Press the water keys (spit valves) to empty any condensation from the horn.
 Wipe the outside of the trumpet with a soft cloth to remove fingerprints.
 Store the trumpet and mouthpiece in the case. Give your trumpet a full bath every few months to clean it inside and out.`
@@ -220,6 +220,162 @@ Play a Bb in 1st position and check it with a tuner. Pull the slide out to go fl
 Use the water key to empty condensation.
 Apply fresh slide lubricant as needed. Wipe down the outer slide and the rest of the instrument.
 Engage the slide lock before putting it in the case to prevent the outer slide from falling off.`
+      }
+    ]
+  },
+  {
+    name: "French Horn",
+    slug: "french-horn",
+    category: "Brass",
+    fingerings: [
+        { note: "G3", positions: ["Open"] },
+        { note: "A3", positions: ["1", "2"] },
+        { note: "B3", positions: ["2"] },
+        { note: "C4", positions: ["1"] },
+        { note: "D4", positions: ["Open"] },
+        { note: "E4", positions: ["2"] },
+        { note: "F4", positions: ["1"] },
+    ],
+    setupGuide: [
+      {
+        title: "Assembly & Hand Position",
+        content: `Insert the mouthpiece with a gentle twist.
+Proper hand position is crucial. Sit up straight and rest the bell of the horn on your right thigh. Place your right hand inside the bell, with your fingers together and slightly cupped, as if you were going to shake hands. Your hand should be against the far side of the bell.
+*Warning: Your right hand acts as part of the instrument. Its position affects tuning and tone quality significantly.*`
+      },
+      {
+        title: "Making Your First Sound",
+        content: `The French horn mouthpiece is smaller and more funnel-shaped than a trumpet's. Practice buzzing into it.
+With the horn in position, bring the mouthpiece to your lips (don't lean forward to the horn). Blow a warm, fast stream of air while buzzing. Adjust your lip tension to find the right pitch.`
+      },
+      {
+        title: "Tuning",
+        content: `Like other brass, there is a main tuning slide. However, fine-tuning is often done with the right hand inside the bell.
+Cupping your hand more into the bell will make the pitch sharper. Opening your hand will make it flatter.`
+      },
+      {
+        title: "Teardown and Maintenance",
+        content: `Remove the mouthpiece.
+Empty water from the horn by turning it and depressing the valves; there may not be a traditional water key.
+Oil the rotary valves regularly with rotor oil. Wipe down the horn to remove fingerprints.
+Store the horn carefully in its case.`
+      }
+    ]
+  },
+  {
+    name: "Baritone B.C.",
+    slug: "baritone-bc",
+    category: "Brass",
+    fingerings: [
+        { note: "Bb2", positions: ["Open"] },
+        { note: "C3", positions: ["1", "3"] },
+        { note: "D3", positions: ["1", "2"] },
+        { note: "Eb3", positions: ["1"] },
+        { note: "F3", positions: ["Open"] },
+        { note: "G3", positions: ["2"] },
+        { note: "A3", positions: ["1", "2"] },
+    ],
+    setupGuide: [
+      {
+        title: "Assembly & Oiling",
+        content: `Gently twist the mouthpiece into the leadpipe to secure it.
+Before playing, oil the valves. Unscrew one valve at a time, pull it out partially, and apply a few drops of valve oil. Re-insert, making sure it clicks into its proper alignment, and screw the cap back on. Press the valve up and down to distribute the oil.
+*Warning: Be careful not to drop the valves. Always oil them one at a time over a soft surface.*`
+      },
+      {
+        title: "Making Your First Sound",
+        content: `The sound is produced by buzzing your lips. Practice buzzing into just the mouthpiece first, aiming for a steady, clear tone.
+Then, insert the mouthpiece into the baritone and buzz again. Support your sound with a steady stream of air.`
+      },
+      {
+        title: "Tuning",
+        content: `The main tuning slide is the large U-shaped slide near the front of the instrument.
+Play a Bb (no valves pressed) and check it with a tuner. Pull the slide out to lower the pitch and push it in to raise the pitch.`
+      },
+      {
+        title: "Teardown and Maintenance",
+        content: `Remove the mouthpiece.
+Press the water keys to empty any condensation from the horn.
+Wipe the outside of the instrument with a soft cloth to remove fingerprints.
+Store the baritone and mouthpiece in their case.`
+      }
+    ]
+  },
+  {
+    name: "Baritone T.C.",
+    slug: "baritone-tc",
+    category: "Brass",
+    fingerings: [
+        { note: "C4", positions: ["Open"] },
+        { note: "D4", positions: ["1", "3"] },
+        { note: "E4", positions: ["1", "2"] },
+        { note: "F4", positions: ["1"] },
+        { note: "G4", positions: ["Open"] },
+        { note: "A4", positions: ["1", "2"] },
+        { note: "B4", positions: ["2"] },
+    ],
+    setupGuide: [
+      {
+        title: "Assembly & Oiling",
+        content: `Gently twist the mouthpiece into the leadpipe to secure it.
+Before playing, oil the valves. Unscrew one valve at a time, pull it out partially, and apply a few drops of valve oil. Re-insert, making sure it clicks into its proper alignment, and screw the cap back on. Press the valve up and down to distribute the oil.
+*Warning: Be careful not to drop the valves. Always oil them one at a time over a soft surface.*`
+      },
+      {
+        title: "Making Your First Sound",
+        content: `The sound is produced by buzzing your lips. Practice buzzing into just the mouthpiece first, aiming for a steady, clear tone.
+Then, insert the mouthpiece into the baritone and buzz again. Support your sound with a steady stream of air.`
+      },
+      {
+        title: "Tuning",
+        content: `The main tuning slide is the large U-shaped slide near the front of the instrument.
+Play a written C (no valves pressed) and check it with a tuner. Pull the slide out to lower the pitch and push it in to raise the pitch.`
+      },
+      {
+        title: "Teardown and Maintenance",
+        content: `Remove the mouthpiece.
+Press the water keys to empty any condensation from the horn.
+Wipe the outside of the instrument with a soft cloth to remove fingerprints.
+Store the baritone and mouthpiece in their case.`
+      }
+    ]
+  },
+  {
+    name: "Tuba",
+    slug: "tuba",
+    category: "Brass",
+    fingerings: [
+        { note: "Bb1", positions: ["Open"] },
+        { note: "C2", positions: ["1", "3"] },
+        { note: "D2", positions: ["1", "2"] },
+        { note: "Eb2", positions: ["1"] },
+        { note: "F2", positions: ["Open"] },
+        { note: "G2", positions: ["2"] },
+        { note: "A2", positions: ["1", "2"] },
+    ],
+    setupGuide: [
+      {
+        title: "Assembly",
+        content: `Carefully place the tuba on its stand or on a soft surface. Insert the mouthpiece into the leadpipe with a gentle twist. Do not force or hit it, as this can get it stuck.
+*Warning: Tubas are large and heavy. Always handle with care and get help if needed to avoid injury or damage to the instrument.*`
+      },
+      {
+        title: "Making Your First Sound",
+        content: `Like other brass instruments, sound starts with a lip buzz. Practice buzzing your lips together to make a low-pitched raspberry sound.
+Then, buzz into the large mouthpiece alone. Aim for a deep, resonant buzz.
+Finally, put the mouthpiece in the tuba and blow a large, relaxed column of air while buzzing. The tuba requires a lot of air!`
+      },
+      {
+        title: "Tuning",
+        content: `The main tuning slide is a large slide near where the leadpipe enters the main body of the instrument.
+Play a Bb and check the pitch with an electronic tuner. Pull the slide out to make the pitch lower (flatter) and push it in to make it higher (sharper).`
+      },
+      {
+        title: "Teardown and Maintenance",
+        content: `After playing, remove the mouthpiece.
+Empty condensation using the water keys (spit valves).
+Oil the valves (piston or rotary) as needed. Unscrew them one at a time, apply a few drops of oil, and work the valve to distribute it.
+Wipe down the exterior of the tuba to remove fingerprints.`
       }
     ]
   },
