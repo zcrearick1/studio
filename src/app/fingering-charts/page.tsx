@@ -62,6 +62,14 @@ export default function FingeringChartsPage() {
   }, [selectedInstrument, searchTerm]);
 
   const instrumentCategories = [...new Set(instruments.map(i => i.category))];
+  const categoryOrder = ["Woodwind", "Brass", "Percussion", "String"];
+  const sortedCategories = instrumentCategories.sort((a, b) => {
+    const indexA = categoryOrder.indexOf(a);
+    const indexB = categoryOrder.indexOf(b);
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  });
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -76,12 +84,12 @@ export default function FingeringChartsPage() {
         <CardContent className="p-6">
           <Tabs value={activeCategory} onValueChange={handleCategoryChange} className="w-full">
             <TabsList className="grid w-full grid-cols-4 mb-4">
-              {instrumentCategories.map(category => (
+              {sortedCategories.map(category => (
                 <TabsTrigger key={category} value={category}>{category}</TabsTrigger>
               ))}
             </TabsList>
             
-            {instrumentCategories.map(category => (
+            {sortedCategories.map(category => (
               <TabsContent key={category} value={category}>
                 <div className="grid md:grid-cols-2 gap-4 items-center">
                   <Select
