@@ -458,7 +458,7 @@ Store the baritone and mouthpiece in their case.`
         { note: "G2", positions: ["2"] },
         { note: "A2", positions: ["1", "2"] },
     ],
-    range: { low: "A#1", high: "A2" },
+    range: { low: "A#1", high: "C3" },
     setupGuide: [
       {
         title: "Assembly",

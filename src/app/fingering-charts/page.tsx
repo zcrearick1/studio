@@ -98,7 +98,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
     const renderClef = () => {
         switch (clef) {
             case "treble":
-                return <path d={TREBLE_CLEF_PATH} fill="currentColor" transform="translate(10, 100) scale(0.04, -0.04)" />;
+                return <path d={TREBLE_CLEF_PATH} fill="currentColor" transform="translate(5, 98) scale(0.035, -0.035)" />;
             case "bass":
                 return (
                     <g transform="translate(15, -1) scale(0.8)">
