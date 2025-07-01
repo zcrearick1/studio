@@ -92,7 +92,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
 
   const renderClef = () => {
     switch (clef) {
-      case "treble": return <TrebleClefIcon className="absolute -left-1 -top-2 text-foreground" style={{ transform: "scale(1.2)"}} />;
+      case "treble": return <TrebleClefIcon className="absolute -left-1 -top-2 text-foreground" style={{ transform: "scale(1.5)"}} />;
       case "bass": return <BassClefIcon className="absolute -left-1 top-2 text-foreground" style={{ transform: "scale(1.2)"}} />;
       case "alto": return <AltoClefIcon className="absolute left-0 top-0 text-foreground" style={{ transform: "scale(1.2)"}} />;
       case "percussion": return <PercussionClefIcon className="absolute left-0 top-0 text-foreground" style={{ transform: "scale(1.2)"}} />;
