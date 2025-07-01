@@ -71,7 +71,7 @@ const NATURAL_PATH = "M30,15 V85 M50,5 V65 M15,45 H65 M15,35 H65";
 
 const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
     const STAFF_HEIGHT = 100;
-    const STAFF_WIDTH = 225;
+    const STAFF_WIDTH = 170;
     const LINE_SPACING = 10;
     const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
     const NOTE_X = 150;
@@ -411,7 +411,7 @@ export default function FingeringChartsPage() {
                 </div>
 
                 {/* Staff */}
-                <div className="p-6">
+                <div className="p-3">
                   <Staff clef={selectedInstrument.clef} note={parsedNote} />
                 </div>
               </div>
