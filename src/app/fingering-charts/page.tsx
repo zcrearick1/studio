@@ -54,7 +54,8 @@ function parseNoteString(noteStr: string): ParsedNote {
       // We internally use sharps for consistency in the chromatic scale
       const sharpEquivalent = Object.keys(flatToSharpMap).find(key => flatToSharpMap[key] === `${letter}#`);
       if (sharpEquivalent) {
-        letter = sharpEquivalent.charAt(0);
+        // This logic is for internal consistency, not for display.
+        // For display, we want to keep the flat letter.
       }
   }
   
@@ -78,10 +79,10 @@ const NATURAL_PATH = "M30,15 V85 M50,5 V65 M15,45 H65 M15,35 H65";
 
 const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
     const STAFF_HEIGHT = 100;
-    const STAFF_WIDTH = 128;
+    const STAFF_WIDTH = 96;
     const LINE_SPACING = 10;
     const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
-    const NOTE_X = 85;
+    const NOTE_X = 65;
 
     const getNoteYPosition = (pNote: ParsedNote) => {
         if (!pNote) return -1000;
@@ -317,27 +318,42 @@ export default function FingeringChartsPage() {
     } else if (newAccidental === 'sharp') {
         targetNoteName = `${letter}#${octave}`;
     } else { // flat
-        const flatNoteName = `${letter}b`;
-        // Check for special cases like Cb and Fb
-        if (flatNoteName === 'Cb') {
-            targetNoteName = `B${octave - 1}`;
-        } else if (flatNoteName === 'Fb') {
-            targetNoteName = `E${octave}`;
-        } else {
-            const sharpEquivalent = Object.keys(flatToSharpMap).find(key => key === flatNoteName);
-            if (sharpEquivalent) {
-                const sharpNote = flatToSharpMap[sharpEquivalent];
-                targetNoteName = `${sharpNote}${octave}`;
+        // This is a bit tricky. We need the note *above* the current one, then find its flat name.
+        const nextNoteIndex = chromaticScaleWithOctaves.indexOf(`${letter}${octave}`) + 1;
+        const nextNote = chromaticScaleWithOctaves[nextNoteIndex];
+        if (nextNote) {
+            const flatEquivalent = sharpToFlatMap[nextNote.slice(0, 2)];
+            if(flatEquivalent) {
+                targetNoteName = `${flatEquivalent}${octave}`;
+            }
+        }
+        // Fallback for simple cases
+        if (!targetNoteName) {
+            const flatNoteName = `${letter}b`;
+            // Check for special cases like Cb and Fb
+            if (flatNoteName === 'Cb') {
+                targetNoteName = `B${octave - 1}`;
+            } else if (flatNoteName === 'Fb') {
+                targetNoteName = `E${octave}`;
+            } else {
+                const sharpEquivalentKey = Object.keys(flatToSharpMap).find(key => key === flatNoteName);
+                if (sharpEquivalentKey) {
+                    const sharpEquivalent = flatToSharpMap[sharpEquivalentKey];
+                    targetNoteName = `${sharpEquivalent}${octave}`;
+                }
             }
         }
     }
 
     if (targetNoteName) {
-        const newIndex = chromaticScaleWithOctaves.indexOf(targetNoteName);
+        const newIndex = chromaticScaleWithOctaves.findIndex(n => n === targetNoteName || (flatToSharpMap[n.slice(0,2) as keyof typeof flatToSharpMap] + n.slice(2)) === targetNoteName);
         const { min, max } = instrumentNoteRangeIndices;
+        
+        const targetSharp = flatToSharpMap[targetNoteName.slice(0, 2) as keyof typeof flatToSharpMap] ? `${flatToSharpMap[targetNoteName.slice(0, 2) as keyof typeof flatToSharpMap]}${targetNoteName.slice(2)}` : targetNoteName;
+        const targetIndex = chromaticScaleWithOctaves.indexOf(targetSharp);
 
-        if (newIndex !== -1 && newIndex >= min && newIndex <= max) {
-            setCurrentNoteIndex(newIndex);
+        if (targetIndex !== -1 && targetIndex >= min && targetIndex <= max) {
+            setCurrentNoteIndex(targetIndex);
             setPreferredAccidental(newAccidental);
         }
     }
@@ -370,6 +386,7 @@ export default function FingeringChartsPage() {
   }
 
   const displayNote = getDisplayNote();
+  const noteForStaff = parseNoteString(displayNote);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -462,7 +479,7 @@ export default function FingeringChartsPage() {
 
                 {/* Staff */}
                 <div className="p-3">
-                  <Staff clef={selectedInstrument.clef} note={parsedNote} />
+                  <Staff clef={selectedInstrument.clef} note={noteForStaff} />
                 </div>
               </div>
             </Card>
