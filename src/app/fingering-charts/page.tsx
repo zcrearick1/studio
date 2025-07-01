@@ -126,7 +126,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
             case 'sharp':
                 return <path d={SHARP_PATH} fill="currentColor" fillRule="evenodd" transform={`translate(${accidentalX + 22.5}, ${y-11}) scale(-0.01, 0.01)`} />;
             case 'flat':
-                return <path d={FLAT_PATH} fill="currentColor" fillRule="evenodd" transform={`translate(${accidentalX - 55}, ${y + 80}) scale(0.08, -0.08)`} />;
+                return <path d={FLAT_PATH} fill="currentColor" fillRule="evenodd" transform={`translate(${accidentalX - 55}, ${y + 80}) scale(0.02, -0.02)`} />;
             default:
                 return null;
         }

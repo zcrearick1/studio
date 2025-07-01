@@ -497,7 +497,7 @@ Wipe down the exterior of the tuba to remove fingerprints.`
       { note: "C4", positions: ["3rd finger on G string"] },
       { note: "D4", positions: ["Open D string"] },
       { note: "E4", positions: ["1st finger on D string"] },
-      { note: "F#4", positions: ["2nd finger on D string"] },
+      { note: "F#4/Gb4", positions: ["2nd finger on D string"] },
     ],
     range: { low: "G3", high: "F#4" },
     setupGuide: [
