@@ -32,8 +32,13 @@ const chromaticScaleWithOctaves = Array.from({ length: 7 * 12 }, (_, i) => {
 
 // A mapping for flat names to their sharp equivalents for lookups
 const flatToSharpMap: { [key: string]: string } = {
-  Db: "C#", Eb: "D#", Gb: "F#", Ab: "G#", Bb: "A#",
+  Db: "C#", Eb: "D#", Gb: "F#", Ab: "G#", Bb: "A#", Cb: "B", Fb: "E"
 };
+
+const sharpToFlatMap: { [key: string]: string } = Object.fromEntries(
+  Object.entries(flatToSharpMap).map(([flat, sharp]) => [sharp, flat])
+);
+
 
 function parseNoteString(noteStr: string): ParsedNote {
   if (!noteStr) return null;
@@ -195,6 +200,7 @@ export default function FingeringChartsPage() {
   const searchParams = useSearchParams();
   const [activeCategory, setActiveCategory] = useState<string>("Woodwind");
   const [selectedInstrumentName, setSelectedInstrumentName] = useState<string>("");
+  const [preferredAccidental, setPreferredAccidental] = useState<'sharp' | 'flat' | 'natural'>('natural');
   
   // State now tracks the index in our master chromatic scale
   const defaultNoteIndex = chromaticScaleWithOctaves.indexOf("C4");
@@ -232,12 +238,17 @@ export default function FingeringChartsPage() {
 
   const changeNote = (direction: 'up' | 'down') => {
       const { min, max } = instrumentNoteRangeIndices;
-
       const step = direction === 'up' ? 1 : -1;
       const nextIndex = currentNoteIndex + step;
       
       if (nextIndex >= min && nextIndex <= max) {
         setCurrentNoteIndex(nextIndex);
+        const nextNoteName = chromaticScaleWithOctaves[nextIndex];
+        if (nextNoteName.includes('#')) {
+            setPreferredAccidental('sharp');
+        } else {
+            setPreferredAccidental('natural');
+        }
       }
   };
 
@@ -307,13 +318,17 @@ export default function FingeringChartsPage() {
         targetNoteName = `${letter}#${octave}`;
     } else { // flat
         const flatNoteName = `${letter}b`;
-        const sharpEquivalent = flatToSharpMap[flatNoteName];
-        if (sharpEquivalent) {
-            targetNoteName = `${sharpEquivalent}${octave}`;
-        } else if (flatNoteName === 'Cb') {
+        // Check for special cases like Cb and Fb
+        if (flatNoteName === 'Cb') {
             targetNoteName = `B${octave - 1}`;
         } else if (flatNoteName === 'Fb') {
             targetNoteName = `E${octave}`;
+        } else {
+            const sharpEquivalent = Object.keys(flatToSharpMap).find(key => key === flatNoteName);
+            if (sharpEquivalent) {
+                const sharpNote = flatToSharpMap[sharpEquivalent];
+                targetNoteName = `${sharpNote}${octave}`;
+            }
         }
     }
 
@@ -323,9 +338,38 @@ export default function FingeringChartsPage() {
 
         if (newIndex !== -1 && newIndex >= min && newIndex <= max) {
             setCurrentNoteIndex(newIndex);
+            setPreferredAccidental(newAccidental);
         }
     }
 };
+
+  const getDisplayNote = () => {
+    // If we have a definitive fingering, use its names.
+    if (currentFingering) {
+        const noteVariants = currentFingering.note.split('/');
+        if (noteVariants.length === 1) return noteVariants[0];
+
+        if (preferredAccidental === 'flat') {
+            const flatVariant = noteVariants.find(v => v.includes('b'));
+            if (flatVariant) return flatVariant;
+        }
+
+        const sharpVariant = noteVariants.find(v => v.includes('#'));
+        return sharpVariant || noteVariants[0];
+    }
+
+    // If no fingering, derive name from internal state.
+    if (preferredAccidental === 'flat' && currentNoteName.includes('#')) {
+        const notePart = currentNoteName.slice(0, 2);
+        const octavePart = currentNoteName.slice(2);
+        const flatEquivalent = sharpToFlatMap[notePart];
+        return flatEquivalent ? `${flatEquivalent}${octavePart}` : currentNoteName;
+    }
+    
+    return currentNoteName;
+  }
+
+  const displayNote = getDisplayNote();
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -429,7 +473,7 @@ export default function FingeringChartsPage() {
                 {currentFingering ? (
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-primary text-4xl">{currentFingering.note}</CardTitle>
+                      <CardTitle className="text-primary text-4xl">{displayNote}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <p className="text-lg text-muted-foreground break-words">{currentFingering.positions.join(' ')}</p>
@@ -438,7 +482,7 @@ export default function FingeringChartsPage() {
                 ) : (
                   <Card className="bg-muted">
                     <CardHeader>
-                      <CardTitle className="text-2xl">{currentNoteName}</CardTitle>
+                      <CardTitle className="text-2xl">{displayNote}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <p className="text-muted-foreground">Fingering not available for this instrument.</p>
@@ -453,3 +497,4 @@ export default function FingeringChartsPage() {
     </div>
   );
 }
+
