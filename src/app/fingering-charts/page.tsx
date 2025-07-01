@@ -23,7 +23,6 @@ import {
   FlatIcon,
   NaturalIcon,
 } from "@/components/icons";
-import { cn } from "@/lib/utils";
 
 type ParsedNote = {
   letter: string;
@@ -31,17 +30,34 @@ type ParsedNote = {
   octave: number;
 } | null;
 
+// A comprehensive chromatic scale to represent the staff
+const noteOrder = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+const chromaticScaleWithOctaves = Array.from({ length: 7 * 12 }, (_, i) => {
+    const octave = Math.floor(i / 12);
+    const noteName = noteOrder[i % 12];
+    return `${noteName}${octave}`;
+});
+
+// A mapping for flat names to their sharp equivalents for lookups
+const flatToSharpMap: { [key: string]: string } = {
+  Db: "C#", Eb: "D#", Gb: "F#", Ab: "G#", Bb: "A#",
+};
+
 function parseNoteString(noteStr: string): ParsedNote {
   if (!noteStr) return null;
   const simpleNote = noteStr.split("/")[0].trim();
   const match = simpleNote.match(/([A-G])([#b]?)([0-9])/);
   if (!match) return null;
 
-  const [, letter, accidentalSymbol, octaveStr] = match;
+  let [, letter, accidentalSymbol, octaveStr] = match;
   let accidental: "sharp" | "flat" | "natural" = "natural";
   if (accidentalSymbol === "#") accidental = "sharp";
-  if (accidentalSymbol === "b") accidental = "flat";
-
+  if (accidentalSymbol === "b") {
+      accidental = "flat";
+      // We internally use sharps for consistency in the chromatic scale
+      letter = flatToSharpMap[`${letter}b`]?.charAt(0) || letter;
+  }
+  
   return {
     letter,
     accidental,
@@ -62,12 +78,14 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
 
     let baseStep = 0;
     // Base step is the position of C4 on the staff for the given clef
-    if (clef === "treble") baseStep = 6; // C4 is on ledger line below staff
-    if (clef === "bass") baseStep = -2; // C4 is on ledger line above staff
+    if (clef === "treble") baseStep = 7; // C4 is on ledger line below staff
+    if (clef === "bass") baseStep = -1; // C4 is on ledger line above staff
     if (clef === "alto") baseStep = 0; // C4 is on middle line
 
     const staffPosition = (step - baseStep) + (octave - 4) * 7;
-    return 50 - staffPosition * 5; // 5px per step, starting from middle
+    // Adjust for sharps, each sharp raises the visual position slightly
+    const accidentalOffset = pNote.accidental === 'sharp' ? -0.5 : 0;
+    return 50 - (staffPosition + accidentalOffset) * 5; // 5px per step, starting from middle
   };
   
   const y = getNoteYPosition(note);
@@ -75,7 +93,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
   const renderClef = () => {
     switch (clef) {
       case "treble": return <TrebleClefIcon className="absolute -left-1 -top-8 text-foreground" style={{ transform: "scale(1.2)"}} />;
-      case "bass": return <BassClefIcon className="absolute -left-1 -top-6 text-foreground" style={{ transform: "scale(1.2)"}} />;
+      case "bass": return <BassClefIcon className="absolute -left-1 -top-2 text-foreground" style={{ transform: "scale(1.2)"}} />;
       case "alto": return <AltoClefIcon className="absolute left-0 top-0 text-foreground" style={{ transform: "scale(1.2)"}} />;
       case "percussion": return <PercussionClefIcon className="absolute left-0 top-0 text-foreground" style={{ transform: "scale(1.2)"}} />;
       default: return null;
@@ -88,7 +106,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
       switch(note.accidental) {
           case 'sharp': return <SharpIcon {...props} />;
           case 'flat': return <FlatIcon {...props} />;
-          case 'natural': return <NaturalIcon {...props} />;
+          // Natural is implicitly handled by note position, no icon needed unless cancelling
           default: return null;
       }
   }
@@ -118,12 +136,14 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
   );
 };
 
-
 export default function FingeringChartsPage() {
   const searchParams = useSearchParams();
   const [activeCategory, setActiveCategory] = useState<string>("Woodwind");
   const [selectedInstrumentName, setSelectedInstrumentName] = useState<string>("");
-  const [currentFingeringIndex, setCurrentFingeringIndex] = useState(0);
+  
+  // State now tracks the index in our master chromatic scale
+  const defaultNoteIndex = chromaticScaleWithOctaves.indexOf("C4");
+  const [currentNoteIndex, setCurrentNoteIndex] = useState(defaultNoteIndex);
 
   const instrumentCategories = [...new Set(instruments.map(i => i.category))];
   const categoryOrder = ["Woodwind", "Brass", "String", "Percussion"];
@@ -139,10 +159,19 @@ export default function FingeringChartsPage() {
     () => instruments.find((i) => i.name === selectedInstrumentName),
     [selectedInstrumentName]
   );
-
-  const currentFingering = selectedInstrument?.fingerings[currentFingeringIndex];
-  const parsedNote = currentFingering ? parseNoteString(currentFingering.note) : null;
   
+  const currentNoteName = chromaticScaleWithOctaves[currentNoteIndex];
+  const parsedNote = parseNoteString(currentNoteName);
+
+  // Find the fingering for the current note, if it exists for the instrument
+  const currentFingering = useMemo(() => {
+    if (!selectedInstrument || !currentNoteName) return null;
+    return selectedInstrument.fingerings.find(f => {
+        const noteVariants = f.note.split('/');
+        return noteVariants.some(v => v === currentNoteName);
+    }) || null;
+  }, [selectedInstrument, currentNoteName]);
+
   useEffect(() => {
     const instrumentSlug = searchParams.get('instrument');
     const targetInstrument = instruments.find(i => i.slug === instrumentSlug);
@@ -159,8 +188,17 @@ export default function FingeringChartsPage() {
   }, [searchParams, selectedInstrumentName]);
   
   useEffect(() => {
-    setCurrentFingeringIndex(0);
-  }, [selectedInstrumentName]);
+    // When instrument changes, set the note to the first available fingering or a default
+    const firstNoteOfInstrument = selectedInstrument?.fingerings[0]?.note.split('/')[0];
+    let initialIndex = defaultNoteIndex;
+    if (firstNoteOfInstrument) {
+        const indexInScale = chromaticScaleWithOctaves.indexOf(firstNoteOfInstrument);
+        if (indexInScale !== -1) {
+            initialIndex = indexInScale;
+        }
+    }
+    setCurrentNoteIndex(initialIndex);
+  }, [selectedInstrumentName, defaultNoteIndex]);
 
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
@@ -173,19 +211,28 @@ export default function FingeringChartsPage() {
   };
   
   const changeNote = (direction: 'up' | 'down') => {
-      if (!selectedInstrument) return;
-      const nextIndex = currentFingeringIndex + (direction === 'up' ? 1 : -1);
-      if (nextIndex >= 0 && nextIndex < selectedInstrument.fingerings.length) {
-          setCurrentFingeringIndex(nextIndex);
-      }
+      const step = direction === 'up' ? 1 : -1;
+      let nextIndex = currentNoteIndex + step;
+      // Wrap around the scale
+      if (nextIndex < 0) nextIndex = chromaticScaleWithOctaves.length - 1;
+      if (nextIndex >= chromaticScaleWithOctaves.length) nextIndex = 0;
+      setCurrentNoteIndex(nextIndex);
   }
 
-  const handleAccidentalChange = (accidental: '#'|'b'|'') => {
-      if (!parsedNote || !selectedInstrument) return;
-      const targetNoteString = `${parsedNote.letter}${accidental}${parsedNote.octave}`;
-      const newIndex = selectedInstrument.fingerings.findIndex(f => f.note.startsWith(targetNoteString));
+  // This function is simplified as accidental is part of the note name now
+  // For UI, we can keep it to quickly jump between note variations if needed
+  const handleAccidentalClick = (targetAccidental: string) => {
+      if(!parsedNote) return;
+      const baseNote = `${parsedNote.letter}${parsedNote.octave}`;
+      const sharpNote = `${parsedNote.letter}#${parsedNote.octave}`;
+      
+      let targetNote = baseNote;
+      if (targetAccidental === '#') targetNote = sharpNote;
+      // A more complex logic could handle flats here
+      
+      const newIndex = chromaticScaleWithOctaves.indexOf(targetNote);
       if (newIndex !== -1) {
-          setCurrentFingeringIndex(newIndex);
+          setCurrentNoteIndex(newIndex);
       }
   }
 
@@ -236,40 +283,30 @@ export default function FingeringChartsPage() {
         <div className="mt-8">
             <h2 className="text-2xl font-bold text-center mb-6">{selectedInstrument.name} Fingerings</h2>
             
-            {selectedInstrument.fingerings.length > 0 && currentFingering ? (
-                <Card className="max-w-3xl mx-auto overflow-hidden">
-                    <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] items-center">
-                        {/* Controls */}
-                        <div className="flex flex-col items-center justify-center p-4 bg-secondary/50 gap-4">
-                            <Button variant="outline" size="icon" onClick={() => changeNote('up')}>
-                                <ArrowUp className="h-5 w-5" />
-                                <span className="sr-only">Note Up</span>
-                            </Button>
-                            <div className="flex gap-2">
-                                <Button variant={parsedNote?.accidental === 'sharp' ? 'default' : 'outline'} size="icon" onClick={() => handleAccidentalChange('#')}>
-                                    <SharpIcon className="h-5 w-5 p-0.5" />
-                                </Button>
-                                 <Button variant={parsedNote?.accidental === 'natural' ? 'default' : 'outline'} size="icon" onClick={() => handleAccidentalChange('')}>
-                                    <NaturalIcon className="h-5 w-5 p-0.5" />
-                                </Button>
-                                <Button variant={parsedNote?.accidental === 'flat' ? 'default' : 'outline'} size="icon" onClick={() => handleAccidentalChange('b')}>
-                                    <FlatIcon className="h-5 w-5 p-0.5" />
-                                </Button>
-                            </div>
-                            <Button variant="outline" size="icon" onClick={() => changeNote('down')}>
-                                <ArrowDown className="h-5 w-5" />
-                                 <span className="sr-only">Note Down</span>
-                            </Button>
-                        </div>
+            <Card className="max-w-3xl mx-auto overflow-hidden">
+                <div className="grid grid-cols-1 md:grid-cols-[3fr_2fr_3fr] items-center">
+                    {/* Controls */}
+                    <div className="flex flex-col items-center justify-center p-4 bg-secondary/50 gap-4 h-full">
+                        <Button variant="outline" size="icon" onClick={() => changeNote('up')}>
+                            <ArrowUp className="h-5 w-5" />
+                            <span className="sr-only">Note Up</span>
+                        </Button>
+                        <div className="text-center font-mono text-lg">{currentNoteName}</div>
+                        <Button variant="outline" size="icon" onClick={() => changeNote('down')}>
+                            <ArrowDown className="h-5 w-5" />
+                             <span className="sr-only">Note Down</span>
+                        </Button>
+                    </div>
 
-                        {/* Staff */}
-                        <div className="p-6">
-                            <Staff clef={selectedInstrument.clef} note={parsedNote} />
-                        </div>
+                    {/* Staff */}
+                    <div className="p-6">
+                        <Staff clef={selectedInstrument.clef} note={parsedNote} />
+                    </div>
 
-                        {/* Fingering Display */}
-                        <div className="p-6 bg-secondary/50 h-full flex flex-col justify-center text-center">
-                             <Card>
+                    {/* Fingering Display */}
+                    <div className="p-6 bg-secondary/50 h-full flex flex-col justify-center text-center">
+                         {currentFingering ? (
+                            <Card>
                                  <CardHeader>
                                     <CardTitle className="text-primary text-4xl">{currentFingering.note}</CardTitle>
                                  </CardHeader>
@@ -277,15 +314,19 @@ export default function FingeringChartsPage() {
                                     <p className="text-lg text-muted-foreground break-words">{currentFingering.positions.join(' ')}</p>
                                  </CardContent>
                              </Card>
-                        </div>
+                         ) : (
+                            <Card className="bg-muted">
+                                <CardHeader>
+                                    <CardTitle className="text-2xl">{currentNoteName}</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <p className="text-muted-foreground">Fingering not available for this instrument.</p>
+                                </CardContent>
+                            </Card>
+                         )}
                     </div>
-                </Card>
-            ) : (
-                <div className="text-center py-12 text-muted-foreground">
-                    <Music className="mx-auto h-12 w-12 mb-4" />
-                    <p>No fingerings available for this instrument.</p>
                 </div>
-            )}
+            </Card>
         </div>
       )}
     </div>
