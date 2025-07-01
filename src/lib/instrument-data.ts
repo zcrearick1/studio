@@ -15,6 +15,10 @@ export type Instrument = {
   clef: "treble" | "bass" | "alto" | "percussion";
   fingerings: Fingering[];
   setupGuide: SetupGuideSection[];
+  range: {
+    low: string;
+    high: string;
+  };
 };
 
 export const instruments: Instrument[] = [
@@ -32,6 +36,7 @@ export const instruments: Instrument[] = [
       { note: "G4", positions: ["T", "1", "2", "|"] },
       { note: "A4", positions: ["T", "|"] },
     ],
+    range: { low: "C4", high: "A4" },
     setupGuide: [
       {
         title: "Assembly",
@@ -73,6 +78,7 @@ Carefully place each part back in its designated spot in the case.`
       { note: "B3", positions: ["T"] },
       { note: "C4", positions: ["All open"] },
     ],
+    range: { low: "E3", high: "C4" },
     setupGuide: [
       {
         title: "Assembly",
@@ -111,10 +117,11 @@ Disassemble the pieces and place them in the case.`
         { note: "C4", positions: ["Middle C key"] },
         { note: "C#4/Db4", positions: ["All open"] },
         { note: "D4", positions: ["Side C", "1", "2", "3", "4", "5", "6"] },
-        { note: "Eb4", positions: ["Side C", "1", "2", "3", "4", "5"] },
+        { note: "D#4/Eb4", positions: ["Side C", "1", "2", "3", "4", "5"] },
         { note: "E4", positions: ["Side C", "1", "2", "3", "4"] },
         { note: "F4", positions: ["Side C", "1", "2", "3"] },
     ],
+    range: { low: "C4", high: "F4" },
     setupGuide: [
       {
         title: "Assembly",
@@ -152,10 +159,11 @@ Wipe down the exterior. Place the end cap on the top of the body before putting 
         { note: "C4", positions: ["Middle C key"] },
         { note: "C#4/Db4", positions: ["All open"] },
         { note: "D4", positions: ["Side C", "1", "2", "3", "4", "5", "6"] },
-        { note: "Eb4", positions: ["Side C", "1", "2", "3", "4", "5"] },
+        { note: "D#4/Eb4", positions: ["Side C", "1", "2", "3", "4", "5"] },
         { note: "E4", positions: ["Side C", "1", "2", "3", "4"] },
         { note: "F4", positions: ["Side C", "1", "2", "3"] },
     ],
+    range: { low: "C4", high: "F4" },
     setupGuide: [
       {
         title: "Assembly",
@@ -193,10 +201,11 @@ Wipe down the exterior. Place the end cap on the top of the body before putting 
         { note: "C4", positions: ["Middle C key"] },
         { note: "C#4/Db4", positions: ["All open"] },
         { note: "D4", positions: ["Side C", "1", "2", "3", "4", "5", "6"] },
-        { note: "Eb4", positions: ["Side C", "1", "2", "3", "4", "5"] },
+        { note: "D#4/Eb4", positions: ["Side C", "1", "2", "3", "4", "5"] },
         { note: "E4", positions: ["Side C", "1", "2", "3", "4"] },
         { note: "F4", positions: ["Side C", "1", "2", "3"] },
     ],
+    range: { low: "C4", high: "F4" },
     setupGuide: [
       {
         title: "Assembly",
@@ -239,6 +248,7 @@ Wipe down the exterior. Place the end cap on the top of the body before putting 
         { note: "F4", positions: ["Open"] },
         { note: "G4", positions: ["1", "2"] },
     ],
+    range: { low: "C4", high: "G4" },
     setupGuide: [
       {
         title: "Assembly & Oiling",
@@ -273,14 +283,15 @@ Store the trumpet and mouthpiece in the case. Give your trumpet a full bath ever
     category: "Brass",
     clef: "bass",
     fingerings: [
-        { note: "Bb2", positions: ["1st Position"] },
+        { note: "A#2/Bb2", positions: ["1st Position"] },
         { note: "A2", positions: ["2nd Position"] },
-        { note: "Ab2", positions: ["3rd Position"] },
+        { note: "G#2/Ab2", positions: ["3rd Position"] },
         { note: "G2", positions: ["4th Position"] },
-        { note: "Gb2", positions: ["5th Position"] },
+        { note: "F#2/Gb2", positions: ["5th Position"] },
         { note: "F2", positions: ["6th Position"] },
         { note: "E2", positions: ["7th Position"] },
     ],
+    range: { low: "E2", high: "A#2" },
     setupGuide: [
       {
         title: "Assembly",
@@ -324,6 +335,7 @@ Engage the slide lock before putting it in the case to prevent the outer slide f
         { note: "E4", positions: ["2"] },
         { note: "F4", positions: ["1"] },
     ],
+    range: { low: "G3", high: "F4" },
     setupGuide: [
       {
         title: "Assembly & Hand Position",
@@ -356,14 +368,15 @@ Store the horn carefully in its case.`
     category: "Brass",
     clef: "bass",
     fingerings: [
-        { note: "Bb2", positions: ["Open"] },
+        { note: "A#2/Bb2", positions: ["Open"] },
         { note: "C3", positions: ["1", "3"] },
         { note: "D3", positions: ["1", "2"] },
-        { note: "Eb3", positions: ["1"] },
+        { note: "D#3/Eb3", positions: ["1"] },
         { note: "F3", positions: ["Open"] },
         { note: "G3", positions: ["2"] },
         { note: "A3", positions: ["1", "2"] },
     ],
+    range: { low: "A#2", high: "A3" },
     setupGuide: [
       {
         title: "Assembly & Oiling",
@@ -404,6 +417,7 @@ Store the baritone and mouthpiece in their case.`
         { note: "A4", positions: ["1", "2"] },
         { note: "B4", positions: ["2"] },
     ],
+    range: { low: "C4", high: "B4" },
     setupGuide: [
       {
         title: "Assembly & Oiling",
@@ -436,14 +450,15 @@ Store the baritone and mouthpiece in their case.`
     category: "Brass",
     clef: "bass",
     fingerings: [
-        { note: "Bb1", positions: ["Open"] },
+        { note: "A#1/Bb1", positions: ["Open"] },
         { note: "C2", positions: ["1", "3"] },
         { note: "D2", positions: ["1", "2"] },
-        { note: "Eb2", positions: ["1"] },
+        { note: "D#2/Eb2", positions: ["1"] },
         { note: "F2", positions: ["Open"] },
         { note: "G2", positions: ["2"] },
         { note: "A2", positions: ["1", "2"] },
     ],
+    range: { low: "A#1", high: "A2" },
     setupGuide: [
       {
         title: "Assembly",
@@ -484,6 +499,7 @@ Wipe down the exterior of the tuba to remove fingerprints.`
       { note: "E4", positions: ["1st finger on D string"] },
       { note: "F#4", positions: ["2nd finger on D string"] },
     ],
+    range: { low: "G3", high: "F#4" },
     setupGuide: [
       {
         title: "Setup",
@@ -526,6 +542,7 @@ Place the violin and bow securely in their case.`
       { note: "A3", positions: ["1st finger on G string"] },
       { note: "B3", positions: ["2nd finger on G string"] },
     ],
+    range: { low: "C3", high: "B3" },
     setupGuide: [
       {
         title: "Setup",
@@ -563,6 +580,7 @@ Store the viola and bow securely in their case.`
       { note: "E2", positions: ["3rd finger on C string"] },
       { note: "F2", positions: ["4th finger on C string"] },
     ],
+    range: { low: "C2", high: "F2" },
     setupGuide: [
       {
         title: "Setup",
@@ -603,6 +621,7 @@ Secure the cello and bow in their case. If it's a soft case, be extra careful no
       { note: "B1", positions: ["2nd finger on A string"] },
       { note: "C2", positions: ["4th finger on A string"] },
     ],
+    range: { low: "E1", high: "C2" },
     setupGuide: [
       {
         title: "Setup",
@@ -636,6 +655,7 @@ Most basses are transported in a padded soft case or "gig bag". Be extremely car
     category: "Percussion",
     clef: "percussion",
     fingerings: [],
+    range: { low: "C4", high: "C4" },
     setupGuide: [
       {
         title: "Assembly",
@@ -670,6 +690,7 @@ If transporting, it's best to use a case or bag to protect the drum from dents a
     category: "Percussion",
     clef: "treble",
     fingerings: [],
+    range: { low: "C4", high: "C7" },
     setupGuide: [
       {
         title: "Assembly",

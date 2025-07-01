@@ -212,6 +212,34 @@ export default function FingeringChartsPage() {
   const currentNoteName = chromaticScaleWithOctaves[currentNoteIndex];
   const parsedNote = parseNoteString(currentNoteName);
 
+  const instrumentNoteRangeIndices = useMemo(() => {
+    if (!selectedInstrument?.range) {
+      return { min: 0, max: chromaticScaleWithOctaves.length - 1 };
+    }
+    
+    const min = chromaticScaleWithOctaves.indexOf(selectedInstrument.range.low);
+    const max = chromaticScaleWithOctaves.indexOf(selectedInstrument.range.high);
+
+    // If a note isn't found, it might be a data issue. Return -1 to signal this.
+    return { min, max };
+  }, [selectedInstrument]);
+
+  const changeNote = (direction: 'up' | 'down') => {
+      const { min, max } = instrumentNoteRangeIndices;
+      if (min === -1 || max === -1) return; // If range is invalid, do nothing.
+
+      const step = direction === 'up' ? 1 : -1;
+      const nextIndex = currentNoteIndex + step;
+      
+      if (nextIndex >= min && nextIndex <= max) {
+        setCurrentNoteIndex(nextIndex);
+      }
+  };
+
+  const canGoUp = instrumentNoteRangeIndices.max === -1 ? false : currentNoteIndex < instrumentNoteRangeIndices.max;
+  const canGoDown = instrumentNoteRangeIndices.min === -1 ? false : currentNoteIndex > instrumentNoteRangeIndices.min;
+
+
   // Find the fingering for the current note, if it exists for the instrument
   const currentFingering = useMemo(() => {
     if (!selectedInstrument || !currentNoteName) return null;
@@ -237,17 +265,17 @@ export default function FingeringChartsPage() {
   }, [searchParams, selectedInstrumentName]);
   
   useEffect(() => {
-    // When instrument changes, set the note to the first available fingering or a default
-    const firstNoteOfInstrument = selectedInstrument?.fingerings[0]?.note.split('/')[0];
-    let initialIndex = defaultNoteIndex;
-    if (firstNoteOfInstrument) {
-        const indexInScale = chromaticScaleWithOctaves.indexOf(firstNoteOfInstrument);
-        if (indexInScale !== -1) {
-            initialIndex = indexInScale;
-        }
+    // When instrument changes, set the note to the bottom of its playable range.
+    if (selectedInstrument?.range) {
+      const lowIndex = chromaticScaleWithOctaves.indexOf(selectedInstrument.range.low);
+      if (lowIndex !== -1) {
+        setCurrentNoteIndex(lowIndex);
+        return;
+      }
     }
-    setCurrentNoteIndex(initialIndex);
-  }, [selectedInstrumentName, defaultNoteIndex]);
+    // Fallback
+    setCurrentNoteIndex(defaultNoteIndex);
+  }, [selectedInstrumentName, defaultNoteIndex, selectedInstrument]);
 
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
@@ -259,15 +287,6 @@ export default function FingeringChartsPage() {
     setSelectedInstrumentName(instrumentName);
   };
   
-  const changeNote = (direction: 'up' | 'down') => {
-      const step = direction === 'up' ? 1 : -1;
-      let nextIndex = currentNoteIndex + step;
-      // Wrap around the scale
-      if (nextIndex < 0) nextIndex = chromaticScaleWithOctaves.length - 1;
-      if (nextIndex >= chromaticScaleWithOctaves.length) nextIndex = 0;
-      setCurrentNoteIndex(nextIndex);
-  }
-
   // This function is simplified as accidental is part of the note name now
   // For UI, we can keep it to quickly jump between note variations if needed
   const handleAccidentalClick = (targetAccidental: string) => {
@@ -338,12 +357,12 @@ export default function FingeringChartsPage() {
               <div className="grid grid-cols-[auto_1fr] items-center h-full">
                 {/* Controls */}
                 <div className="flex flex-col items-center justify-center p-4 bg-secondary/50 gap-4 h-full">
-                  <Button variant="outline" size="icon" onClick={() => changeNote('up')}>
+                  <Button variant="outline" size="icon" onClick={() => changeNote('up')} disabled={!canGoUp}>
                     <ArrowUp className="h-5 w-5" />
                     <span className="sr-only">Note Up</span>
                   </Button>
                   <div className="text-center font-mono text-lg">{currentNoteName}</div>
-                  <Button variant="outline" size="icon" onClick={() => changeNote('down')}>
+                  <Button variant="outline" size="icon" onClick={() => changeNote('down')} disabled={!canGoDown}>
                     <ArrowDown className="h-5 w-5" />
                     <span className="sr-only">Note Down</span>
                   </Button>
