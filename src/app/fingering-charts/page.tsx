@@ -124,7 +124,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
         
         switch (note.accidental) {
             case 'sharp':
-                return <path d={SHARP_PATH} fill="currentColor" transform={`translate(${accidentalX}, ${y-15}) scale(0.015)`} />;
+                return <path d={SHARP_PATH} fill="currentColor" fillRule="evenodd" transform={`translate(${accidentalX}, ${y-15}) scale(0.015)`} />;
             case 'flat':
                 return <path d={FLAT_PATH} fill="currentColor" transform={`translate(${accidentalX}, ${y-40}) scale(0.6)`} />;
             default:
@@ -405,7 +405,7 @@ export default function FingeringChartsPage() {
                         </Button>
                         <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleAccidentalChange('sharp')}>
                              <svg viewBox="0 0 900 2000" className="w-auto h-4 text-foreground">
-                                <path d={SHARP_PATH} fill="currentColor" />
+                                <path d={SHARP_PATH} fill="currentColor" fillRule="evenodd" />
                             </svg>
                             <span className="sr-only">Sharp</span>
                         </Button>
