@@ -67,7 +67,7 @@ const BASS_CLEF_DOT1_PATH = "M3860 4494 c-94 -29 -186 -125 -211 -218 -16 -60 -7 
 const BASS_CLEF_DOT2_PATH = "M3915 3140 c-101 -15 -194 -82 -243 -175 -25 -45 -27 -60 -27 -160 0 -100 2 -115 27 -161 35 -67 115 -138 179 -159 58 -20 167 -23 225 -7 96 27 191 121 219 215 40 134 5 257 -99 355 -86 82 -170 109 -281 92z";
 const ALTO_CLEF_PATH = "M 36.9,81.2 C 36.9,81.2 36.9,20.5 36.9,20.5 L 36.9,178.5 M 62.6,81.2 C 62.6,81.2 62.6,20.5 62.6,20.5 L 62.6,178.5 M 21.1,51.8 C 21.1,51.8 49.8,20.5 49.8,20.5 C 49.8,20.5 78.4,51.8 78.4,51.8 M 21.1,147.8 C 21.1,147.8 49.8,178.5 49.8,178.5 C 49.8,178.5 78.4,147.8 78.4,147.8";
 const PERCUSSION_CLEF_PATH = "M 20 20 L 20 80 M 80 20 L 80 80 M 10 50 L 90 50";
-const SHARP_PATH = "M20,5L60,0L55,35L95,30L90,65L50,70L55,100L15,105L20,70L-20,75L-15,40L20,35Z";
+const SHARP_PATH = "M5410 17031 c0 -2258 -1 -2380 -17 -2385 -10 -3 -135 -39 -278 -80 -528 -152 -1004 -289 -1134 -327 -74 -21 -138 -39 -143 -39 -4 0 -8 1087 -8 2415 l0 2415 -435 0 -435 0 0 -2543 0 -2543 -492 -143 c-877 -252 -998 -288 -1003 -293 -8 -8 -5 -2523 3 -2521 9 1 1382 398 1445 417 l47 14 -2 -1851 -3 -1850 -720 -208 c-396 -114 -737 -213 -757 -219 l-38 -11 0 -1263 0 -1263 343 99 c188 54 522 150 742 214 220 63 408 117 417 120 17 5 18 -114 20 -2358 l3 -2363 432 -3 433 -2 2 2492 3 2493 145 41 c80 23 327 95 550 159 223 64 511 148 640 185 l235 67 3 -2528 2 -2529 430 0 430 0 0 2654 0 2653 103 30 c56 17 335 97 619 179 l518 149 0 1263 c0 694 -3 1262 -6 1262 -10 0 -1189 -340 -1211 -350 l-23 -10 0 1853 0 1852 628 181 627 180 3 1262 c1 694 -1 1262 -5 1262 -5 0 -53 -13 -108 -29 -632 -183 -927 -268 -1010 -291 -55 -16 -108 -32 -117 -35 -17 -7 -18 104 -18 2249 l0 2256 -430 0 -430 0 0 -2379z m0 -6755 c0 -1015 -3 -1847 -8 -1850 -7 -4 -119 -37 -1107 -322 -236 -68 -438 -127 -447 -130 -17 -5 -18 87 -18 1845 0 1753 1 1850 18 1855 9 3 168 49 352 102 184 53 526 152 760 220 234 67 431 123 438 123 9 1 12 -374 12 -1843z";
 const FLAT_PATH = "M15,5V70C40,60,40,45,15,35";
 const NATURAL_PATH = "M30,15 V85 M50,5 V65 M15,45 H65 M15,35 H65";
 
@@ -100,10 +100,10 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
     const renderClef = () => {
         switch (clef) {
             case "treble":
-                return <path d={TREBLE_CLEF_PATH} fill="currentColor" transform="translate(5, 98) scale(0.035, -0.035)" />;
+                return <path d={TREBLE_CLEF_PATH} fill="currentColor" transform="translate(5, 95) scale(0.03, -0.03)" />;
             case "bass":
                 return (
-                    <g transform="translate(10, 95) scale(0.015, -0.015)">
+                    <g transform="translate(15, 64.5) scale(0.007, -0.007)">
                         <path d={BASS_CLEF_BODY_PATH} fill="currentColor" fillRule="evenodd" />
                         <path d={BASS_CLEF_DOT1_PATH} fill="currentColor" />
                         <path d={BASS_CLEF_DOT2_PATH} fill="currentColor" />
@@ -124,7 +124,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
         
         switch (note.accidental) {
             case 'sharp':
-                return <path d={SHARP_PATH} fill="currentColor" transform={`translate(${accidentalX}, ${y-15}) scale(0.3)`} />;
+                return <path d={SHARP_PATH} fill="currentColor" transform={`translate(${accidentalX}, ${y-15}) scale(0.015)`} />;
             case 'flat':
                 return <path d={FLAT_PATH} fill="currentColor" transform={`translate(${accidentalX}, ${y-40}) scale(0.6)`} />;
             default:
@@ -404,7 +404,7 @@ export default function FingeringChartsPage() {
                             <span className="sr-only">Natural</span>
                         </Button>
                         <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleAccidentalChange('sharp')}>
-                             <svg viewBox="0 0 100 105" className="w-auto h-4 text-foreground">
+                             <svg viewBox="0 0 900 2000" className="w-auto h-4 text-foreground">
                                 <path d={SHARP_PATH} fill="currentColor" />
                             </svg>
                             <span className="sr-only">Sharp</span>
