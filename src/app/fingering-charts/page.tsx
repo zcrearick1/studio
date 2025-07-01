@@ -47,7 +47,10 @@ function parseNoteString(noteStr: string): ParsedNote {
   if (accidentalSymbol === "b") {
       accidental = "flat";
       // We internally use sharps for consistency in the chromatic scale
-      letter = flatToSharpMap[`${letter}b`]?.charAt(0) || letter;
+      const sharpEquivalent = Object.keys(flatToSharpMap).find(key => flatToSharpMap[key] === `${letter}#`);
+      if (sharpEquivalent) {
+        letter = sharpEquivalent.charAt(0);
+      }
   }
   
   return {
@@ -64,6 +67,7 @@ const ALTO_CLEF_PATH = "M 36.9,81.2 C 36.9,81.2 36.9,20.5 36.9,20.5 L 36.9,178.5
 const PERCUSSION_CLEF_PATH = "M 20 20 L 20 80 M 80 20 L 80 80 M 10 50 L 90 50";
 const SHARP_PATH = "M20,5L60,0L55,35L95,30L90,65L50,70L55,100L15,105L20,70L-20,75L-15,40L20,35Z";
 const FLAT_PATH = "M15,5V70C40,60,40,45,15,35";
+const NATURAL_PATH = "M30,15 V85 M50,5 V65 M15,45 H65 M15,35 H65";
 
 const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
     const STAFF_HEIGHT = 100;
@@ -221,12 +225,11 @@ export default function FingeringChartsPage() {
     const max = chromaticScaleWithOctaves.indexOf(selectedInstrument.range.high);
 
     // If a note isn't found, it might be a data issue. Return -1 to signal this.
-    return { min, max };
+    return { min: min === -1 ? 0 : min, max: max === -1 ? chromaticScaleWithOctaves.length - 1 : max };
   }, [selectedInstrument]);
 
   const changeNote = (direction: 'up' | 'down') => {
       const { min, max } = instrumentNoteRangeIndices;
-      if (min === -1 || max === -1) return; // If range is invalid, do nothing.
 
       const step = direction === 'up' ? 1 : -1;
       const nextIndex = currentNoteIndex + step;
@@ -236,8 +239,8 @@ export default function FingeringChartsPage() {
       }
   };
 
-  const canGoUp = instrumentNoteRangeIndices.max === -1 ? false : currentNoteIndex < instrumentNoteRangeIndices.max;
-  const canGoDown = instrumentNoteRangeIndices.min === -1 ? false : currentNoteIndex > instrumentNoteRangeIndices.min;
+  const canGoUp = currentNoteIndex < instrumentNoteRangeIndices.max;
+  const canGoDown = currentNoteIndex > instrumentNoteRangeIndices.min;
 
 
   // Find the fingering for the current note, if it exists for the instrument
@@ -269,13 +272,16 @@ export default function FingeringChartsPage() {
     if (selectedInstrument?.range) {
       const lowIndex = chromaticScaleWithOctaves.indexOf(selectedInstrument.range.low);
       if (lowIndex !== -1) {
-        setCurrentNoteIndex(lowIndex);
+        // Only reset note if it's outside the new instrument's range
+        if (currentNoteIndex < lowIndex || currentNoteIndex > instrumentNoteRangeIndices.max) {
+           setCurrentNoteIndex(lowIndex);
+        }
         return;
       }
     }
-    // Fallback
+    // Fallback if no range or current note is out of bounds
     setCurrentNoteIndex(defaultNoteIndex);
-  }, [selectedInstrumentName, defaultNoteIndex, selectedInstrument]);
+  }, [selectedInstrumentName, selectedInstrument, defaultNoteIndex, currentNoteIndex, instrumentNoteRangeIndices.max]);
 
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
@@ -287,22 +293,37 @@ export default function FingeringChartsPage() {
     setSelectedInstrumentName(instrumentName);
   };
   
-  // This function is simplified as accidental is part of the note name now
-  // For UI, we can keep it to quickly jump between note variations if needed
-  const handleAccidentalClick = (targetAccidental: string) => {
-      if(!parsedNote) return;
-      const baseNote = `${parsedNote.letter}${parsedNote.octave}`;
-      const sharpNote = `${parsedNote.letter}#${parsedNote.octave}`;
-      
-      let targetNote = baseNote;
-      if (targetAccidental === '#') targetNote = sharpNote;
-      // A more complex logic could handle flats here
-      
-      const newIndex = chromaticScaleWithOctaves.indexOf(targetNote);
-      if (newIndex !== -1) {
-          setCurrentNoteIndex(newIndex);
-      }
-  }
+  const handleAccidentalChange = (newAccidental: 'sharp' | 'flat' | 'natural') => {
+    if (!parsedNote) return;
+
+    const { letter, octave } = parsedNote;
+    let targetNoteName: string | null = null;
+
+    if (newAccidental === 'natural') {
+        targetNoteName = `${letter}${octave}`;
+    } else if (newAccidental === 'sharp') {
+        targetNoteName = `${letter}#${octave}`;
+    } else { // flat
+        const flatNoteName = `${letter}b`;
+        const sharpEquivalent = flatToSharpMap[flatNoteName];
+        if (sharpEquivalent) {
+            targetNoteName = `${sharpEquivalent}${octave}`;
+        } else if (flatNoteName === 'Cb') {
+            targetNoteName = `B${octave - 1}`;
+        } else if (flatNoteName === 'Fb') {
+            targetNoteName = `E${octave}`;
+        }
+    }
+
+    if (targetNoteName) {
+        const newIndex = chromaticScaleWithOctaves.indexOf(targetNoteName);
+        const { min, max } = instrumentNoteRangeIndices;
+
+        if (newIndex !== -1 && newIndex >= min && newIndex <= max) {
+            setCurrentNoteIndex(newIndex);
+        }
+    }
+};
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -356,16 +377,37 @@ export default function FingeringChartsPage() {
             <Card className="overflow-hidden">
               <div className="grid grid-cols-[auto_1fr] items-center h-full">
                 {/* Controls */}
-                <div className="flex flex-col items-center justify-center p-4 bg-secondary/50 gap-4 h-full">
-                  <Button variant="outline" size="icon" onClick={() => changeNote('up')} disabled={!canGoUp}>
-                    <ArrowUp className="h-5 w-5" />
-                    <span className="sr-only">Note Up</span>
-                  </Button>
-                  <div className="text-center font-mono text-lg">{currentNoteName}</div>
-                  <Button variant="outline" size="icon" onClick={() => changeNote('down')} disabled={!canGoDown}>
-                    <ArrowDown className="h-5 w-5" />
-                    <span className="sr-only">Note Down</span>
-                  </Button>
+                <div className="flex flex-col items-center justify-between p-4 bg-secondary/50 h-full">
+                    <div className="flex flex-col items-center gap-4">
+                        <Button variant="outline" size="icon" onClick={() => changeNote('up')} disabled={!canGoUp}>
+                            <ArrowUp className="h-5 w-5" />
+                            <span className="sr-only">Note Up</span>
+                        </Button>
+                        <Button variant="outline" size="icon" onClick={() => changeNote('down')} disabled={!canGoDown}>
+                            <ArrowDown className="h-5 w-5" />
+                            <span className="sr-only">Note Down</span>
+                        </Button>
+                    </div>
+                    <div className="flex justify-center gap-1 pt-4 border-t w-full">
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleAccidentalChange('flat')}>
+                            <svg viewBox="0 0 45 100" className="w-auto h-4 text-foreground">
+                                <path d={FLAT_PATH} fill="currentColor" />
+                            </svg>
+                            <span className="sr-only">Flat</span>
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleAccidentalChange('natural')}>
+                             <svg viewBox="0 0 80 90" className="w-auto h-4 text-foreground">
+                                <path d={NATURAL_PATH} stroke="currentColor" strokeWidth="10" fill="none" strokeLinecap="round" />
+                            </svg>
+                            <span className="sr-only">Natural</span>
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleAccidentalChange('sharp')}>
+                             <svg viewBox="0 0 100 105" className="w-auto h-4 text-foreground">
+                                <path d={SHARP_PATH} fill="currentColor" />
+                            </svg>
+                            <span className="sr-only">Sharp</span>
+                        </Button>
+                    </div>
                 </div>
 
                 {/* Staff */}
