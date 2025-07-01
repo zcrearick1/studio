@@ -93,7 +93,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
   const renderClef = () => {
     switch (clef) {
       case "treble": return <TrebleClefIcon className="absolute -left-1 -top-8 text-foreground" style={{ transform: "scale(1.2)"}} />;
-      case "bass": return <BassClefIcon className="absolute -left-1 -top-2 text-foreground" style={{ transform: "scale(1.2)"}} />;
+      case "bass": return <BassClefIcon className="absolute -left-1 top-2 text-foreground" style={{ transform: "scale(1.2)"}} />;
       case "alto": return <AltoClefIcon className="absolute left-0 top-0 text-foreground" style={{ transform: "scale(1.2)"}} />;
       case "percussion": return <PercussionClefIcon className="absolute left-0 top-0 text-foreground" style={{ transform: "scale(1.2)"}} />;
       default: return null;
@@ -281,52 +281,57 @@ export default function FingeringChartsPage() {
       
       {selectedInstrument && (
         <div className="mt-8">
-            <h2 className="text-2xl font-bold text-center mb-6">{selectedInstrument.name} Fingerings</h2>
-            
-            <Card className="max-w-3xl mx-auto overflow-hidden">
-                <div className="grid grid-cols-1 md:grid-cols-[3fr_2fr_3fr] items-center">
-                    {/* Controls */}
-                    <div className="flex flex-col items-center justify-center p-4 bg-secondary/50 gap-4 h-full">
-                        <Button variant="outline" size="icon" onClick={() => changeNote('up')}>
-                            <ArrowUp className="h-5 w-5" />
-                            <span className="sr-only">Note Up</span>
-                        </Button>
-                        <div className="text-center font-mono text-lg">{currentNoteName}</div>
-                        <Button variant="outline" size="icon" onClick={() => changeNote('down')}>
-                            <ArrowDown className="h-5 w-5" />
-                             <span className="sr-only">Note Down</span>
-                        </Button>
-                    </div>
-
-                    {/* Staff */}
-                    <div className="p-6">
-                        <Staff clef={selectedInstrument.clef} note={parsedNote} />
-                    </div>
-
-                    {/* Fingering Display */}
-                    <div className="p-6 bg-secondary/50 h-full flex flex-col justify-center text-center">
-                         {currentFingering ? (
-                            <Card>
-                                 <CardHeader>
-                                    <CardTitle className="text-primary text-4xl">{currentFingering.note}</CardTitle>
-                                 </CardHeader>
-                                 <CardContent>
-                                    <p className="text-lg text-muted-foreground break-words">{currentFingering.positions.join(' ')}</p>
-                                 </CardContent>
-                             </Card>
-                         ) : (
-                            <Card className="bg-muted">
-                                <CardHeader>
-                                    <CardTitle className="text-2xl">{currentNoteName}</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <p className="text-muted-foreground">Fingering not available for this instrument.</p>
-                                </CardContent>
-                            </Card>
-                         )}
-                    </div>
+          <h2 className="text-2xl font-bold text-center mb-6">{selectedInstrument.name} Fingerings</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Left Card for Controls and Staff */}
+            <Card className="overflow-hidden">
+              <div className="grid grid-cols-[1fr_3fr] items-center h-full">
+                {/* Controls */}
+                <div className="flex flex-col items-center justify-center p-4 bg-secondary/50 gap-4 h-full">
+                  <Button variant="outline" size="icon" onClick={() => changeNote('up')}>
+                    <ArrowUp className="h-5 w-5" />
+                    <span className="sr-only">Note Up</span>
+                  </Button>
+                  <div className="text-center font-mono text-lg">{currentNoteName}</div>
+                  <Button variant="outline" size="icon" onClick={() => changeNote('down')}>
+                    <ArrowDown className="h-5 w-5" />
+                    <span className="sr-only">Note Down</span>
+                  </Button>
                 </div>
+
+                {/* Staff */}
+                <div className="p-6">
+                  <Staff clef={selectedInstrument.clef} note={parsedNote} />
+                </div>
+              </div>
             </Card>
+
+            {/* Right Card for Fingering */}
+            <Card className="flex flex-col justify-center">
+              <div className="p-6 h-full flex flex-col justify-center text-center">
+                {currentFingering ? (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-primary text-4xl">{currentFingering.note}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-lg text-muted-foreground break-words">{currentFingering.positions.join(' ')}</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <Card className="bg-muted">
+                    <CardHeader>
+                      <CardTitle className="text-2xl">{currentNoteName}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground">Fingering not available for this instrument.</p>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            </Card>
+          </div>
         </div>
       )}
     </div>
