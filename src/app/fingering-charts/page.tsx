@@ -68,7 +68,7 @@ const BASS_CLEF_DOT2_PATH = "M3915 3140 c-101 -15 -194 -82 -243 -175 -25 -45 -27
 const ALTO_CLEF_PATH = "M 36.9,81.2 C 36.9,81.2 36.9,20.5 36.9,20.5 L 36.9,178.5 M 62.6,81.2 C 62.6,81.2 62.6,20.5 62.6,20.5 L 62.6,178.5 M 21.1,51.8 C 21.1,51.8 49.8,20.5 49.8,20.5 C 49.8,20.5 78.4,51.8 78.4,51.8 M 21.1,147.8 C 21.1,147.8 49.8,178.5 49.8,178.5 C 49.8,178.5 78.4,147.8 78.4,147.8";
 const PERCUSSION_CLEF_PATH = "M 20 20 L 20 80 M 80 20 L 80 80 M 10 50 L 90 50";
 const SHARP_PATH = "M1328 1998 l-3 -252 -215 -58 c-118 -31 -216 -58 -217 -58 -2 0 -3 99 -3 220 l0 220 -60 0 -60 0 0 -235 0 -234 -52 -15 c-29 -8 -75 -21 -103 -28 l-50 -14 -3 -122 c-1 -67 1 -122 5 -122 4 0 48 11 98 25 49 14 93 25 97 25 5 0 8 -142 8 -315 l0 -314 -48 -14 c-26 -8 -73 -20 -105 -27 l-57 -13 0 -124 c0 -114 1 -124 18 -119 30 9 180 46 186 46 3 0 6 -106 6 -235 l0 -235 60 0 60 0 0 253 0 253 208 54 c114 29 213 55 220 58 10 4 12 -40 10 -217 l-3 -221 62 0 63 0 2 237 3 237 118 30 117 31 0 122 c0 68 -2 123 -4 123 -2 0 -55 -13 -117 -30 -63 -16 -115 -30 -117 -30 -1 0 -1 143 0 317 l3 316 118 31 117 30 0 124 c0 113 -1 123 -17 118 -10 -3 -56 -14 -103 -26 -47 -12 -93 -23 -102 -26 -17 -5 -18 11 -18 230 l0 236 -60 0 -60 0 -2 -252z m0 -815 l-3 -318 -215 -57 c-118 -31 -216 -57 -217 -57 -2 -1 -3 142 -3 317 l0 317 213 57 c116 31 215 57 220 57 4 1 6 -142 5 -316z";
-const FLAT_PATH = "M15,5V70C40,60,40,45,15,35";
+const FLAT_PATH = "M910 1155 c0 -575 4 -1045 8 -1045 5 0 21 14 38 31 53 56 247 214 367 299 256 181 348 335 288 476 -12 28 -39 67 -59 87 -117 112 -287 116 -465 11 -32 -19 -60 -34 -63 -34 -2 0 -4 275 -4 610 l0 610 -55 0 -55 0 0 -1045z m366 -201 c50 -24 84 -87 84 -156 0 -105 -109 -271 -299 -453 l-41 -39 0 271 0 271 27 33 c67 80 156 108 229 73z";
 const NATURAL_PATH = "M30,15 V85 M50,5 V65 M15,45 H65 M15,35 H65";
 
 const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
@@ -126,7 +126,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
             case 'sharp':
                 return <path d={SHARP_PATH} fill="currentColor" fillRule="evenodd" transform={`translate(${accidentalX + 22.5}, ${y-11}) scale(-0.01, 0.01)`} />;
             case 'flat':
-                return <path d={FLAT_PATH} fill="currentColor" transform={`translate(${accidentalX}, ${y-40}) scale(0.6)`} />;
+                return <path d={FLAT_PATH} fill="currentColor" fillRule="evenodd" transform={`translate(${accidentalX - 55}, ${y + 80}) scale(0.08, -0.08)`} />;
             default:
                 return null;
         }
@@ -392,8 +392,10 @@ export default function FingeringChartsPage() {
                     </div>
                     <div className="flex justify-center gap-1 pt-4 border-t w-full">
                         <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleAccidentalChange('flat')}>
-                            <svg viewBox="0 0 45 100" className="w-auto h-4 text-foreground">
-                                <path d={FLAT_PATH} fill="currentColor" />
+                            <svg viewBox="0 0 225 225" className="w-auto h-4 text-foreground">
+                                <g transform="scale(1, -1) translate(0, -225)">
+                                    <path d={FLAT_PATH} fill="currentColor" fillRule="evenodd" />
+                                </g>
                             </svg>
                             <span className="sr-only">Flat</span>
                         </Button>
