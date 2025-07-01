@@ -74,7 +74,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
     const STAFF_WIDTH = 170;
     const LINE_SPACING = 10;
     const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
-    const NOTE_X = 150;
+    const NOTE_X = 120;
 
     const getNoteYPosition = (pNote: ParsedNote) => {
         if (!pNote) return -1000;
