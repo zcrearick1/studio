@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
@@ -14,15 +15,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Music, ArrowUp, ArrowDown } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import {
-  TrebleClefIcon,
-  BassClefIcon,
-  AltoClefIcon,
-  PercussionClefIcon,
-  SharpIcon,
-  FlatIcon,
-  NaturalIcon,
-} from "@/components/icons";
 
 type ParsedNote = {
   letter: string;
@@ -65,76 +57,133 @@ function parseNoteString(noteStr: string): ParsedNote {
   };
 }
 
-const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
-  const getNoteYPosition = (pNote: ParsedNote) => {
-    if (!pNote) return -1000;
+// SVG Path data for clefs and accidentals
+const TREBLE_CLEF_PATH = "M890 2694 c-50 -46 -104 -152 -126 -250 -21 -95 -15 -244 15 -387 l21 -98 -108 -107 c-219 -216 -303 -389 -289 -595 10 -160 90 -290 238 -387 90 -58 155 -75 290 -75 l117 0 27 -132 c22 -102 27 -148 22 -197 -7 -73 -42 -153 -82 -184 -57 -45 -193 -53 -251 -15 l-28 18 42 7 c56 9 87 32 112 82 26 54 25 81 -2 136 -30 57 -76 83 -139 77 -60 -5 -102 -36 -124 -89 -46 -116 56 -270 196 -296 161 -30 301 64 328 223 13 72 12 81 -26 264 -23 111 -24 125 -10 133 129 72 210 212 211 368 0 103 -22 157 -95 230 -67 67 -142 102 -223 104 l-64 1 -27 126 -27 126 66 89 c140 189 202 364 194 554 -5 113 -22 177 -66 242 -51 78 -127 90 -192 32z m178 -189 c41 -121 -51 -359 -183 -474 -46 -40 -48 -37 -65 72 -22 137 1 265 66 359 34 49 99 89 139 86 25 -3 32 -9 43 -43z m-199 -873 c12 -50 21 -98 21 -105 0 -8 -27 -31 -59 -51 -102 -62 -161 -162 -161 -269 1 -97 59 -176 172 -233 l53 -27 -51 55 c-44 46 -53 62 -59 106 -13 99 38 201 117 231 27 10 27 10 42 -57 66 -298 87 -415 76 -426 -7 -7 -47 -11 -103 -11 -82 0 -99 4 -159 32 -199 94 -289 344 -191 530 23 44 271 328 279 320 2 -1 12 -44 23 -95z m217 -303 c57 -27 110 -88 125 -141 25 -93 -17 -230 -87 -283 -19 -15 -37 -25 -39 -23 -2 2 -25 100 -50 218 -25 118 -49 223 -51 233 -8 25 48 23 102 -4z";
+const BASS_CLEF_PATH_MAIN = "M16.5,32C15.5,10,50,10,50,30C50,45,35,40,16.5,61V11.5";
+const ALTO_CLEF_PATH = "M 36.9,81.2 C 36.9,81.2 36.9,20.5 36.9,20.5 L 36.9,178.5 M 62.6,81.2 C 62.6,81.2 62.6,20.5 62.6,20.5 L 62.6,178.5 M 21.1,51.8 C 21.1,51.8 49.8,20.5 49.8,20.5 C 49.8,20.5 78.4,51.8 78.4,51.8 M 21.1,147.8 C 21.1,147.8 49.8,178.5 49.8,178.5 C 49.8,178.5 78.4,147.8 78.4,147.8";
+const PERCUSSION_CLEF_PATH = "M 20 20 L 20 80 M 80 20 L 80 80 M 10 50 L 90 50";
+const SHARP_PATH = "M20,5L60,0L55,35L95,30L90,65L50,70L55,100L15,105L20,70L-20,75L-15,40L20,35Z";
+const FLAT_PATH = "M15,5V70C40,60,40,45,15,35";
 
-    const notePositions: { [key: string]: number } = {
-      C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6,
+const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
+    const STAFF_HEIGHT = 100;
+    const STAFF_WIDTH = 300;
+    const LINE_SPACING = 10;
+    const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
+    const NOTE_X = 150;
+
+    const getNoteYPosition = (pNote: ParsedNote) => {
+        if (!pNote) return -1000;
+
+        const notePositions: { [key: string]: number } = { C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6 };
+        const step = notePositions[pNote.letter];
+        const octave = pNote.octave;
+        const noteValue = (step + (octave - 4) * 7);
+
+        let baseStep = 0; // baseStep is the diatonic value of the note on the middle line
+        if (clef === "treble") baseStep = 6; // B4
+        if (clef === "bass") baseStep = -6; // D3
+        if (clef === "alto") baseStep = 0; // C4
+
+        const staffPosition = noteValue - baseStep;
+        return (STAFF_HEIGHT / 2) - (staffPosition * (LINE_SPACING / 2));
     };
 
-    const step = notePositions[pNote.letter];
-    const octave = pNote.octave;
+    const y = getNoteYPosition(note);
 
-    let baseStep = 0;
-    // Base step is the position of C4 on the staff for the given clef
-    if (clef === "treble") baseStep = 7; // C4 is on ledger line below staff
-    if (clef === "bass") baseStep = -1; // C4 is on ledger line above staff
-    if (clef === "alto") baseStep = 0; // C4 is on middle line
-
-    const staffPosition = (step - baseStep) + (octave - 4) * 7;
-    // Adjust for sharps, each sharp raises the visual position slightly
-    const accidentalOffset = pNote.accidental === 'sharp' ? -0.5 : 0;
-    return 50 - (staffPosition + accidentalOffset) * 5; // 5px per step, starting from middle
-  };
-  
-  const y = getNoteYPosition(note);
-
-  const renderClef = () => {
-    switch (clef) {
-      case "treble": return <TrebleClefIcon className="absolute -left-1 -top-2 text-foreground" style={{ transform: "scale(1.5)"}} />;
-      case "bass": return <BassClefIcon className="absolute -left-1 top-2 text-foreground" style={{ transform: "scale(1.2)"}} />;
-      case "alto": return <AltoClefIcon className="absolute left-0 top-0 text-foreground" style={{ transform: "scale(1.2)"}} />;
-      case "percussion": return <PercussionClefIcon className="absolute left-0 top-0 text-foreground" style={{ transform: "scale(1.2)"}} />;
-      default: return null;
+    const renderClef = () => {
+        switch (clef) {
+            case "treble":
+                return <path d={TREBLE_CLEF_PATH} fill="currentColor" transform="translate(10, 100) scale(0.04, -0.04)" />;
+            case "bass":
+                return (
+                    <g transform="translate(15, -1) scale(0.8)">
+                        <path d={BASS_CLEF_PATH_MAIN} fill="currentColor" />
+                        <circle cx="58" cy="23.5" r="5.5" fill="currentColor" />
+                        <circle cx="58" cy="45.5" r="5.5" fill="currentColor" />
+                    </g>
+                );
+            case "alto":
+                return <path d={ALTO_CLEF_PATH} stroke="currentColor" strokeWidth="5" fill="none" transform="translate(20, 0) scale(0.5)" />;
+            case "percussion":
+                return <path d={PERCUSSION_CLEF_PATH} stroke="currentColor" strokeWidth="6" fill="none" transform="translate(15, 25) scale(0.5)" />;
+            default:
+                return null;
+        }
+    };
+    
+    const renderAccidental = () => {
+        if (!note || note.accidental === "natural") return null;
+        const accidentalX = NOTE_X - 28;
+        
+        switch (note.accidental) {
+            case 'sharp':
+                return <path d={SHARP_PATH} fill="currentColor" transform={`translate(${accidentalX}, ${y-15}) scale(0.3)`} />;
+            case 'flat':
+                return <path d={FLAT_PATH} fill="currentColor" transform={`translate(${accidentalX}, ${y-40}) scale(0.6)`} />;
+            default:
+                return null;
+        }
     }
-  };
-  
-  const renderAccidental = () => {
-      if (!note) return null;
-      const props = { className: "absolute text-foreground", style: { top: `${y-20}px`, left: '35px' }};
-      switch(note.accidental) {
-          case 'sharp': return <SharpIcon {...props} />;
-          case 'flat': return <FlatIcon {...props} />;
-          // Natural is implicitly handled by note position, no icon needed unless cancelling
-          default: return null;
-      }
-  }
 
-  return (
-    <div className="relative w-full h-24 my-4">
-      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-full h-20">
-        {/* Staff Lines */}
-        {[...Array(5)].map((_, i) => (
-          <div key={i} className="bg-foreground/50 h-px" style={{ top: `${20 + i * 10}px`, position: 'absolute', width: '100%' }}></div>
-        ))}
-        {/* Clef */}
-        {renderClef()}
-        {/* Note */}
-        {note && (
-            <>
-                {/* Accidental */}
+    const renderLedgerLines = () => {
+        if (!note) return [];
+        const lines = [];
+        const staffTopY = TOP_MARGIN;
+        const staffBottomY = TOP_MARGIN + 4 * LINE_SPACING;
+
+        if (y < staffTopY) { // Top ledger lines
+            for (let lineY = staffTopY - LINE_SPACING; lineY >= y - LINE_SPACING / 2; lineY -= LINE_SPACING) {
+                lines.push(<line key={`ledger-top-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
+            }
+        }
+        if (y > staffBottomY) { // Bottom ledger lines
+            for (let lineY = staffBottomY + LINE_SPACING; lineY <= y + LINE_SPACING / 2; lineY += LINE_SPACING) {
+                lines.push(<line key={`ledger-bottom-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
+            }
+        }
+        return lines;
+    };
+
+    const renderNote = () => {
+        if (!note) return null;
+        const noteHeadY = y;
+        const middleStaffY = STAFF_HEIGHT / 2;
+        const stemDown = noteHeadY <= middleStaffY;
+        const stemX = stemDown ? NOTE_X - 6 : NOTE_X + 6;
+        const stemEndY = stemDown ? noteHeadY + 30 : noteHeadY - 30;
+
+        return (
+            <g>
+                {renderLedgerLines()}
                 {renderAccidental()}
-                {/* Note Head */}
-                <div className="absolute rounded-full bg-foreground w-[13px] h-[10px]" style={{ top: `${y-5}px`, left: '60px' }}></div>
-                {/* Note Stem */}
-                <div className="absolute bg-foreground w-0.5" style={{ top: `${y-20}px`, left: `${60+12}px`, height: '25px' }}></div>
-            </>
-        )}
-      </div>
-    </div>
-  );
+                <ellipse cx={NOTE_X} cy={noteHeadY} rx="6.5" ry="5" fill="currentColor" />
+                <line x1={stemX} y1={noteHeadY} x2={stemX} y2={stemEndY} stroke="currentColor" strokeWidth="1.5" />
+            </g>
+        )
+    }
+
+    return (
+        <svg viewBox={`0 0 ${STAFF_WIDTH} ${STAFF_HEIGHT}`} className="w-full h-auto text-foreground">
+            {/* Staff Lines */}
+            {[...Array(5)].map((_, i) => (
+                <line
+                    key={i}
+                    x1="10"
+                    y1={TOP_MARGIN + i * LINE_SPACING}
+                    x2={STAFF_WIDTH - 10}
+                    y2={TOP_MARGIN + i * LINE_SPACING}
+                    stroke="currentColor"
+                    strokeOpacity="0.5"
+                    strokeWidth="1"
+                />
+            ))}
+            {renderClef()}
+            {renderNote()}
+        </svg>
+    );
 };
+
 
 export default function FingeringChartsPage() {
   const searchParams = useSearchParams();
