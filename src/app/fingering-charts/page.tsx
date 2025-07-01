@@ -92,7 +92,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
 
   const renderClef = () => {
     switch (clef) {
-      case "treble": return <TrebleClefIcon className="absolute -left-1 -top-8 text-foreground" style={{ transform: "scale(1.2)"}} />;
+      case "treble": return <TrebleClefIcon className="absolute -left-1 -top-2 text-foreground" style={{ transform: "scale(1.2)"}} />;
       case "bass": return <BassClefIcon className="absolute -left-1 top-2 text-foreground" style={{ transform: "scale(1.2)"}} />;
       case "alto": return <AltoClefIcon className="absolute left-0 top-0 text-foreground" style={{ transform: "scale(1.2)"}} />;
       case "percussion": return <PercussionClefIcon className="absolute left-0 top-0 text-foreground" style={{ transform: "scale(1.2)"}} />;
@@ -286,7 +286,7 @@ export default function FingeringChartsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {/* Left Card for Controls and Staff */}
             <Card className="overflow-hidden">
-              <div className="grid grid-cols-[1fr_3fr] items-center h-full">
+              <div className="grid grid-cols-[auto_1fr] items-center h-full">
                 {/* Controls */}
                 <div className="flex flex-col items-center justify-center p-4 bg-secondary/50 gap-4 h-full">
                   <Button variant="outline" size="icon" onClick={() => changeNote('up')}>
