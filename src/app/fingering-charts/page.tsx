@@ -77,10 +77,10 @@ const NATURAL_PATH = "M30,15 V85 M50,5 V65 M15,45 H65 M15,35 H65";
 
 const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
     const STAFF_HEIGHT = 100;
-    const STAFF_WIDTH = 110;
+    const STAFF_WIDTH = 125;
     const LINE_SPACING = 10;
     const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
-    const NOTE_X = 79;
+    const NOTE_X = 90;
 
     const getNoteYPosition = (pNote: ParsedNote) => {
         if (!pNote) return -1000;
@@ -315,42 +315,8 @@ export default function FingeringChartsPage() {
   };
   
   const handleAccidentalChange = (newAccidental: 'sharp' | 'flat' | 'natural') => {
-    if (!parsedNote) return;
-
-    const { letter, octave } = parsedNote;
-    let targetNoteName: string | null = null;
-    let targetSharpEquivalent: string | null = null;
-
-    if (newAccidental === 'natural') {
-        targetNoteName = `${letter}${octave}`;
-        targetSharpEquivalent = targetNoteName;
-    } else if (newAccidental === 'sharp') {
-        targetNoteName = `${letter}#${octave}`;
-        targetSharpEquivalent = targetNoteName;
-    } else { // flat
-        const flatNoteStr = `${letter}b`;
-        const sharpEquivalent = Object.keys(flatToSharpMap).find(f => f === flatNoteStr);
-
-        if (sharpEquivalent) {
-            targetSharpEquivalent = flatToSharpMap[sharpEquivalent] + octave;
-        } else if (flatNoteStr === 'Cb') {
-            targetSharpEquivalent = `B${octave - 1}`;
-        } else if (flatNoteStr === 'Fb') {
-            targetSharpEquivalent = `E${octave}`;
-        }
-        targetNoteName = `${flatNoteStr}${octave}`;
-    }
-
-    if (targetSharpEquivalent) {
-        const targetIndex = chromaticScaleWithOctaves.indexOf(targetSharpEquivalent);
-        const { min, max } = instrumentNoteRangeIndices;
-        
-        if (targetIndex !== -1 && targetIndex >= min && targetIndex <= max) {
-            setCurrentNoteIndex(targetIndex);
-            setPreferredAccidental(newAccidental);
-        }
-    }
-};
+    setPreferredAccidental(newAccidental);
+  };
 
   const getDisplayNote = () => {
     if (currentFingering) {
@@ -513,3 +479,6 @@ export default function FingeringChartsPage() {
 }
 
 
+
+
+    
