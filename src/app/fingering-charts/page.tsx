@@ -78,10 +78,10 @@ const NATURAL_PATH = "M30,15 V85 M50,5 V65 M15,45 H65 M15,35 H65";
 
 const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
     const STAFF_HEIGHT = 100;
-    const STAFF_WIDTH = 165;
+    const STAFF_WIDTH = 190;
     const LINE_SPACING = 10;
     const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
-    const NOTE_X = 120;
+    const NOTE_X = 140;
 
     const getNoteYPosition = (pNote: ParsedNote) => {
         if (!pNote) return -1000;
@@ -328,10 +328,7 @@ export default function FingeringChartsPage() {
   };
   
   const handleAccidentalChange = (newAccidental: 'sharp' | 'flat' | 'natural') => {
-    const noteHasAccidental = currentFingering && currentFingering.note.includes('/');
-    if (noteHasAccidental || newAccidental === 'natural') {
-        setPreferredAccidental(newAccidental);
-    }
+    setPreferredAccidental(newAccidental);
   };
   
   const getDisplayNote = () => {
@@ -423,7 +420,7 @@ export default function FingeringChartsPage() {
                             <span className="sr-only">Note Down</span>
                         </Button>
                     </div>
-                    <div className="flex justify-center gap-1 pt-4 border-t w-full">
+                    <div className="flex flex-col justify-center gap-1 pt-4 border-t w-full">
                         <Button
                             variant="outline"
                             size="icon"
@@ -510,3 +507,4 @@ export default function FingeringChartsPage() {
     </div>
   );
 }
+
