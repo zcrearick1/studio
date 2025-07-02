@@ -78,10 +78,10 @@ const NATURAL_PATH = "M30,15 V85 M50,5 V65 M15,45 H65 M15,35 H65";
 
 const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
     const STAFF_HEIGHT = 100;
-    const STAFF_WIDTH = 190;
+    const STAFF_WIDTH = 220;
     const LINE_SPACING = 10;
     const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
-    const NOTE_X = 140;
+    const NOTE_X = 160;
 
     const getNoteYPosition = (pNote: ParsedNote) => {
         if (!pNote) return -1000;
@@ -250,6 +250,8 @@ export default function FingeringChartsPage() {
             const flatEquivalent = sharpToFlatMap[nextNoteName.slice(0, 2)];
             if (!flatEquivalent) {
                 setPreferredAccidental('natural');
+            } else {
+                setPreferredAccidental('flat');
             }
         }
       }
@@ -317,20 +319,6 @@ export default function FingeringChartsPage() {
     setCurrentNoteIndex(defaultNoteIndex);
   }, [selectedInstrumentName, selectedInstrument, defaultNoteIndex, currentNoteIndex, instrumentNoteRangeIndices.max]);
 
-  const handleCategoryChange = (category: string) => {
-    setActiveCategory(category);
-    const firstInstrumentInCategory = instruments.find(i => i.category === category);
-    setSelectedInstrumentName(firstInstrumentInCategory?.name || "");
-  };
-  
-  const handleInstrumentChange = (instrumentName: string) => {
-    setSelectedInstrumentName(instrumentName);
-  };
-  
-  const handleAccidentalChange = (newAccidental: 'sharp' | 'flat' | 'natural') => {
-    setPreferredAccidental(newAccidental);
-  };
-  
   const getDisplayNote = () => {
     if (!currentFingering) return currentNoteName;
 
@@ -349,11 +337,60 @@ export default function FingeringChartsPage() {
         if (sharpVariant) return sharpVariant;
     }
 
-    // Default or 'natural' preference: return the first variant (usually sharp)
-    // or the natural note if no accidental is preferred.
+    // Default or 'natural' preference: return the first variant
     return noteVariants[0];
-  }
+  };
 
+  const handleAccidentalChange = (newAccidental: 'sharp' | 'flat' | 'natural') => {
+      const currentDisplayNote = getDisplayNote();
+      const match = currentDisplayNote.match(/([A-G])[#b]?(\d+)/);
+
+      if (!match) {
+          setPreferredAccidental(newAccidental);
+          return;
+      }
+
+      const [, letter, octave] = match;
+      
+      let targetNoteName = `${letter}${octave}`;
+      if (newAccidental === 'sharp') {
+          targetNoteName = `${letter}#${octave}`;
+      } else if (newAccidental === 'flat') {
+          targetNoteName = `${letter}b${octave}`;
+      }
+      
+      let lookupNoteName = targetNoteName;
+      const noteTwoChars = lookupNoteName.substring(0, 2);
+      if (flatToSharpMap[noteTwoChars]) {
+        lookupNoteName = flatToSharpMap[noteTwoChars] + lookupNoteName.slice(2);
+      }
+
+      const octaveNum = parseInt(octave, 10);
+      if (targetNoteName === `Cb${octave}`) lookupNoteName = `B${octaveNum - 1}`;
+      if (targetNoteName === `Fb${octave}`) lookupNoteName = `E${octaveNum}`;
+      if (targetNoteName === `B#${octave}`) lookupNoteName = `C${octaveNum + 1}`;
+      if (targetNoteName === `E#${octave}`) lookupNoteName = `F${octaveNum}`;
+
+      const newIndex = chromaticScaleWithOctaves.indexOf(lookupNoteName);
+      const { min, max } = instrumentNoteRangeIndices;
+
+      if (newIndex !== -1 && newIndex >= min && newIndex <= max) {
+          setCurrentNoteIndex(newIndex);
+      }
+      
+      setPreferredAccidental(newAccidental);
+  };
+  
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category);
+    const firstInstrumentInCategory = instruments.find(i => i.category === category);
+    setSelectedInstrumentName(firstInstrumentInCategory?.name || "");
+  };
+  
+  const handleInstrumentChange = (instrumentName: string) => {
+    setSelectedInstrumentName(instrumentName);
+  };
+  
   const displayNote = getDisplayNote();
   const noteForStaff = parseNoteString(displayNote);
 
