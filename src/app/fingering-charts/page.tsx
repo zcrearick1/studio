@@ -77,10 +77,10 @@ const NATURAL_PATH = "M30,15 V85 M50,5 V65 M15,45 H65 M15,35 H65";
 
 const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
     const STAFF_HEIGHT = 100;
-    const STAFF_WIDTH = 125;
+    const STAFF_WIDTH = 145;
     const LINE_SPACING = 10;
     const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
-    const NOTE_X = 90;
+    const NOTE_X = 105;
 
     const getNoteYPosition = (pNote: ParsedNote) => {
         if (!pNote) return -1000;
@@ -221,7 +221,6 @@ export default function FingeringChartsPage() {
   );
   
   const currentNoteName = chromaticScaleWithOctaves[currentNoteIndex];
-  const parsedNote = parseNoteString(currentNoteName);
 
   const instrumentNoteRangeIndices = useMemo(() => {
     if (!selectedInstrument?.range) {
@@ -243,15 +242,17 @@ export default function FingeringChartsPage() {
       if (nextIndex >= min && nextIndex <= max) {
         setCurrentNoteIndex(nextIndex);
         const nextNoteName = chromaticScaleWithOctaves[nextIndex];
+        // If the new note is a sharp, prefer showing it as a sharp by default
         if (nextNoteName.includes('#')) {
             setPreferredAccidental('sharp');
         } else {
-            // Check if there is a flat equivalent for the previous note
-            const prevNoteName = chromaticScaleWithOctaves[nextIndex -1];
-            if(prevNoteName) {
-                const flatEquivalent = sharpToFlatMap[prevNoteName.slice(0, 2)];
-                if (flatEquivalent) {
-                    setPreferredAccidental('natural'); // Or based on key signature logic later
+            // Otherwise, check if the previous note had a flat equivalent to be "smart"
+            const prevNoteSharpName = chromaticScaleWithOctaves[nextIndex -1];
+            if(prevNoteSharpName) {
+                const flatEquivalent = sharpToFlatMap[prevNoteSharpName.slice(0, 2)];
+                // If the current note is the flat version of the previous sharp, show natural
+                if (flatEquivalent && flatEquivalent + prevNoteSharpName.slice(2) === nextNoteName) {
+                     setPreferredAccidental('natural');
                 }
             } else {
                 setPreferredAccidental('natural');
@@ -269,7 +270,17 @@ export default function FingeringChartsPage() {
     if (!selectedInstrument || !currentNoteName) return null;
     return selectedInstrument.fingerings.find(f => {
         const noteVariants = f.note.split('/');
-        return noteVariants.some(v => v === currentNoteName || flatToSharpMap[v.slice(0, 2)] + v.slice(2) === currentNoteName);
+        // Check if current note (e.g., C#4) is one of the variants directly
+        if (noteVariants.includes(currentNoteName)) return true;
+        
+        // Check if current note's sharp name maps to a flat variant
+        // e.g. currentNoteName is "D#4", find a variant "Eb4"
+        const sharpEquivalent = Object.keys(flatToSharpMap).find(key => flatToSharpMap[key] === currentNoteName.slice(0,2))
+        if(sharpEquivalent){
+            return noteVariants.some(v => v === sharpEquivalent + currentNoteName.slice(2));
+        }
+
+        return false;
     }) || null;
   }, [selectedInstrument, currentNoteName]);
 
@@ -317,7 +328,7 @@ export default function FingeringChartsPage() {
   const handleAccidentalChange = (newAccidental: 'sharp' | 'flat' | 'natural') => {
     setPreferredAccidental(newAccidental);
   };
-
+  
   const getDisplayNote = () => {
     if (currentFingering) {
         const noteVariants = currentFingering.note.split('/');
@@ -333,7 +344,7 @@ export default function FingeringChartsPage() {
             if (sharpVariant) return sharpVariant;
         }
 
-        // Fallback to the first available name if preferred is not found
+        // Fallback to the first available name if preferred is not found or is 'natural'
         return noteVariants[0];
     }
 
@@ -415,7 +426,7 @@ export default function FingeringChartsPage() {
                         </Button>
                     </div>
                     <div className="flex justify-center gap-1 pt-4 border-t w-full">
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleAccidentalChange('flat')}>
+                        <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleAccidentalChange('flat')}>
                             <svg viewBox="0 0 225 225" className="w-auto h-4 text-foreground">
                                 <g transform="scale(1, -1) translate(0, -225)">
                                     <path d={FLAT_PATH} fill="currentColor" fillRule="evenodd" />
@@ -423,13 +434,13 @@ export default function FingeringChartsPage() {
                             </svg>
                             <span className="sr-only">Flat</span>
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleAccidentalChange('natural')}>
+                        <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleAccidentalChange('natural')}>
                              <svg viewBox="0 0 80 90" className="w-auto h-4 text-foreground">
                                 <path d={NATURAL_PATH} stroke="currentColor" strokeWidth="10" fill="none" strokeLinecap="round" />
                             </svg>
                             <span className="sr-only">Natural</span>
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleAccidentalChange('sharp')}>
+                        <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleAccidentalChange('sharp')}>
                              <svg viewBox="0 0 225 225" className="w-auto h-4 text-foreground">
                                 <g transform="scale(-1, 1) translate(-225, 0)">
                                   <path d={SHARP_PATH} fill="currentColor" fillRule="evenodd" />
@@ -477,8 +488,3 @@ export default function FingeringChartsPage() {
     </div>
   );
 }
-
-
-
-
-    
