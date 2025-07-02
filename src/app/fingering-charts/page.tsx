@@ -23,29 +23,54 @@ type ParsedNote = {
   octave: number;
 } | null;
 
-// A comprehensive chromatic scale to represent the staff
-const noteOrder = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-const chromaticScaleWithOctaves = Array.from({ length: 7 * 12 }, (_, i) => {
-    const octave = Math.floor(i / 12);
-    const noteName = noteOrder[i % 12];
-    return `${noteName}${octave}`;
-});
+// --- Note Logic Helpers ---
 
-// A mapping for flat names to their sharp equivalents for lookups
-const flatToSharpMap: { [key: string]: string } = {
-  Db: "C#", Eb: "D#", Gb: "F#", Ab: "G#", Bb: "A#", Cb: "B", Fb: "E"
-};
+const noteValueMap: { [key: string]: number } = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
 
-const sharpToFlatMap: { [key: string]: string } = Object.fromEntries(
-  Object.entries(flatToSharpMap).map(([flat, sharp]) => [sharp, flat])
-);
+// This function converts ANY note string ("Fb4", "C#5") to a unique integer (MIDI value).
+function getMidiValue(note: string): number {
+  if (!note) return -1;
+  const match = note.match(/([A-G])([#b]*)(\d+)/);
+  if (!match) return -1;
+
+  let [, letter, accidentals, octaveStr] = match;
+  const octave = parseInt(octaveStr, 10);
+  let value = noteValueMap[letter as keyof typeof noteValueMap];
+
+  for (const acc of accidentals) {
+    if (acc === '#') value++;
+    else if (acc === 'b') value--;
+  }
+
+  // Adjust for octave wrapping (e.g., Cb4 is B3, B#3 is C4)
+  const finalOctave = octave + Math.floor(value / 12);
+  const finalPitchClass = (value % 12 + 12) % 12;
+  
+  return 12 * finalOctave + finalPitchClass;
+}
+
+const sharpNoteNames: { [key: number]: string } = {0: "C", 1: "C#", 2: "D", 3: "D#", 4: "E", 5: "F", 6: "F#", 7: "G", 8: "G#", 9: "A", 10: "A#", 11: "B"};
+const flatNoteNames: { [key: number]: string } = {0: "C", 1: "Db", 2: "D", 3: "Eb", 4: "E", 5: "F", 6: "Gb", 7: "G", 8: "Ab", 9: "A", 10: "Bb", 11: "B"};
+
+// Gets a default note name from a MIDI value, preferring a certain accidental
+function getNoteNameFromMidi(midi: number, preferred: 'sharp'|'flat'): string {
+    const octave = Math.floor(midi / 12);
+    const pitchClass = midi % 12;
+
+    const sharpName = sharpNoteNames[pitchClass];
+    const flatName = flatNoteNames[pitchClass];
+
+    if (preferred === 'flat' && flatName.includes('b')) {
+        return `${flatName}${octave}`;
+    }
+    return `${sharpName}${octave}`;
+}
 
 
 function parseNoteString(noteStr: string): ParsedNote {
   if (!noteStr) return null;
   const simpleNote = noteStr.split("/")[0].trim();
   
-  // Regex to handle notes like 'C', 'C#', 'Db', and the octave number
   const match = simpleNote.match(/([A-G])([#b]?)([0-9])/);
   if (!match) return null;
 
@@ -78,10 +103,10 @@ const NATURAL_PATH = "M30,15 V85 M50,5 V65 M15,45 H65 M15,35 H65";
 
 const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
     const STAFF_HEIGHT = 100;
-    const STAFF_WIDTH = 220;
+    const STAFF_WIDTH = 250;
     const LINE_SPACING = 10;
     const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
-    const NOTE_X = 160;
+    const NOTE_X = 180;
 
     const getNoteYPosition = (pNote: ParsedNote) => {
         if (!pNote) return -1000;
@@ -201,10 +226,7 @@ export default function FingeringChartsPage() {
   const [activeCategory, setActiveCategory] = useState<string>("Woodwind");
   const [selectedInstrumentName, setSelectedInstrumentName] = useState<string>("");
   const [preferredAccidental, setPreferredAccidental] = useState<'sharp' | 'flat' | 'natural'>('natural');
-  
-  // State now tracks the index in our master chromatic scale
-  const defaultNoteIndex = chromaticScaleWithOctaves.indexOf("C4");
-  const [currentNoteIndex, setCurrentNoteIndex] = useState(defaultNoteIndex);
+  const [currentNote, setCurrentNote] = useState("C4");
 
   const instrumentCategories = [...new Set(instruments.map(i => i.category))];
   const categoryOrder = ["Woodwind", "Brass", "String", "Percussion"];
@@ -221,72 +243,42 @@ export default function FingeringChartsPage() {
     [selectedInstrumentName]
   );
   
-  const currentNoteName = chromaticScaleWithOctaves[currentNoteIndex];
-
-  const instrumentNoteRangeIndices = useMemo(() => {
+  const instrumentNoteRangeMidi = useMemo(() => {
     if (!selectedInstrument?.range) {
-      return { min: 0, max: chromaticScaleWithOctaves.length - 1 };
+      return { min: 0, max: 127 };
     }
-    
-    const min = chromaticScaleWithOctaves.indexOf(selectedInstrument.range.low);
-    const max = chromaticScaleWithOctaves.indexOf(selectedInstrument.range.high);
-
-    // If a note isn't found, it might be a data issue. Return -1 to signal this.
-    return { min: min === -1 ? 0 : min, max: max === -1 ? chromaticScaleWithOctaves.length - 1 : max };
+    const min = getMidiValue(selectedInstrument.range.low);
+    const max = getMidiValue(selectedInstrument.range.high);
+    return { min: min === -1 ? 0 : min, max: max === -1 ? 127 : max };
   }, [selectedInstrument]);
 
   const changeNote = (direction: 'up' | 'down') => {
-      const { min, max } = instrumentNoteRangeIndices;
-      const step = direction === 'up' ? 1 : -1;
-      const nextIndex = currentNoteIndex + step;
+      const currentMidi = getMidiValue(currentNote);
+      if (currentMidi === -1) return;
       
-      if (nextIndex >= min && nextIndex <= max) {
-        setCurrentNoteIndex(nextIndex);
-        const nextNoteName = chromaticScaleWithOctaves[nextIndex];
-        // If the new note is a sharp, prefer showing it as a sharp by default
-        if (nextNoteName.includes('#')) {
-            setPreferredAccidental('sharp');
-        } else {
-            const flatEquivalent = sharpToFlatMap[nextNoteName.slice(0, 2)];
-            if (!flatEquivalent) {
-                setPreferredAccidental('natural');
-            } else {
-                setPreferredAccidental('flat');
-            }
-        }
+      const nextMidi = currentMidi + (direction === 'up' ? 1 : -1);
+      
+      if (nextMidi >= instrumentNoteRangeMidi.min && nextMidi <= instrumentNoteRangeMidi.max) {
+        const preferred = preferredAccidental === 'natural' ? 'sharp' : preferredAccidental;
+        const nextNoteName = getNoteNameFromMidi(nextMidi, preferred);
+        setCurrentNote(nextNoteName);
       }
   };
 
-  const canGoUp = currentNoteIndex < instrumentNoteRangeIndices.max;
-  const canGoDown = currentNoteIndex > instrumentNoteRangeIndices.min;
+  const currentMidiValue = getMidiValue(currentNote);
+  const canGoUp = currentMidiValue < instrumentNoteRangeMidi.max;
+  const canGoDown = currentMidiValue > instrumentNoteRangeMidi.min;
 
-
-  // Find the fingering for the current note, if it exists for the instrument
   const currentFingering = useMemo(() => {
-    if (!selectedInstrument || !currentNoteName) return null;
+    if (!selectedInstrument || !currentNote) return null;
+    const currentMidi = getMidiValue(currentNote);
+    if (currentMidi === -1) return null;
+    
     return selectedInstrument.fingerings.find(f => {
         const noteVariants = f.note.split('/');
-        // Check if current note (e.g., C#4) is one of the variants directly
-        if (noteVariants.some(v => v === currentNoteName)) return true;
-        
-        // If current note is a sharp (e.g. C#4), check if a flat variant exists (e.g. Db4)
-        if (currentNoteName.includes('#')) {
-            const flatEquivalent = sharpToFlatMap[currentNoteName.slice(0, 2)];
-            if (flatEquivalent) {
-                const flatNoteName = flatEquivalent + currentNoteName.slice(2);
-                if (noteVariants.some(v => v === flatNoteName)) return true;
-            }
-        } else { // Current note is natural or flat. Check for sharp equivalent.
-            const sharpEquivalent = flatToSharpMap[currentNoteName.slice(0, 2)];
-             if (sharpEquivalent) {
-                const sharpNoteName = sharpEquivalent + currentNoteName.slice(2);
-                if (noteVariants.some(v => v === sharpNoteName)) return true;
-            }
-        }
-
-        return false;
+        return noteVariants.some(variant => getMidiValue(variant) === currentMidi);
     }) || null;
-  }, [selectedInstrument, currentNoteName]);
+  }, [selectedInstrument, currentNote]);
 
   useEffect(() => {
     const instrumentSlug = searchParams.get('instrument');
@@ -304,81 +296,36 @@ export default function FingeringChartsPage() {
   }, [searchParams, selectedInstrumentName]);
   
   useEffect(() => {
-    // When instrument changes, set the note to the bottom of its playable range.
     if (selectedInstrument?.range) {
-      const lowIndex = chromaticScaleWithOctaves.indexOf(selectedInstrument.range.low);
-      if (lowIndex !== -1) {
-        // Only reset note if it's outside the new instrument's range
-        if (currentNoteIndex < lowIndex || currentNoteIndex > instrumentNoteRangeIndices.max) {
-           setCurrentNoteIndex(lowIndex);
-        }
-        return;
+      const lowNoteMidi = getMidiValue(selectedInstrument.range.low);
+      const highNoteMidi = getMidiValue(selectedInstrument.range.high);
+      const currentNoteMidi = getMidiValue(currentNote);
+      
+      if (currentNoteMidi < lowNoteMidi || currentNoteMidi > highNoteMidi) {
+         setCurrentNote(selectedInstrument.range.low);
       }
     }
-    // Fallback if no range or current note is out of bounds
-    setCurrentNoteIndex(defaultNoteIndex);
-  }, [selectedInstrumentName, selectedInstrument, defaultNoteIndex, currentNoteIndex, instrumentNoteRangeIndices.max]);
-
-  const getDisplayNote = () => {
-    if (!currentFingering) return currentNoteName;
-
-    const noteVariants = currentFingering.note.split('/');
-    if (noteVariants.length === 1) return noteVariants[0];
-
-    // User wants to see a flat. Find the flat variant if it exists.
-    if (preferredAccidental === 'flat') {
-        const flatVariant = noteVariants.find(v => v.includes('b'));
-        if (flatVariant) return flatVariant;
-    }
-    
-    // User wants to see a sharp. Find the sharp variant if it exists.
-    if (preferredAccidental === 'sharp') {
-        const sharpVariant = noteVariants.find(v => v.includes('#'));
-        if (sharpVariant) return sharpVariant;
-    }
-
-    // Default or 'natural' preference: return the first variant
-    return noteVariants[0];
-  };
+  }, [selectedInstrument, currentNote]);
 
   const handleAccidentalChange = (newAccidental: 'sharp' | 'flat' | 'natural') => {
-      const currentDisplayNote = getDisplayNote();
-      const match = currentDisplayNote.match(/([A-G])[#b]?(\d+)/);
+      const match = currentNote.match(/([A-G])[#b]*(\d+)/);
+      if (!match) return;
 
-      if (!match) {
-          setPreferredAccidental(newAccidental);
-          return;
-      }
-
-      const [, letter, octave] = match;
+      const [, letter, , octaveStr] = match;
       
-      let targetNoteName = `${letter}${octave}`;
+      let targetNoteName = `${letter}${octaveStr}`;
       if (newAccidental === 'sharp') {
-          targetNoteName = `${letter}#${octave}`;
+          targetNoteName = `${letter}#${octaveStr}`;
       } else if (newAccidental === 'flat') {
-          targetNoteName = `${letter}b${octave}`;
+          targetNoteName = `${letter}b${octaveStr}`;
       }
       
-      let lookupNoteName = targetNoteName;
-      const noteTwoChars = lookupNoteName.substring(0, 2);
-      if (flatToSharpMap[noteTwoChars]) {
-        lookupNoteName = flatToSharpMap[noteTwoChars] + lookupNoteName.slice(2);
+      const targetMidi = getMidiValue(targetNoteName);
+
+      if (targetMidi >= instrumentNoteRangeMidi.min && targetMidi <= instrumentNoteRangeMidi.max) {
+          setCurrentNote(targetNoteName);
+          setPreferredAccidental(newAccidental);
       }
-
-      const octaveNum = parseInt(octave, 10);
-      if (targetNoteName === `Cb${octave}`) lookupNoteName = `B${octaveNum - 1}`;
-      if (targetNoteName === `Fb${octave}`) lookupNoteName = `E${octaveNum}`;
-      if (targetNoteName === `B#${octave}`) lookupNoteName = `C${octaveNum + 1}`;
-      if (targetNoteName === `E#${octave}`) lookupNoteName = `F${octaveNum}`;
-
-      const newIndex = chromaticScaleWithOctaves.indexOf(lookupNoteName);
-      const { min, max } = instrumentNoteRangeIndices;
-
-      if (newIndex !== -1 && newIndex >= min && newIndex <= max) {
-          setCurrentNoteIndex(newIndex);
-      }
-      
-      setPreferredAccidental(newAccidental);
   };
   
   const handleCategoryChange = (category: string) => {
@@ -391,8 +338,7 @@ export default function FingeringChartsPage() {
     setSelectedInstrumentName(instrumentName);
   };
   
-  const displayNote = getDisplayNote();
-  const noteForStaff = parseNoteString(displayNote);
+  const noteForStaff = parseNoteString(currentNote);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -520,7 +466,7 @@ export default function FingeringChartsPage() {
                 {currentFingering ? (
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-primary text-4xl">{displayNote}</CardTitle>
+                      <CardTitle className="text-primary text-4xl">{currentNote}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <p className="text-lg text-muted-foreground break-words">{currentFingering.positions.join(' ')}</p>
@@ -529,7 +475,7 @@ export default function FingeringChartsPage() {
                 ) : (
                   <Card className="bg-muted">
                     <CardHeader>
-                      <CardTitle className="text-2xl">{displayNote}</CardTitle>
+                      <CardTitle className="text-2xl">{currentNote}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <p className="text-muted-foreground">Fingering not available for this instrument.</p>
@@ -544,4 +490,3 @@ export default function FingeringChartsPage() {
     </div>
   );
 }
-
