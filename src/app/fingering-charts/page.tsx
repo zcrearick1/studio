@@ -15,6 +15,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Music, ArrowUp, ArrowDown } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 type ParsedNote = {
   letter: string;
@@ -77,10 +78,10 @@ const NATURAL_PATH = "M30,15 V85 M50,5 V65 M15,45 H65 M15,35 H65";
 
 const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
     const STAFF_HEIGHT = 100;
-    const STAFF_WIDTH = 145;
+    const STAFF_WIDTH = 165;
     const LINE_SPACING = 10;
     const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
-    const NOTE_X = 105;
+    const NOTE_X = 120;
 
     const getNoteYPosition = (pNote: ParsedNote) => {
         if (!pNote) return -1000;
@@ -246,15 +247,8 @@ export default function FingeringChartsPage() {
         if (nextNoteName.includes('#')) {
             setPreferredAccidental('sharp');
         } else {
-            // Otherwise, check if the previous note had a flat equivalent to be "smart"
-            const prevNoteSharpName = chromaticScaleWithOctaves[nextIndex -1];
-            if(prevNoteSharpName) {
-                const flatEquivalent = sharpToFlatMap[prevNoteSharpName.slice(0, 2)];
-                // If the current note is the flat version of the previous sharp, show natural
-                if (flatEquivalent && flatEquivalent + prevNoteSharpName.slice(2) === nextNoteName) {
-                     setPreferredAccidental('natural');
-                }
-            } else {
+            const flatEquivalent = sharpToFlatMap[nextNoteName.slice(0, 2)];
+            if (!flatEquivalent) {
                 setPreferredAccidental('natural');
             }
         }
@@ -271,13 +265,21 @@ export default function FingeringChartsPage() {
     return selectedInstrument.fingerings.find(f => {
         const noteVariants = f.note.split('/');
         // Check if current note (e.g., C#4) is one of the variants directly
-        if (noteVariants.includes(currentNoteName)) return true;
+        if (noteVariants.some(v => v === currentNoteName)) return true;
         
-        // Check if current note's sharp name maps to a flat variant
-        // e.g. currentNoteName is "D#4", find a variant "Eb4"
-        const sharpEquivalent = Object.keys(flatToSharpMap).find(key => flatToSharpMap[key] === currentNoteName.slice(0,2))
-        if(sharpEquivalent){
-            return noteVariants.some(v => v === sharpEquivalent + currentNoteName.slice(2));
+        // If current note is a sharp (e.g. C#4), check if a flat variant exists (e.g. Db4)
+        if (currentNoteName.includes('#')) {
+            const flatEquivalent = sharpToFlatMap[currentNoteName.slice(0, 2)];
+            if (flatEquivalent) {
+                const flatNoteName = flatEquivalent + currentNoteName.slice(2);
+                if (noteVariants.some(v => v === flatNoteName)) return true;
+            }
+        } else { // Current note is natural or flat. Check for sharp equivalent.
+            const sharpEquivalent = flatToSharpMap[currentNoteName.slice(0, 2)];
+             if (sharpEquivalent) {
+                const sharpNoteName = sharpEquivalent + currentNoteName.slice(2);
+                if (noteVariants.some(v => v === sharpNoteName)) return true;
+            }
         }
 
         return false;
@@ -326,37 +328,33 @@ export default function FingeringChartsPage() {
   };
   
   const handleAccidentalChange = (newAccidental: 'sharp' | 'flat' | 'natural') => {
-    setPreferredAccidental(newAccidental);
+    const noteHasAccidental = currentFingering && currentFingering.note.includes('/');
+    if (noteHasAccidental || newAccidental === 'natural') {
+        setPreferredAccidental(newAccidental);
+    }
   };
   
   const getDisplayNote = () => {
-    if (currentFingering) {
-        const noteVariants = currentFingering.note.split('/');
-        if (noteVariants.length === 1) return noteVariants[0];
+    if (!currentFingering) return currentNoteName;
 
-        if (preferredAccidental === 'flat') {
-            const flatVariant = noteVariants.find(v => v.includes('b'));
-            if (flatVariant) return flatVariant;
-        }
-        
-        if(preferredAccidental === 'sharp') {
-            const sharpVariant = noteVariants.find(v => v.includes('#'));
-            if (sharpVariant) return sharpVariant;
-        }
+    const noteVariants = currentFingering.note.split('/');
+    if (noteVariants.length === 1) return noteVariants[0];
 
-        // Fallback to the first available name if preferred is not found or is 'natural'
-        return noteVariants[0];
-    }
-
-    // If no fingering, derive name from internal state.
-    if (preferredAccidental === 'flat' && currentNoteName.includes('#')) {
-        const notePart = currentNoteName.slice(0, 2);
-        const octavePart = currentNoteName.slice(2);
-        const flatEquivalent = sharpToFlatMap[notePart];
-        return flatEquivalent ? `${flatEquivalent}${octavePart}` : currentNoteName;
+    // User wants to see a flat. Find the flat variant if it exists.
+    if (preferredAccidental === 'flat') {
+        const flatVariant = noteVariants.find(v => v.includes('b'));
+        if (flatVariant) return flatVariant;
     }
     
-    return currentNoteName;
+    // User wants to see a sharp. Find the sharp variant if it exists.
+    if (preferredAccidental === 'sharp') {
+        const sharpVariant = noteVariants.find(v => v.includes('#'));
+        if (sharpVariant) return sharpVariant;
+    }
+
+    // Default or 'natural' preference: return the first variant (usually sharp)
+    // or the natural note if no accidental is preferred.
+    return noteVariants[0];
   }
 
   const displayNote = getDisplayNote();
@@ -426,22 +424,46 @@ export default function FingeringChartsPage() {
                         </Button>
                     </div>
                     <div className="flex justify-center gap-1 pt-4 border-t w-full">
-                        <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleAccidentalChange('flat')}>
-                            <svg viewBox="0 0 225 225" className="w-auto h-4 text-foreground">
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className={cn('h-8 w-8', {
+                                'bg-accent hover:bg-accent/90 text-accent-foreground': preferredAccidental === 'flat',
+                            })}
+                            onClick={() => handleAccidentalChange('flat')}
+                            disabled={preferredAccidental === 'flat'}
+                        >
+                            <svg viewBox="0 0 225 225" className="w-auto h-4">
                                 <g transform="scale(1, -1) translate(0, -225)">
                                     <path d={FLAT_PATH} fill="currentColor" fillRule="evenodd" />
                                 </g>
                             </svg>
                             <span className="sr-only">Flat</span>
                         </Button>
-                        <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleAccidentalChange('natural')}>
-                             <svg viewBox="0 0 80 90" className="w-auto h-4 text-foreground">
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className={cn('h-8 w-8', {
+                                'bg-accent hover:bg-accent/90 text-accent-foreground': preferredAccidental === 'natural',
+                            })}
+                            onClick={() => handleAccidentalChange('natural')}
+                            disabled={preferredAccidental === 'natural'}
+                        >
+                             <svg viewBox="0 0 80 90" className="w-auto h-4">
                                 <path d={NATURAL_PATH} stroke="currentColor" strokeWidth="10" fill="none" strokeLinecap="round" />
                             </svg>
                             <span className="sr-only">Natural</span>
                         </Button>
-                        <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleAccidentalChange('sharp')}>
-                             <svg viewBox="0 0 225 225" className="w-auto h-4 text-foreground">
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className={cn('h-8 w-8', {
+                                'bg-accent hover:bg-accent/90 text-accent-foreground': preferredAccidental === 'sharp',
+                            })}
+                            onClick={() => handleAccidentalChange('sharp')}
+                            disabled={preferredAccidental === 'sharp'}
+                        >
+                             <svg viewBox="0 0 225 225" className="w-auto h-4">
                                 <g transform="scale(-1, 1) translate(-225, 0)">
                                   <path d={SHARP_PATH} fill="currentColor" fillRule="evenodd" />
                                 </g>
