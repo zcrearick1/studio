@@ -43,20 +43,18 @@ const sharpToFlatMap: { [key: string]: string } = Object.fromEntries(
 function parseNoteString(noteStr: string): ParsedNote {
   if (!noteStr) return null;
   const simpleNote = noteStr.split("/")[0].trim();
+  
+  // Regex to handle notes like 'C', 'C#', 'Db', and the octave number
   const match = simpleNote.match(/([A-G])([#b]?)([0-9])/);
   if (!match) return null;
 
   let [, letter, accidentalSymbol, octaveStr] = match;
   let accidental: "sharp" | "flat" | "natural" = "natural";
-  if (accidentalSymbol === "#") accidental = "sharp";
-  if (accidentalSymbol === "b") {
+  
+  if (accidentalSymbol === "#") {
+      accidental = "sharp";
+  } else if (accidentalSymbol === "b") {
       accidental = "flat";
-      // We internally use sharps for consistency in the chromatic scale
-      const sharpEquivalent = Object.keys(flatToSharpMap).find(key => flatToSharpMap[key] === `${letter}#`);
-      if (sharpEquivalent) {
-        // This logic is for internal consistency, not for display.
-        // For display, we want to keep the flat letter.
-      }
   }
   
   return {
@@ -79,10 +77,10 @@ const NATURAL_PATH = "M30,15 V85 M50,5 V65 M15,45 H65 M15,35 H65";
 
 const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
     const STAFF_HEIGHT = 100;
-    const STAFF_WIDTH = 96;
+    const STAFF_WIDTH = 110;
     const LINE_SPACING = 10;
     const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
-    const NOTE_X = 65;
+    const NOTE_X = 79;
 
     const getNoteYPosition = (pNote: ParsedNote) => {
         if (!pNote) return -1000;
@@ -132,7 +130,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
             case 'sharp':
                 return <path d={SHARP_PATH} fill="currentColor" fillRule="evenodd" transform={`translate(${accidentalX + 22.5}, ${y-11}) scale(-0.01, 0.01)`} />;
             case 'flat':
-                return <path d={FLAT_PATH} fill="currentColor" fillRule="evenodd" transform={`translate(${accidentalX - 55}, ${y + 80}) scale(0.02, -0.02)`} />;
+                return <path d={FLAT_PATH} fill="currentColor" fillRule="evenodd" transform={`translate(${accidentalX - 4}, ${y + 8}) scale(0.013, -0.013)`} />;
             default:
                 return null;
         }
@@ -248,7 +246,16 @@ export default function FingeringChartsPage() {
         if (nextNoteName.includes('#')) {
             setPreferredAccidental('sharp');
         } else {
-            setPreferredAccidental('natural');
+            // Check if there is a flat equivalent for the previous note
+            const prevNoteName = chromaticScaleWithOctaves[nextIndex -1];
+            if(prevNoteName) {
+                const flatEquivalent = sharpToFlatMap[prevNoteName.slice(0, 2)];
+                if (flatEquivalent) {
+                    setPreferredAccidental('natural'); // Or based on key signature logic later
+                }
+            } else {
+                setPreferredAccidental('natural');
+            }
         }
       }
   };
@@ -262,7 +269,7 @@ export default function FingeringChartsPage() {
     if (!selectedInstrument || !currentNoteName) return null;
     return selectedInstrument.fingerings.find(f => {
         const noteVariants = f.note.split('/');
-        return noteVariants.some(v => v === currentNoteName);
+        return noteVariants.some(v => v === currentNoteName || flatToSharpMap[v.slice(0, 2)] + v.slice(2) === currentNoteName);
     }) || null;
   }, [selectedInstrument, currentNoteName]);
 
@@ -312,46 +319,32 @@ export default function FingeringChartsPage() {
 
     const { letter, octave } = parsedNote;
     let targetNoteName: string | null = null;
+    let targetSharpEquivalent: string | null = null;
 
     if (newAccidental === 'natural') {
         targetNoteName = `${letter}${octave}`;
+        targetSharpEquivalent = targetNoteName;
     } else if (newAccidental === 'sharp') {
         targetNoteName = `${letter}#${octave}`;
+        targetSharpEquivalent = targetNoteName;
     } else { // flat
-        // This is a bit tricky. We need the note *above* the current one, then find its flat name.
-        const nextNoteIndex = chromaticScaleWithOctaves.indexOf(`${letter}${octave}`) + 1;
-        const nextNote = chromaticScaleWithOctaves[nextNoteIndex];
-        if (nextNote) {
-            const flatEquivalent = sharpToFlatMap[nextNote.slice(0, 2)];
-            if(flatEquivalent) {
-                targetNoteName = `${flatEquivalent}${octave}`;
-            }
+        const flatNoteStr = `${letter}b`;
+        const sharpEquivalent = Object.keys(flatToSharpMap).find(f => f === flatNoteStr);
+
+        if (sharpEquivalent) {
+            targetSharpEquivalent = flatToSharpMap[sharpEquivalent] + octave;
+        } else if (flatNoteStr === 'Cb') {
+            targetSharpEquivalent = `B${octave - 1}`;
+        } else if (flatNoteStr === 'Fb') {
+            targetSharpEquivalent = `E${octave}`;
         }
-        // Fallback for simple cases
-        if (!targetNoteName) {
-            const flatNoteName = `${letter}b`;
-            // Check for special cases like Cb and Fb
-            if (flatNoteName === 'Cb') {
-                targetNoteName = `B${octave - 1}`;
-            } else if (flatNoteName === 'Fb') {
-                targetNoteName = `E${octave}`;
-            } else {
-                const sharpEquivalentKey = Object.keys(flatToSharpMap).find(key => key === flatNoteName);
-                if (sharpEquivalentKey) {
-                    const sharpEquivalent = flatToSharpMap[sharpEquivalentKey];
-                    targetNoteName = `${sharpEquivalent}${octave}`;
-                }
-            }
-        }
+        targetNoteName = `${flatNoteStr}${octave}`;
     }
 
-    if (targetNoteName) {
-        const newIndex = chromaticScaleWithOctaves.findIndex(n => n === targetNoteName || (flatToSharpMap[n.slice(0,2) as keyof typeof flatToSharpMap] + n.slice(2)) === targetNoteName);
+    if (targetSharpEquivalent) {
+        const targetIndex = chromaticScaleWithOctaves.indexOf(targetSharpEquivalent);
         const { min, max } = instrumentNoteRangeIndices;
         
-        const targetSharp = flatToSharpMap[targetNoteName.slice(0, 2) as keyof typeof flatToSharpMap] ? `${flatToSharpMap[targetNoteName.slice(0, 2) as keyof typeof flatToSharpMap]}${targetNoteName.slice(2)}` : targetNoteName;
-        const targetIndex = chromaticScaleWithOctaves.indexOf(targetSharp);
-
         if (targetIndex !== -1 && targetIndex >= min && targetIndex <= max) {
             setCurrentNoteIndex(targetIndex);
             setPreferredAccidental(newAccidental);
@@ -360,7 +353,6 @@ export default function FingeringChartsPage() {
 };
 
   const getDisplayNote = () => {
-    // If we have a definitive fingering, use its names.
     if (currentFingering) {
         const noteVariants = currentFingering.note.split('/');
         if (noteVariants.length === 1) return noteVariants[0];
@@ -369,9 +361,14 @@ export default function FingeringChartsPage() {
             const flatVariant = noteVariants.find(v => v.includes('b'));
             if (flatVariant) return flatVariant;
         }
+        
+        if(preferredAccidental === 'sharp') {
+            const sharpVariant = noteVariants.find(v => v.includes('#'));
+            if (sharpVariant) return sharpVariant;
+        }
 
-        const sharpVariant = noteVariants.find(v => v.includes('#'));
-        return sharpVariant || noteVariants[0];
+        // Fallback to the first available name if preferred is not found
+        return noteVariants[0];
     }
 
     // If no fingering, derive name from internal state.
@@ -514,4 +511,5 @@ export default function FingeringChartsPage() {
     </div>
   );
 }
+
 
