@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
@@ -27,6 +26,8 @@ type ParsedNote = {
 // --- Note Logic Helpers ---
 
 const noteValueMap: { [key: string]: number } = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+const noteLetterMap: string[] = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
 
 // This function converts ANY note string ("Fb4", "C#5") to a unique integer (MIDI value).
 function getMidiValue(note: string): number {
@@ -43,31 +44,28 @@ function getMidiValue(note: string): number {
     else if (acc === 'b') value--;
   }
   
-  return 12 * octave + value;
+  return 12 * (octave + 1) + value;
 }
 
 const sharpNoteNames: { [key: number]: string } = {0: "C", 1: "C#", 2: "D", 3: "D#", 4: "E", 5: "F", 6: "F#", 7: "G", 8: "G#", 9: "A", 10: "A#", 11: "B"};
 const flatNoteNames: { [key: number]: string } = {0: "C", 1: "Db", 2: "D", 3: "Eb", 4: "E", 5: "F", 6: "Gb", 7: "G", 8: "Ab", 9: "A", 10: "Bb", 11: "B"};
 
-function getNoteNameFromMidi(midi: number, preferred: 'sharp'|'flat'|'natural'): string {
-    const octave = Math.floor(midi / 12);
+function getNoteNameFromMidi(midi: number, preferred: 'sharp'|'flat'|'natural' = 'natural'): string {
+    const octave = Math.floor(midi / 12) - 1;
     const pitchClass = (midi % 12 + 12) % 12;
 
     if (preferred === 'flat') {
       const flatName = flatNoteNames[pitchClass];
-      // Adjust octave for notes like Cb
-      if (flatName.includes('b') && pitchClass === 11) { // B becomes Cb
-        return `Cb${octave + 1}`;
-      }
-       return `${flatNoteNames[pitchClass]}${octave}`;
+      if (flatName === 'Cb') return `Cb${octave + 1}`;
+      if (flatName === 'Gb') return `Gb${octave}`;
+      return `${flatNoteNames[pitchClass]}${octave}`;
     }
     
     const sharpName = sharpNoteNames[pitchClass];
-    // Adjust octave for notes like B#
-    if (sharpName.includes('#') && pitchClass === 0) { // C becomes B#
-      return `B#${octave - 1}`;
-    }
-    return `${sharpName}${octave}`;
+     if (sharpName === 'B#') return `B#${octave - 1}`;
+    
+    // Default to sharps for chromatic notes if 'natural' is preferred
+    return `${sharpNoteNames[pitchClass]}${octave}`;
 }
 
 function parseNoteString(noteStr: string): ParsedNote {
@@ -106,10 +104,10 @@ const NATURAL_PATH = "M810 1359 c0 -843 1 -890 18 -885 9 3 126 32 260 64 l242 59
 
 const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
     const STAFF_HEIGHT = 100;
-    const STAFF_WIDTH = 330;
+    const STAFF_WIDTH = 150;
     const LINE_SPACING = 10;
     const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
-    const NOTE_X = 200;
+    const NOTE_X = 100;
 
     const getNoteYPosition = (pNote: ParsedNote) => {
         if (!pNote) return -1000;
@@ -176,14 +174,14 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
         const firstLedgerBelow = staffBottomY + LINE_SPACING;
 
         // Top ledger lines
-        if (y <= firstLedgerAbove) { 
-            for (let lineY = firstLedgerAbove; lineY >= y - (LINE_SPACING/2); lineY -= LINE_SPACING) {
+        if (y <= firstLedgerAbove + (LINE_SPACING / 2)) { 
+            for (let lineY = staffTopY - LINE_SPACING; lineY >= y - (LINE_SPACING/2); lineY -= LINE_SPACING) {
                  lines.push(<line key={`ledger-top-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
             }
         }
         // Bottom ledger lines
-        if (y >= firstLedgerBelow) {
-            for (let lineY = firstLedgerBelow; lineY <= y + (LINE_SPACING/2); lineY += LINE_SPACING) {
+        if (y >= firstLedgerBelow - (LINE_SPACING / 2)) {
+            for (let lineY = staffBottomY + LINE_SPACING; lineY <= y + (LINE_SPACING/2); lineY += LINE_SPACING) {
                 lines.push(<line key={`ledger-bottom-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
             }
         }
@@ -291,9 +289,8 @@ export default function FingeringChartsPage() {
       if (accidental === 'flat') accidentalSymbol = 'b';
       
       const nextNoteName = `${nextLetter}${accidentalSymbol}${nextOctave}`;
-
       const nextMidi = getMidiValue(nextNoteName);
-
+      
       if (nextMidi >= instrumentNoteRangeMidi.min && nextMidi <= instrumentNoteRangeMidi.max) {
           setCurrentNote(nextNoteName);
       }
@@ -329,22 +326,26 @@ export default function FingeringChartsPage() {
   }, [currentNote, instrumentNoteRangeMidi, selectedInstrument]);
 
 
-  const getDisplayNote = (note: string, preferred: 'sharp' | 'flat' | 'natural') => {
-    if (!selectedInstrument || !note) return note;
+  const getDisplayNote = (noteName: string, preferred: 'sharp' | 'flat' | 'natural') => {
+    if (!selectedInstrument || !noteName) return noteName;
 
-    const midi = getMidiValue(note);
-    if (midi === -1) return note;
+    const midi = getMidiValue(noteName);
+    if (midi === -1) return noteName;
 
     const fingering = selectedInstrument.fingerings.find(f => {
         const noteVariants = f.note.split('/');
         return noteVariants.some(variant => getMidiValue(variant) === midi);
     });
 
-    if (!fingering) return getNoteNameFromMidi(midi, preferred);
-
+    // If no specific fingering found, generate a name based on preference
+    if (!fingering) {
+        return getNoteNameFromMidi(midi, preferred);
+    }
+    
     const noteVariants = fingering.note.split('/');
     if (noteVariants.length === 1) return noteVariants[0];
 
+    // Try to find a variant that matches the preferred accidental
     if (preferred === 'flat') {
         const flatVariant = noteVariants.find(v => v.includes('b'));
         if (flatVariant) return flatVariant;
@@ -354,8 +355,19 @@ export default function FingeringChartsPage() {
         if (sharpVariant) return sharpVariant;
     }
     
-    // Default to preferred, or first variant
-    return getNoteNameFromMidi(midi, preferred);
+    // If preference doesn't match, check the current note's accidental
+    const currentParsed = parseNoteString(noteName);
+    if (currentParsed?.accidental === 'flat') {
+       const flatVariant = noteVariants.find(v => v.includes('b'));
+       if (flatVariant) return flatVariant;
+    }
+    if (currentParsed?.accidental === 'sharp') {
+       const sharpVariant = noteVariants.find(v => v.includes('#'));
+       if (sharpVariant) return sharpVariant;
+    }
+
+    // Default to the first listed variant
+    return noteVariants[0];
   };
   
   const currentDisplayNote = getDisplayNote(currentNote, preferredAccidental);
@@ -394,6 +406,7 @@ export default function FingeringChartsPage() {
       
       if (currentNoteMidi < lowNoteMidi || currentNoteMidi > highNoteMidi) {
          setCurrentNote(selectedInstrument.range.low);
+         setPreferredAccidental('natural');
       }
     }
   }, [selectedInstrument, currentNote]);
@@ -409,10 +422,15 @@ export default function FingeringChartsPage() {
 
   const handleAccidentalChange = (newAccidental: 'sharp' | 'flat' | 'natural') => {
       setPreferredAccidental(newAccidental);
+      
       const parsed = parseNoteString(currentNote);
       if (!parsed) return;
       
-      let targetNoteName = `${parsed.letter}${newAccidental === 'sharp' ? '#' : newAccidental === 'flat' ? 'b' : ''}${parsed.octave}`;
+      let accidentalSymbol = '';
+      if (newAccidental === 'sharp') accidentalSymbol = '#';
+      else if (newAccidental === 'flat') accidentalSymbol = 'b';
+
+      let targetNoteName = `${parsed.letter}${accidentalSymbol}${parsed.octave}`;
 
       const finalMidi = getMidiValue(targetNoteName);
       
@@ -431,7 +449,7 @@ export default function FingeringChartsPage() {
     setSelectedInstrumentName(instrumentName);
   };
   
-  const noteForStaff = parseNoteString(currentNote);
+  const noteForStaff = parseNoteString(currentDisplayNote);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -522,8 +540,8 @@ export default function FingeringChartsPage() {
                             onClick={() => handleAccidentalChange('natural')}
                             disabled={preferredAccidental === 'natural'}
                         >
-                             <svg viewBox="0 0 2250 2250" className="w-auto h-4" fillRule="evenodd">
-                               <g transform="scale(0.1, -0.1) translate(0, -2250)">
+                             <svg viewBox="0 0 225 225" className="w-auto h-4" fillRule="evenodd">
+                               <g transform="translate(0, 225) scale(0.1, -0.1)">
                                 <path d={NATURAL_PATH} fill="currentColor" />
                                </g>
                             </svg>
