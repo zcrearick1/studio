@@ -1,20 +1,33 @@
 "use client";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { instruments } from "@/lib/instrument-data";
-import { HelpCircle } from "lucide-react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { instruments } from "@/lib/instrument-data";
+import { HelpCircle, ArrowRight } from "lucide-react";
+import type { Instrument } from "@/lib/instrument-types";
+
 
 export default function QuizzesPage() {
+  const [activeCategory, setActiveCategory] = useState<string>("Woodwind");
+  const [selectedInstrumentSlug, setSelectedInstrumentSlug] = useState<string>("");
+
   const instrumentCategories = [...new Set(instruments.map(i => i.category))];
-  
   const categoryOrder = ["Woodwind", "Brass", "Percussion", "String"];
   const sortedCategories = instrumentCategories.sort((a, b) => {
     const indexA = categoryOrder.indexOf(a);
@@ -23,6 +36,25 @@ export default function QuizzesPage() {
     if (indexB === -1) return -1;
     return indexA - indexB;
   });
+  
+  const instrumentsInCategory = useMemo(() => {
+    return instruments.filter((i) => i.category === activeCategory);
+  }, [activeCategory]);
+
+  const selectedInstrument = useMemo(() => {
+    if (!selectedInstrumentSlug) return null;
+    return instruments.find(i => i.slug === selectedInstrumentSlug);
+  }, [selectedInstrumentSlug]);
+
+
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category);
+    setSelectedInstrumentSlug("");
+  };
+  
+  const handleInstrumentChange = (slug: string) => {
+    setSelectedInstrumentSlug(slug);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -36,30 +68,50 @@ export default function QuizzesPage() {
         </div>
 
         <Card>
-            <CardHeader>
+            <CardHeader className="text-center">
                 <CardTitle>Select a Quiz</CardTitle>
                 <CardDescription>Select an instrument category, then choose an instrument to start the quiz.</CardDescription>
             </CardHeader>
             <CardContent>
-                <Accordion type="single" collapsible className="w-full">
-                    {sortedCategories.map((category) => (
-                        <AccordionItem value={category} key={category}>
-                            <AccordionTrigger className="text-xl font-semibold text-primary">{category}</AccordionTrigger>
-                            <AccordionContent>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 pl-4 border-l ml-1 py-2">
-                                    {instruments.filter(instrument => instrument.category === category).map((instrument) => (
-                                        <Button asChild variant="ghost" className="justify-start font-normal" key={instrument.slug}>
-                                            <Link href={`/fingering-charts/quizzes/${instrument.slug}`}>
-                                                {instrument.name}
-                                            </Link>
-                                        </Button>
-                                    ))}
-                                </div>
-                            </AccordionContent>
-                        </AccordionItem>
-                    ))}
-                </Accordion>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Select value={activeCategory} onValueChange={handleCategoryChange}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {sortedCategories.map((category) => (
+                            <SelectItem key={category} value={category}>
+                                {category}
+                            </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <Select
+                        value={selectedInstrumentSlug}
+                        onValueChange={handleInstrumentChange}
+                        disabled={!activeCategory}
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select an instrument" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {instrumentsInCategory.map((instrument) => (
+                                <SelectItem key={instrument.slug} value={instrument.slug}>
+                                    {instrument.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
             </CardContent>
+            <CardFooter className="justify-center pt-6">
+                <Button asChild disabled={!selectedInstrument} size="lg">
+                    <Link href={selectedInstrument ? `/fingering-charts/quizzes/${selectedInstrument.slug}` : '#'}>
+                        Start Quiz
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                </Button>
+            </CardFooter>
         </Card>
       </div>
     </div>
