@@ -178,13 +178,13 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
         const staffBottomY = TOP_MARGIN + 4 * LINE_SPACING;
 
         // Top ledger lines
-        if (y < staffTopY - LINE_SPACING / 2) {
+        if (y < staffTopY) {
             for (let lineY = staffTopY - LINE_SPACING; lineY >= y - (LINE_SPACING/4); lineY -= LINE_SPACING) {
                  lines.push(<line key={`ledger-top-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
             }
         }
         // Bottom ledger lines
-        if (y > staffBottomY + LINE_SPACING / 2) {
+        if (y > staffBottomY) {
             for (let lineY = staffBottomY + LINE_SPACING; lineY <= y + (LINE_SPACING/4); lineY += LINE_SPACING) {
                 lines.push(<line key={`ledger-bottom-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
             }
@@ -211,7 +211,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
     }
 
     return (
-        <svg viewBox={`0 0 ${STAFF_WIDTH} ${STAFF_HEIGHT}`} className="w-full h-auto text-foreground">
+        <svg viewBox={`0 -40 ${STAFF_WIDTH} 180`} className="w-full h-auto text-foreground">
             {/* Staff Lines */}
             {[...Array(5)].map((_, i) => (
                 <line
