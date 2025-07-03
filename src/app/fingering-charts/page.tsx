@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
@@ -179,13 +178,13 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
         const staffBottomY = TOP_MARGIN + 4 * LINE_SPACING;
 
         // Top ledger lines
-        if (y < staffTopY - (LINE_SPACING / 2)) {
+        if (y < staffTopY) {
             for (let lineY = staffTopY - LINE_SPACING; lineY >= y - (LINE_SPACING/4); lineY -= LINE_SPACING) {
                  lines.push(<line key={`ledger-top-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
             }
         }
         // Bottom ledger lines
-        if (y > staffBottomY + (LINE_SPACING / 2)) {
+        if (y > staffBottomY) {
             for (let lineY = staffBottomY + LINE_SPACING; lineY <= y + (LINE_SPACING/4); lineY += LINE_SPACING) {
                 lines.push(<line key={`ledger-bottom-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
             }
@@ -466,7 +465,7 @@ export default function FingeringChartsPage() {
       </div>
 
       <Card className="max-w-4xl mx-auto">
-        <CardHeader>
+        <CardHeader className="text-center">
           <CardTitle>Select Your Instrument</CardTitle>
           <CardDescription>
             First, choose a category, then select your instrument from the list.
@@ -555,8 +554,8 @@ export default function FingeringChartsPage() {
                             onClick={() => handleAccidentalChange('natural')}
                             disabled={preferredAccidental === 'natural'}
                         >
-                             <svg viewBox="0 0 225.000000 225.000000" className="w-auto h-4" fillRule="evenodd">
-                               <g transform="translate(0.000000,225.000000) scale(0.100000,-0.100000)">
+                             <svg viewBox="0 0 2250 2250" className="w-auto h-4" fillRule="evenodd">
+                               <g transform="translate(0, 2250) scale(0.1, -0.1)">
                                 <path d={NATURAL_PATH} fill="currentColor" />
                                </g>
                             </svg>
