@@ -133,7 +133,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
     const renderClef = () => {
         switch (clef) {
             case "treble":
-                return <path d={TREBLE_CLEF_PATH} fill="currentColor" transform="translate(5, 95) scale(0.03, -0.03)" />;
+                return <path d={TREBLE_CLEF_PATH} fill="currentColor" transform="translate(5, 92.5) scale(0.028, -0.028)" />;
             case "bass":
                 return (
                     <g transform="translate(15, 64.5) scale(0.007, -0.007)" fillRule="evenodd">
@@ -144,7 +144,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
                 );
             case "alto":
                 return (
-                    <g transform="translate(20, 95) scale(0.02, -0.02)" fill="currentColor">
+                    <g transform="translate(5, 73.5) scale(0.0207, -0.0207)" fill="currentColor">
                         <path d={ALTO_CLEF_PATH_C} />
                         <path d={ALTO_CLEF_PATH_LEFT_BAR} />
                         <path d={ALTO_CLEF_PATH_RIGHT_BAR} />
@@ -522,7 +522,7 @@ export default function FingeringChartsPage() {
                             <span className="sr-only">Note Down</span>
                         </Button>
                     </div>
-                    <div className="flex flex-col justify-center gap-1 pt-4 border-t w-full">
+                    <div className="flex flex-col items-center justify-center gap-1 pt-4 border-t w-full">
                         <Button
                             variant="outline"
                             size="icon"
