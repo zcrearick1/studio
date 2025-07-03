@@ -177,19 +177,15 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
         const staffTopY = TOP_MARGIN;
         const staffBottomY = TOP_MARGIN + 4 * LINE_SPACING;
 
-        // Notes need ledger lines only if they are on or beyond the first ledger line position.
-        const firstLedgerAbove = staffTopY - LINE_SPACING;
-        const firstLedgerBelow = staffBottomY + LINE_SPACING;
-
         // Top ledger lines
-        if (y <= firstLedgerAbove + (LINE_SPACING / 2)) { 
-            for (let lineY = staffTopY - LINE_SPACING; lineY >= y - (LINE_SPACING/2); lineY -= LINE_SPACING) {
+        if (y < staffTopY - LINE_SPACING / 2) {
+            for (let lineY = staffTopY - LINE_SPACING; lineY >= y - (LINE_SPACING/4); lineY -= LINE_SPACING) {
                  lines.push(<line key={`ledger-top-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
             }
         }
         // Bottom ledger lines
-        if (y >= firstLedgerBelow - (LINE_SPACING / 2)) {
-            for (let lineY = staffBottomY + LINE_SPACING; lineY <= y + (LINE_SPACING/2); lineY += LINE_SPACING) {
+        if (y > staffBottomY + LINE_SPACING / 2) {
+            for (let lineY = staffBottomY + LINE_SPACING; lineY <= y + (LINE_SPACING/4); lineY += LINE_SPACING) {
                 lines.push(<line key={`ledger-bottom-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
             }
         }
