@@ -5,7 +5,7 @@
 import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { instruments, Instrument, Fingering } from "@/lib/instrument-data";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -14,7 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Music, ArrowUp, ArrowDown } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -467,36 +466,46 @@ export default function FingeringChartsPage() {
       </div>
 
       <Card className="max-w-4xl mx-auto">
-        <CardContent className="p-6">
-          <Tabs value={activeCategory} onValueChange={handleCategoryChange} className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-4">
-              {sortedCategories.map(category => (
-                <TabsTrigger key={category} value={category}>{category}</TabsTrigger>
-              ))}
-            </TabsList>
-            
-            {sortedCategories.map(category => (
-              <TabsContent key={category} value={category}>
-                <Select
-                  value={selectedInstrumentName}
-                  onValueChange={handleInstrumentChange}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select an instrument" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {instruments
-                      .filter((i) => i.category === category)
-                      .map((instrument) => (
-                        <SelectItem key={instrument.name} value={instrument.name}>
-                          {instrument.name}
-                        </SelectItem>
-                      ))}
-                  </SelectContent>
-                </Select>
-              </TabsContent>
-            ))}
-          </Tabs>
+        <CardHeader>
+          <CardTitle>Select Your Instrument</CardTitle>
+          <CardDescription>
+            First, choose a category, then select your instrument from the list.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Select value={activeCategory} onValueChange={handleCategoryChange}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent>
+                {sortedCategories.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select
+              value={selectedInstrumentName}
+              onValueChange={handleInstrumentChange}
+              disabled={!activeCategory}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select an instrument" />
+              </SelectTrigger>
+              <SelectContent>
+                {instruments
+                  .filter((i) => i.category === activeCategory)
+                  .map((instrument) => (
+                    <SelectItem key={instrument.name} value={instrument.name}>
+                      {instrument.name}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+          </div>
         </CardContent>
       </Card>
       
