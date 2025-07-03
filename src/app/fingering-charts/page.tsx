@@ -109,7 +109,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
     const STAFF_WIDTH = 330;
     const LINE_SPACING = 10;
     const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
-    const NOTE_X = 240;
+    const NOTE_X = 200;
 
     const getNoteYPosition = (pNote: ParsedNote) => {
         if (!pNote) return -1000;
@@ -176,19 +176,15 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
         const firstLedgerBelow = staffBottomY + LINE_SPACING;
 
         // Top ledger lines
-        if (y < staffTopY) { 
-            for (let lineY = firstLedgerAbove; lineY >= y; lineY -= LINE_SPACING) {
-                if (Math.round(lineY*2) % Math.round(LINE_SPACING*2) === 0) {
-                     lines.push(<line key={`ledger-top-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
-                }
+        if (y <= firstLedgerAbove) { 
+            for (let lineY = firstLedgerAbove; lineY >= y - (LINE_SPACING/2); lineY -= LINE_SPACING) {
+                 lines.push(<line key={`ledger-top-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
             }
         }
         // Bottom ledger lines
-        if (y > staffBottomY) {
-            for (let lineY = firstLedgerBelow; lineY <= y; lineY += LINE_SPACING) {
-                if (Math.round(lineY*2) % Math.round(LINE_SPACING*2) === 0) {
-                    lines.push(<line key={`ledger-bottom-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
-                }
+        if (y >= firstLedgerBelow) {
+            for (let lineY = firstLedgerBelow; lineY <= y + (LINE_SPACING/2); lineY += LINE_SPACING) {
+                lines.push(<line key={`ledger-bottom-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
             }
         }
         return lines;
@@ -403,11 +399,16 @@ export default function FingeringChartsPage() {
   }, [selectedInstrument, currentNote]);
   
   useEffect(() => {
-    setCurrentNote(currentDisplayNote);
-  }, [preferredAccidental, currentDisplayNote]);
+    const displayMidi = getMidiValue(currentDisplayNote);
+    const currentMidi = getMidiValue(currentNote);
+    if(displayMidi !== currentMidi) {
+      setCurrentNote(currentDisplayNote);
+    }
+  }, [preferredAccidental, currentDisplayNote, currentNote]);
 
 
   const handleAccidentalChange = (newAccidental: 'sharp' | 'flat' | 'natural') => {
+      setPreferredAccidental(newAccidental);
       const parsed = parseNoteString(currentNote);
       if (!parsed) return;
       
@@ -418,7 +419,6 @@ export default function FingeringChartsPage() {
       if (finalMidi >= instrumentNoteRangeMidi.min && finalMidi <= instrumentNoteRangeMidi.max) {
         setCurrentNote(targetNoteName);
       }
-      setPreferredAccidental(newAccidental);
   };
   
   const handleCategoryChange = (category: string) => {
@@ -523,7 +523,7 @@ export default function FingeringChartsPage() {
                             disabled={preferredAccidental === 'natural'}
                         >
                              <svg viewBox="0 0 2250 2250" className="w-auto h-4" fillRule="evenodd">
-                               <g transform="scale(1, -1) translate(0, -2250)">
+                               <g transform="scale(0.1, -0.1) translate(0, -2250)">
                                 <path d={NATURAL_PATH} fill="currentColor" />
                                </g>
                             </svg>
