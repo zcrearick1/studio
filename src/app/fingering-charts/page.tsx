@@ -1,7 +1,9 @@
 
+
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import Image from "next/image";
 import { instruments, Instrument, Fingering } from "@/lib/instrument-data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -178,13 +180,13 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
         const staffBottomY = TOP_MARGIN + 4 * LINE_SPACING;
 
         // Top ledger lines
-        if (y < staffTopY) {
+        if (y < staffTopY - (LINE_SPACING / 2)) {
             for (let lineY = staffTopY - LINE_SPACING; lineY >= y - (LINE_SPACING/4); lineY -= LINE_SPACING) {
                  lines.push(<line key={`ledger-top-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
             }
         }
         // Bottom ledger lines
-        if (y > staffBottomY) {
+        if (y > staffBottomY + (LINE_SPACING / 2)) {
             for (let lineY = staffBottomY + LINE_SPACING; lineY <= y + (LINE_SPACING/4); lineY += LINE_SPACING) {
                 lines.push(<line key={`ledger-bottom-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
             }
@@ -586,7 +588,19 @@ export default function FingeringChartsPage() {
                       <CardTitle className="text-primary text-4xl">{currentDisplayNote}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-lg text-muted-foreground break-words">{currentFingering.positions.join(' ')}</p>
+                      {currentFingering.imageUrl ? (
+                        <div className="relative aspect-[1/2] w-full max-w-[150px] mx-auto">
+                            <Image
+                                src={currentFingering.imageUrl}
+                                alt={`Fingering diagram for ${currentDisplayNote}`}
+                                fill
+                                className="object-contain rounded-md"
+                                data-ai-hint="fingering diagram"
+                            />
+                        </div>
+                        ) : (
+                        <p className="text-lg text-muted-foreground break-words">{currentFingering.positions.join(' ')}</p>
+                      )}
                     </CardContent>
                   </Card>
                 ) : (
