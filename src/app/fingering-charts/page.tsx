@@ -213,7 +213,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
     }
 
     return (
-        <svg viewBox={`0 -65 ${STAFF_WIDTH} 230`} className="w-full h-auto text-foreground">
+        <svg viewBox={`0 -25 ${STAFF_WIDTH} 150`} className="w-full h-auto text-foreground">
             {/* Staff Lines */}
             {[...Array(5)].map((_, i) => (
                 <line
@@ -519,7 +519,7 @@ export default function FingeringChartsPage() {
             <Card className="overflow-hidden">
               <div className="grid grid-cols-[auto_1fr] items-center h-full">
                 {/* Controls */}
-                <div className="flex flex-col items-center justify-center p-2 bg-secondary/50 h-32 gap-4 border-r">
+                <div className="flex flex-col items-center justify-center p-2 bg-secondary/50 h-32 gap-2 border-r">
                     <div className="flex flex-col items-center gap-2">
                         <Button variant="outline" size="icon" onClick={() => changeNote('up')} disabled={!canGoUp}>
                             <ArrowUp className="h-4 w-4" />
@@ -530,7 +530,7 @@ export default function FingeringChartsPage() {
                             <span className="sr-only">Note Down</span>
                         </Button>
                     </div>
-                    <div className="flex flex-col items-center justify-center gap-1">
+                    <div className="flex items-center justify-center gap-2">
                         <Button
                             variant="outline"
                             size="icon"
