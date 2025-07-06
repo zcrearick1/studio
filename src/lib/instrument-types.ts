@@ -2,6 +2,7 @@ export type Fingering = {
   note: string;
   positions: string[];
   imageUrl?: string;
+  keys?: string[];
 };
 
 export type SetupGuideSection = {

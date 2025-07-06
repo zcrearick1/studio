@@ -16,6 +16,8 @@ import {
 import { Music, ArrowUp, ArrowDown } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { ClarinetFingeringDiagram } from "@/components/clarinet-fingering-diagram";
+
 
 type ParsedNote = {
   letter: string;
@@ -178,13 +180,13 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
         const staffBottomY = TOP_MARGIN + 4 * LINE_SPACING;
 
         // Top ledger lines
-        if (y < staffTopY) {
+        if (y < staffTopY - (LINE_SPACING / 2)) {
             for (let lineY = staffTopY - LINE_SPACING; lineY >= y - (LINE_SPACING/4); lineY -= LINE_SPACING) {
                  lines.push(<line key={`ledger-top-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
             }
         }
         // Bottom ledger lines
-        if (y > staffBottomY) {
+        if (y > staffBottomY + (LINE_SPACING / 2)) {
             for (let lineY = staffBottomY + LINE_SPACING; lineY <= y + (LINE_SPACING/4); lineY += LINE_SPACING) {
                 lines.push(<line key={`ledger-bottom-${lineY}`} x1={NOTE_X - 10} y1={lineY} x2={NOTE_X + 10} y2={lineY} stroke="currentColor" strokeWidth="1" />);
             }
@@ -211,7 +213,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
     }
 
     return (
-        <svg viewBox={`0 -40 ${STAFF_WIDTH} 180`} className="w-full h-auto text-foreground">
+        <svg viewBox={`0 -65 ${STAFF_WIDTH} 230`} className="w-full h-auto text-foreground">
             {/* Staff Lines */}
             {[...Array(5)].map((_, i) => (
                 <line
@@ -517,28 +519,28 @@ export default function FingeringChartsPage() {
             <Card className="overflow-hidden">
               <div className="grid grid-cols-[auto_1fr] items-center h-full">
                 {/* Controls */}
-                <div className="flex flex-col items-center justify-between p-4 bg-secondary/50 h-full border-r">
-                    <div className="flex flex-col items-center gap-4">
+                <div className="flex flex-col items-center justify-center p-2 bg-secondary/50 h-32 gap-4 border-r">
+                    <div className="flex flex-col items-center gap-2">
                         <Button variant="outline" size="icon" onClick={() => changeNote('up')} disabled={!canGoUp}>
-                            <ArrowUp className="h-5 w-5" />
+                            <ArrowUp className="h-4 w-4" />
                             <span className="sr-only">Note Up</span>
                         </Button>
                         <Button variant="outline" size="icon" onClick={() => changeNote('down')} disabled={!canGoDown}>
-                            <ArrowDown className="h-5 w-5" />
+                            <ArrowDown className="h-4 w-4" />
                             <span className="sr-only">Note Down</span>
                         </Button>
                     </div>
-                    <div className="flex flex-col items-center justify-center gap-1 pt-4 border-t w-full">
+                    <div className="flex flex-col items-center justify-center gap-1">
                         <Button
                             variant="outline"
                             size="icon"
-                            className={cn('h-8 w-8', {
+                            className={cn('h-6 w-6', {
                                 'bg-accent hover:bg-accent/90 text-accent-foreground': preferredAccidental === 'flat',
                             })}
                             onClick={() => handleAccidentalChange('flat')}
                             disabled={preferredAccidental === 'flat'}
                         >
-                            <svg viewBox="0 0 2250 2250" className="w-auto h-4" fillRule="evenodd">
+                            <svg viewBox="0 0 2250 2250" className="w-auto h-3" fillRule="evenodd">
                                 <g transform="scale(1, -1) translate(0, -2250)">
                                     <path d={FLAT_PATH} fill="currentColor" />
                                 </g>
@@ -548,13 +550,13 @@ export default function FingeringChartsPage() {
                         <Button
                             variant="outline"
                             size="icon"
-                            className={cn('h-8 w-8', {
+                            className={cn('h-6 w-6', {
                                 'bg-accent hover:bg-accent/90 text-accent-foreground': preferredAccidental === 'natural',
                             })}
                             onClick={() => handleAccidentalChange('natural')}
                             disabled={preferredAccidental === 'natural'}
                         >
-                             <svg viewBox="0 0 2250 2250" className="w-auto h-4" fillRule="evenodd">
+                             <svg viewBox="0 0 2250 2250" className="w-auto h-3" fillRule="evenodd">
                                <g transform="translate(0, 2250) scale(0.1, -0.1)">
                                 <path d={NATURAL_PATH} fill="currentColor" />
                                </g>
@@ -564,13 +566,13 @@ export default function FingeringChartsPage() {
                         <Button
                             variant="outline"
                             size="icon"
-                            className={cn('h-8 w-8', {
+                            className={cn('h-6 w-6', {
                                 'bg-accent hover:bg-accent/90 text-accent-foreground': preferredAccidental === 'sharp',
                             })}
                             onClick={() => handleAccidentalChange('sharp')}
                             disabled={preferredAccidental === 'sharp'}
                         >
-                             <svg viewBox="0 0 2250 2250" className="w-auto h-4" fillRule="evenodd">
+                             <svg viewBox="0 0 2250 2250" className="w-auto h-3" fillRule="evenodd">
                                 <g transform="scale(1, -1) translate(0, -2250)">
                                   <path d={SHARP_PATH} fill="currentColor" />
                                 </g>
@@ -581,7 +583,7 @@ export default function FingeringChartsPage() {
                 </div>
 
                 {/* Staff */}
-                <div className="p-3">
+                <div className="p-3 h-32">
                   <Staff clef={selectedInstrument.clef} note={noteForStaff} />
                 </div>
               </div>
@@ -596,8 +598,12 @@ export default function FingeringChartsPage() {
                       <CardTitle className="text-primary text-4xl">{currentDisplayNote}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      {currentFingering.imageUrl ? (
-                        <div className="relative aspect-[1/2] w-full max-w-[150px] mx-auto">
+                      {currentFingering.keys && selectedInstrument.slug === 'clarinet' ? (
+                          <div className="w-full max-w-[100px] h-32 mx-auto">
+                              <ClarinetFingeringDiagram activeKeys={currentFingering.keys} />
+                          </div>
+                      ) : currentFingering.imageUrl ? (
+                        <div className="relative w-full max-w-[112px] h-32 mx-auto">
                             <Image
                                 src={currentFingering.imageUrl}
                                 alt={`Fingering diagram for ${currentDisplayNote}`}
