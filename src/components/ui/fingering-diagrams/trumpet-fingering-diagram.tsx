@@ -23,6 +23,7 @@ const Valve = ({
   const isActive = activeKeys?.includes(id);
   const valveClass = isActive ? 'fill-primary stroke-foreground' : 'fill-card stroke-foreground';
   const interactiveClass = onClick ? 'cursor-pointer' : '';
+  const stemHeight = isActive ? 15 : 25;
 
   const handleClick = () => {
     if (onClick) {
@@ -41,19 +42,21 @@ const Valve = ({
       {/* Layer 3: The moving valve stem and cap. Drawn on top of the casing. */}
       <g transform={isActive ? 'translate(0, 10)' : 'translate(0, 0)'} className="transition-transform duration-100 ease-in-out">
           {/* Stem is drawn first, so the cap sits on top of it. */}
-          <rect x={x + 12} y="25" width="6" height={isActive ? 15 : 25} className={cn(valveClass)} strokeWidth="1.5" />
+          <rect x={x + 12} y="25" width="6" height={stemHeight} className={cn(valveClass)} strokeWidth="1.5" />
           
           {/* Cylindrical Cap */}
           <g className={cn(valveClass)} strokeWidth="1.5">
-            {/* The side/body of the cap, which gives it height. */}
-            <rect x={x + 3} y="21" width="24" height="4" rx="2" ry="2"/>
-            {/* The top surface of the cap, an ellipse. */}
+            {/* The bottom ellipse of the cap, drawn first to be in the back. */}
+            <ellipse cx={x + 15} cy="26" rx="12" ry="5" />
+            {/* The "sides" of the cylinder, drawn as a rectangle. */}
+            <rect x={x + 3} y="21" width="24" height="5" />
+            {/* The top ellipse of the cap, drawn last to be in the front. */}
             <ellipse cx={x + 15} cy="21" rx="12" ry="5" />
           </g>
       </g>
       
       {/* Layer 4: A small, dark ellipse to create the illusion of a hole for the stem. Drawn last so it's on top. */}
-      <ellipse cx={x + 15} cy="50" rx="4" ry="1.5" fill="hsl(var(--foreground))" opacity="0.6" />
+      <ellipse cx={x + 15} cy="50" rx="4" ry="1.5" fill="hsl(var(--foreground))" opacity="1" />
     </g>
   );
 };
