@@ -603,7 +603,7 @@ export default function FingeringChartsPage() {
                           <div className="w-full max-w-[100px] h-full mx-auto">
                               <ClarinetFingeringDiagram activeKeys={currentFingering.keys} />
                           </div>
-                      ) : currentFingering.keys && selectedInstrument.slug === 'trumpet' ? (
+                      ) : currentFingering.keys && ['trumpet', 'baritone-bc', 'baritone-tc'].includes(selectedInstrument.slug) ? (
                           <div className="w-full max-w-[200px] mx-auto">
                               <TrumpetFingeringDiagram activeKeys={currentFingering.keys} />
                           </div>

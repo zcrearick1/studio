@@ -23,7 +23,7 @@ const Valve = ({
   const isActive = activeKeys?.includes(id);
   const valveClass = isActive ? 'fill-primary stroke-foreground' : 'fill-card stroke-foreground';
   const interactiveClass = onClick ? 'cursor-pointer' : '';
-  const stemHeight = isActive ? 15 : 25;
+  const stemHeight = isActive ? 10 : 25;
 
   const handleClick = () => {
     if (onClick) {
@@ -37,19 +37,19 @@ const Valve = ({
       <rect x={x} y="50" width="30" height="20" rx="3" fill="hsl(var(--muted))" stroke="hsl(var(--foreground))" strokeWidth="1" />
       
       {/* Layer 2: The top of the casing. This is drawn before the stem. */}
-      <ellipse cx={x + 15} cy="50" rx="15" ry="5" fill="hsl(var(--muted))" stroke="hsl(var(--foreground))" strokeWidth="1" />
+      <ellipse cx={x + 15} cy="50" rx="15" ry="5" fill="hsl(var(--muted))" stroke="hsl(var(--foreground))" strokeWidth="1.5" />
       
       {/* Layer 3: The moving valve stem and cap. Drawn on top of the casing. */}
-      <g transform={isActive ? 'translate(0, 10)' : 'translate(0, 0)'} className="transition-transform duration-100 ease-in-out">
+      <g transform={isActive ? 'translate(0, 15)' : 'translate(0, 0)'} className="transition-transform duration-100 ease-in-out">
           {/* Stem is drawn first, so the cap sits on top of it. */}
           <rect x={x + 12} y="25" width="6" height={stemHeight} className={cn(valveClass)} strokeWidth="1.5" />
           
           {/* Cylindrical Cap */}
           <g className={cn(valveClass)} strokeWidth="1.5">
-            {/* The bottom ellipse of the cap, drawn first to be in the back. */}
-            <ellipse cx={x + 15} cy="26" rx="12" ry="5" />
             {/* The "sides" of the cylinder, drawn as a rectangle. */}
             <rect x={x + 3} y="21" width="24" height="5" />
+            {/* The bottom ellipse of the cap, drawn first to be in the back. */}
+            <ellipse cx={x + 15} cy="26" rx="12" ry="5" />
             {/* The top ellipse of the cap, drawn last to be in the front. */}
             <ellipse cx={x + 15} cy="21" rx="12" ry="5" />
           </g>
