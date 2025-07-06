@@ -107,7 +107,7 @@ const FLAT_PATH = "M910 1155 c0 -575 4 -1045 8 -1045 5 0 21 14 38 31 53 56 247 2
 const NATURAL_PATH = "M810 1359 c0 -843 1 -890 18 -885 9 3 126 32 260 64 l242 59 0 -298 0 -299 55 0 55 0 0 891 c0 843 -1 890 -17 885 -57 -17 -469 -116 -484 -116 -18 0 -19 14 -19 295 l0 295 -55 0 -55 0 0 -891z m517 -495 c-2 -2 -87 -24 -188 -49 -101 -25 -192 -48 -201 -51 -17 -5 -18 14 -18 310 l0 314 203 49 202 49 3 -310 c1 -170 1 -311 -1 -312z";
 
 const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
-    const STAFF_HEIGHT = 75;
+    const STAFF_HEIGHT = 120;
     const STAFF_WIDTH = 150;
     const LINE_SPACING = 10;
     const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
