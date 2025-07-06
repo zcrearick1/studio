@@ -60,7 +60,11 @@ export const ClarinetFingeringDiagram: FC<ClarinetFingeringDiagramProps> = ({
       xmlns="http://www.w3.org/2000/svg"
     >
       {/* Instrument Body */}
-      <rect x="35" y="10" width="30" height="200" rx="5" fill="hsl(var(--muted))" />
+      <path
+        transform="translate(0, 10)"
+        fill="hsl(var(--muted))"
+        d="M50 0 s-6 -2 -6 6 l-2 26 v132 q-2 20 -10 30 Q32 200 50 200 M50 0 s6 -2 6 6 l2 26 v132 q2 20 10 30 Q68 200 50 200"
+      />
 
       {/* Keys */}
       {/* Register Key */}
