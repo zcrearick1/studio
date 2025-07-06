@@ -40,10 +40,16 @@ const Valve = ({
       
       {/* Layer 3: The moving valve stem and cap. Drawn on top of the casing. */}
       <g transform={isActive ? 'translate(0, 10)' : 'translate(0, 0)'} className="transition-transform duration-100 ease-in-out">
-          {/* Stem - shortened to stop at the center of the casing top */}
+          {/* Stem is drawn first, so the cap sits on top of it. */}
           <rect x={x + 12} y="25" width="6" height={isActive ? 15 : 25} className={cn(valveClass)} strokeWidth="1.5" />
-          {/* Cap */}
-          <ellipse cx={x + 15} cy="25" rx="12" ry="5" className={cn(valveClass)} strokeWidth="1.5" />
+          
+          {/* Cylindrical Cap */}
+          <g className={cn(valveClass)} strokeWidth="1.5">
+            {/* The side/body of the cap, which gives it height. */}
+            <rect x={x + 3} y="21" width="24" height="4" rx="2" ry="2"/>
+            {/* The top surface of the cap, an ellipse. */}
+            <ellipse cx={x + 15} cy="21" rx="12" ry="5" />
+          </g>
       </g>
       
       {/* Layer 4: A small, dark ellipse to create the illusion of a hole for the stem. Drawn last so it's on top. */}
