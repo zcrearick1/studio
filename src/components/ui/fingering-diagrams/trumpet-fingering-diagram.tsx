@@ -21,7 +21,7 @@ const Valve = ({
   onClick?: (id: string) => void;
 }) => {
   const isActive = activeKeys?.includes(id);
-  const valveClass = isActive ? 'fill-primary' : 'fill-card stroke-foreground';
+  const valveClass = isActive ? 'fill-primary stroke-foreground' : 'fill-card stroke-foreground';
   const interactiveClass = onClick ? 'cursor-pointer' : '';
 
   const handleClick = () => {
