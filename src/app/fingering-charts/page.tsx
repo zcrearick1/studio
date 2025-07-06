@@ -17,6 +17,7 @@ import { Music, ArrowUp, ArrowDown } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ClarinetFingeringDiagram } from "@/components/ui/fingering-diagrams/clarinet-fingering-diagram";
+import { TrumpetFingeringDiagram } from "@/components/ui/fingering-diagrams/trumpet-fingering-diagram";
 
 
 type ParsedNote = {
@@ -107,8 +108,8 @@ const FLAT_PATH = "M910 1155 c0 -575 4 -1045 8 -1045 5 0 21 14 38 31 53 56 247 2
 const NATURAL_PATH = "M810 1359 c0 -843 1 -890 18 -885 9 3 126 32 260 64 l242 59 0 -298 0 -299 55 0 55 0 0 891 c0 843 -1 890 -17 885 -57 -17 -469 -116 -484 -116 -18 0 -19 14 -19 295 l0 295 -55 0 -55 0 0 -891z m517 -495 c-2 -2 -87 -24 -188 -49 -101 -25 -192 -48 -201 -51 -17 -5 -18 14 -18 310 l0 314 203 49 202 49 3 -310 c1 -170 1 -311 -1 -312z";
 
 const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
-    const STAFF_HEIGHT = 130;
     const STAFF_WIDTH = 150;
+    const STAFF_HEIGHT = 160;
     const LINE_SPACING = 10;
     const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
     const NOTE_X = 75;
@@ -135,10 +136,10 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
     const renderClef = () => {
         switch (clef) {
             case "treble":
-                return <path d={TREBLE_CLEF_PATH} fill="currentColor" transform="translate(5, 62.5) scale(0.02, -0.02)" />;
+                return <path d={TREBLE_CLEF_PATH} fill="currentColor" transform="translate(5, 77.5) scale(0.02, -0.02)" />;
             case "bass":
                 return (
-                    <g transform="translate(15, 47.5) scale(0.005, -0.005)" fillRule="evenodd">
+                    <g transform="translate(15, 62.5) scale(0.005, -0.005)" fillRule="evenodd">
                         <path d={BASS_CLEF_BODY_PATH} fill="currentColor" />
                         <path d={BASS_CLEF_DOT1_PATH} fill="currentColor" />
                         <path d={BASS_CLEF_DOT2_PATH} fill="currentColor" />
@@ -146,14 +147,14 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
                 );
             case "alto":
                 return (
-                    <g transform="translate(5, 53) scale(0.015, -0.015)" fill="currentColor">
+                    <g transform="translate(5, 68) scale(0.015, -0.015)" fill="currentColor">
                         <path d={ALTO_CLEF_PATH_C} />
                         <path d={ALTO_CLEF_PATH_LEFT_BAR} />
                         <path d={ALTO_CLEF_PATH_RIGHT_BAR} />
                     </g>
                 );
             case "percussion":
-                return <path d={PERCUSSION_CLEF_PATH} fill="currentColor" transform="translate(5, 51) scale(0.018, -0.018)" />;
+                return <path d={PERCUSSION_CLEF_PATH} fill="currentColor" transform="translate(5, 66) scale(0.018, -0.018)" />;
             default:
                 return null;
         }
@@ -601,6 +602,10 @@ export default function FingeringChartsPage() {
                       {currentFingering.keys && selectedInstrument.slug === 'clarinet' ? (
                           <div className="w-full max-w-[100px] h-full mx-auto">
                               <ClarinetFingeringDiagram activeKeys={currentFingering.keys} />
+                          </div>
+                      ) : currentFingering.keys && selectedInstrument.slug === 'trumpet' ? (
+                          <div className="w-full max-w-[200px] mx-auto">
+                              <TrumpetFingeringDiagram activeKeys={currentFingering.keys} />
                           </div>
                       ) : currentFingering.imageUrl ? (
                         <div className="relative w-full max-w-[112px] h-24 mx-auto">
