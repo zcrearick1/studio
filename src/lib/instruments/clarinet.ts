@@ -14,7 +14,7 @@ export const clarinet: Instrument = {
         { note: "A3", positions: ["T 12- | ---"], keys: ['thumb', 'L1', 'L2'] },
         { note: "A#3/Bb3", positions: ["T 1-- | ---"], keys: ['thumb', 'L1', 'A'] },
         { note: "B3/Cb4", positions: ["T--- | ---"], keys: ['thumb'] },
-        { note: "C4/B#3", positions: ["--- | ---"], keys: [] },
+        { note: "C4/B#3", positions: ["--- | ---"], keys: ['thumb', 'L1', 'L2', 'L3'] },
         { note: "C#4/Db4", positions: ["T 123 | 45-"], keys: ['R1', 'R2', 'R3', 'LP-F-sharp'] },
         { note: "D4", positions: ["R T 123 | 4--"], keys: ['register', 'thumb', 'L1', 'L2', 'L3', 'R1'] },
         { note: "D#4/Eb4", positions: ["R T 123 | -5-"], keys: ['register', 'thumb', 'L1', 'L2', 'L3', 'R2'] },
