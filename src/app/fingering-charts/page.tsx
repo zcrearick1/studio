@@ -458,6 +458,8 @@ export default function FingeringChartsPage() {
   
   const noteForStaff = parseNoteString(currentDisplayNote);
 
+  const isTallLayout = selectedInstrument && ['clarinet', 'alto-saxophone', 'tenor-saxophone', 'baritone-saxophone'].includes(selectedInstrument.slug);
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-8">
@@ -557,7 +559,7 @@ export default function FingeringChartsPage() {
                             onClick={() => handleAccidentalChange('natural')}
                             disabled={preferredAccidental === 'natural'}
                         >
-                             <svg viewBox="0 0 2250 2250" className="w-auto h-3" fillRule="evenodd">
+                             <svg viewBox="0 0 1400 2250" className="w-auto h-3" fillRule="evenodd">
                                <g transform="scale(1, -1) translate(0, -2250)">
                                 <path d={NATURAL_PATH} fill="currentColor" />
                                </g>
@@ -591,37 +593,62 @@ export default function FingeringChartsPage() {
             </Card>
 
             {/* Right Card for Fingering */}
-            <Card className="flex flex-col justify-center">
-              <div className="p-6 h-full flex flex-col justify-center text-center">
-                {currentFingering ? (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-primary text-4xl">{currentDisplayNote}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      {currentFingering.keys && selectedInstrument.slug === 'clarinet' ? (
-                          <div className="w-full max-w-[100px] h-full mx-auto">
-                              <ClarinetFingeringDiagram activeKeys={currentFingering.keys} />
+            <Card className="flex items-center justify-center">
+              <div className="p-6 h-full w-full flex items-center justify-center text-center">
+                {currentFingering && selectedInstrument ? (
+                  (() => {
+                    const diagramDisplay = (
+                      <>
+                        {currentFingering.keys && selectedInstrument.slug === 'clarinet' ? (
+                            <div className="w-full max-w-[100px] h-full mx-auto">
+                                <ClarinetFingeringDiagram activeKeys={currentFingering.keys} />
+                            </div>
+                        ) : currentFingering.keys && ['trumpet', 'baritone-bc', 'baritone-tc', 'tuba'].includes(selectedInstrument.slug) ? (
+                            <div className="w-full max-w-[200px] mx-auto">
+                                <TrumpetFingeringDiagram activeKeys={currentFingering.keys} />
+                            </div>
+                        ) : currentFingering.imageUrl ? (
+                          <div className="relative w-full max-w-[112px] h-24 mx-auto">
+                              <Image
+                                  src={currentFingering.imageUrl}
+                                  alt={`Fingering diagram for ${currentDisplayNote}`}
+                                  fill
+                                  className="object-contain rounded-md"
+                                  data-ai-hint="fingering diagram"
+                              />
                           </div>
-                      ) : currentFingering.keys && ['trumpet', 'baritone-bc', 'baritone-tc', 'tuba'].includes(selectedInstrument.slug) ? (
-                          <div className="w-full max-w-[200px] mx-auto">
-                              <TrumpetFingeringDiagram activeKeys={currentFingering.keys} />
+                          ) : (
+                          <p className="text-lg text-muted-foreground break-words">{currentFingering.positions.join(' ')}</p>
+                        )}
+                      </>
+                    );
+
+                    if (isTallLayout) {
+                      return (
+                        <div className="grid grid-cols-2 gap-4 w-full items-center">
+                          <Card>
+                            <CardHeader>
+                              <CardTitle className="text-primary text-4xl">{currentDisplayNote}</CardTitle>
+                            </CardHeader>
+                          </Card>
+                          <div className="h-full flex items-center justify-center">
+                            {diagramDisplay}
                           </div>
-                      ) : currentFingering.imageUrl ? (
-                        <div className="relative w-full max-w-[112px] h-24 mx-auto">
-                            <Image
-                                src={currentFingering.imageUrl}
-                                alt={`Fingering diagram for ${currentDisplayNote}`}
-                                fill
-                                className="object-contain rounded-md"
-                                data-ai-hint="fingering diagram"
-                            />
                         </div>
-                        ) : (
-                        <p className="text-lg text-muted-foreground break-words">{currentFingering.positions.join(' ')}</p>
-                      )}
-                    </CardContent>
-                  </Card>
+                      )
+                    }
+
+                    return (
+                      <Card className="w-full">
+                        <CardHeader>
+                          <CardTitle className="text-primary text-4xl">{currentDisplayNote}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          {diagramDisplay}
+                        </CardContent>
+                      </Card>
+                    );
+                  })()
                 ) : (
                   <Card className="bg-muted">
                     <CardHeader>
@@ -640,3 +667,5 @@ export default function FingeringChartsPage() {
     </div>
   );
 }
+
+    
