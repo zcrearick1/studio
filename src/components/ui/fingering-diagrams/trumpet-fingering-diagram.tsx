@@ -32,19 +32,22 @@ const Valve = ({
 
   return (
     <g onClick={handleClick} className={interactiveClass}>
-        {/* Valve Stem and Cap - Drawn first to appear behind the casing top */}
-        <g transform={isActive ? 'translate(0, 10)' : 'translate(0, 0)'} className="transition-transform duration-100 ease-in-out">
-            {/* Stem */}
-            <rect x={x + 12} y="25" width="6" height="25" className={cn(valveClass)} strokeWidth="1.5" />
-            {/* Cap */}
-            <ellipse cx={x + 15} cy="25" rx="12" ry="5" className={cn(valveClass)} strokeWidth="1.5" />
-        </g>
-        
-        {/* Valve Casing (main body) */}
-        <rect x={x} y="50" width="30" height="20" rx="3" fill="hsl(var(--muted))" stroke="hsl(var(--foreground))" strokeWidth="1" />
+      {/* Layer 1: The moving valve stem and cap. Drawn first so it appears behind the casing top. */}
+      <g transform={isActive ? 'translate(0, 10)' : 'translate(0, 0)'} className="transition-transform duration-100 ease-in-out">
+          {/* Stem */}
+          <rect x={x + 12} y="25" width="6" height="30" className={cn(valveClass)} strokeWidth="1.5" />
+          {/* Cap */}
+          <ellipse cx={x + 15} cy="25" rx="12" ry="5" className={cn(valveClass)} strokeWidth="1.5" />
+      </g>
+      
+      {/* Layer 2: The static valve casing body */}
+      <rect x={x} y="50" width="30" height="20" rx="3" fill="hsl(var(--muted))" stroke="hsl(var(--foreground))" strokeWidth="1" />
 
-        {/* Casing Top - Drawn last to create cylindrical illusion and cover stem */}
-        <ellipse cx={x + 15} cy="50" rx="15" ry="5" fill="hsl(var(--muted))" stroke="hsl(var(--foreground))" strokeWidth="1" />
+      {/* Layer 3: The top of the casing. This covers the part of the stem that is "inside" the cylinder */}
+      <ellipse cx={x + 15} cy="50" rx="15" ry="5" fill="hsl(var(--muted))" stroke="hsl(var(--foreground))" strokeWidth="1" />
+      
+      {/* Layer 4: A small, dark ellipse to create the illusion of a hole for the stem */}
+      <ellipse cx={x + 15} cy="50" rx="4" ry="1.5" fill="hsl(var(--foreground))" opacity="0.6" />
     </g>
   );
 };
