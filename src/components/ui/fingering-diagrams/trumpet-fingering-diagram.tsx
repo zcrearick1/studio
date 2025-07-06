@@ -7,6 +7,7 @@ interface TrumpetFingeringDiagramProps {
   activeKeys?: string[];
   className?: string;
   onClickKey?: (keyId: string) => void;
+  fill?: string;
 }
 
 const Valve = ({
@@ -14,11 +15,13 @@ const Valve = ({
   id,
   activeKeys,
   onClick,
+  fill,
 }: {
   x: number;
   id: string;
   activeKeys?: string[];
   onClick?: (id: string) => void;
+  fill?: string;
 }) => {
   const isActive = activeKeys?.includes(id);
   const valveClass = isActive ? 'fill-primary stroke-foreground' : 'fill-card stroke-foreground';
@@ -56,7 +59,7 @@ const Valve = ({
       </g>
       
       {/* Layer 4: A small, dark ellipse to create the illusion of a hole for the stem. Drawn last so it's on top. */}
-      <ellipse cx={x + 15} cy="50" rx="4" ry="1.5" fill="hsl(var(--foreground))" opacity="1" />
+      <ellipse cx={x + 15} cy="50" rx="4" ry="1.5" fill={fill ?? "hsl(var(--foreground))"} opacity="1" />
     </g>
   );
 };
@@ -66,6 +69,7 @@ export const TrumpetFingeringDiagram: FC<TrumpetFingeringDiagramProps> = ({
   activeKeys = [],
   className,
   onClickKey,
+  fill,
 }) => {
   return (
     <svg
@@ -73,9 +77,9 @@ export const TrumpetFingeringDiagram: FC<TrumpetFingeringDiagramProps> = ({
       className={cn('w-full h-auto', className)}
       xmlns="http://www.w3.org/2000/svg"
     >
-        <Valve x={20} id="v1" activeKeys={activeKeys} onClick={onClickKey} />
-        <Valve x={65} id="v2" activeKeys={activeKeys} onClick={onClickKey} />
-        <Valve x={110} id="v3" activeKeys={activeKeys} onClick={onClickKey} />
+        <Valve x={20} id="v1" activeKeys={activeKeys} onClick={onClickKey} fill={fill} />
+        <Valve x={65} id="v2" activeKeys={activeKeys} onClick={onClickKey} fill={fill} />
+        <Valve x={110} id="v3" activeKeys={activeKeys} onClick={onClickKey} fill={fill} />
     </svg>
   );
 };

@@ -558,7 +558,7 @@ export default function FingeringChartsPage() {
                             disabled={preferredAccidental === 'natural'}
                         >
                              <svg viewBox="0 0 2250 2250" className="w-auto h-3" fillRule="evenodd">
-                               <g transform="translate(0, 2250) scale(0.1, -0.1)">
+                               <g transform="scale(1, -1) translate(0, -2250)">
                                 <path d={NATURAL_PATH} fill="currentColor" />
                                </g>
                             </svg>
