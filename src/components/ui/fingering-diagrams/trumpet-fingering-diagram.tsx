@@ -43,10 +43,10 @@ const Valve = ({
       {/* Layer 2: The static valve casing body */}
       <rect x={x} y="50" width="30" height="20" rx="3" fill="hsl(var(--muted))" stroke="hsl(var(--foreground))" strokeWidth="1" />
 
-      {/* Layer 3: The top of the casing. This covers the part of the stem that is "inside" the cylinder */}
+      {/* Layer 3: The top of the casing. This is drawn on top of the stem to create the illusion of depth. */}
       <ellipse cx={x + 15} cy="50" rx="15" ry="5" fill="hsl(var(--muted))" stroke="hsl(var(--foreground))" strokeWidth="1" />
       
-      {/* Layer 4: A small, dark ellipse to create the illusion of a hole for the stem */}
+      {/* Layer 4: A small, dark ellipse to create the illusion of a hole for the stem. Drawn last so it's on top. */}
       <ellipse cx={x + 15} cy="50" rx="4" ry="1.5" fill="hsl(var(--foreground))" opacity="0.6" />
     </g>
   );
