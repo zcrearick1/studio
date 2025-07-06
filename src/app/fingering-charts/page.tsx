@@ -107,11 +107,10 @@ const FLAT_PATH = "M910 1155 c0 -575 4 -1045 8 -1045 5 0 21 14 38 31 53 56 247 2
 const NATURAL_PATH = "M810 1359 c0 -843 1 -890 18 -885 9 3 126 32 260 64 l242 59 0 -298 0 -299 55 0 55 0 0 891 c0 843 -1 890 -17 885 -57 -17 -469 -116 -484 -116 -18 0 -19 14 -19 295 l0 295 -55 0 -55 0 0 -891z m517 -495 c-2 -2 -87 -24 -188 -49 -101 -25 -192 -48 -201 -51 -17 -5 -18 14 -18 310 l0 314 203 49 202 49 3 -310 c1 -170 1 -311 -1 -312z";
 
 const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) => {
-    const STAFF_HEIGHT = 100;
+    const STAFF_HEIGHT = 75;
     const STAFF_WIDTH = 150;
     const LINE_SPACING = 10;
     const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
-    const NOTE_X = 100;
 
     const getNoteYPosition = (pNote: ParsedNote) => {
         if (!pNote) return -1000;
@@ -135,10 +134,10 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
     const renderClef = () => {
         switch (clef) {
             case "treble":
-                return <path d={TREBLE_CLEF_PATH} fill="currentColor" transform="translate(5, 92.5) scale(0.028, -0.028)" />;
+                return <path d={TREBLE_CLEF_PATH} fill="currentColor" transform="translate(5, 62.5) scale(0.02, -0.02)" />;
             case "bass":
                 return (
-                    <g transform="translate(15, 64.5) scale(0.007, -0.007)" fillRule="evenodd">
+                    <g transform="translate(15, 47.5) scale(0.005, -0.005)" fillRule="evenodd">
                         <path d={BASS_CLEF_BODY_PATH} fill="currentColor" />
                         <path d={BASS_CLEF_DOT1_PATH} fill="currentColor" />
                         <path d={BASS_CLEF_DOT2_PATH} fill="currentColor" />
@@ -146,14 +145,14 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
                 );
             case "alto":
                 return (
-                    <g transform="translate(5, 73.5) scale(0.0207, -0.0207)" fill="currentColor">
+                    <g transform="translate(5, 53) scale(0.015, -0.015)" fill="currentColor">
                         <path d={ALTO_CLEF_PATH_C} />
                         <path d={ALTO_CLEF_PATH_LEFT_BAR} />
                         <path d={ALTO_CLEF_PATH_RIGHT_BAR} />
                     </g>
                 );
             case "percussion":
-                return <path d={PERCUSSION_CLEF_PATH} fill="currentColor" transform="translate(5, 71) scale(0.026, -0.026)" />;
+                return <path d={PERCUSSION_CLEF_PATH} fill="currentColor" transform="translate(5, 51) scale(0.018, -0.018)" />;
             default:
                 return null;
         }
@@ -213,7 +212,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
     }
 
     return (
-        <svg viewBox={`0 -25 ${STAFF_WIDTH} 150`} className="w-full h-auto text-foreground">
+        <svg viewBox={`0 0 ${STAFF_WIDTH} ${STAFF_HEIGHT}`} className="w-full h-auto text-foreground">
             {/* Staff Lines */}
             {[...Array(5)].map((_, i) => (
                 <line
@@ -519,7 +518,7 @@ export default function FingeringChartsPage() {
             <Card className="overflow-hidden">
               <div className="grid grid-cols-[auto_1fr] items-center h-full">
                 {/* Controls */}
-                <div className="flex flex-col items-center justify-center p-2 bg-secondary/50 h-32 gap-2 border-r">
+                <div className="flex flex-col items-center justify-center p-2 bg-secondary/50 h-24 gap-2 border-r">
                     <div className="flex flex-col items-center gap-2">
                         <Button variant="outline" size="icon" onClick={() => changeNote('up')} disabled={!canGoUp}>
                             <ArrowUp className="h-4 w-4" />
@@ -530,7 +529,7 @@ export default function FingeringChartsPage() {
                             <span className="sr-only">Note Down</span>
                         </Button>
                     </div>
-                    <div className="flex items-center justify-center gap-2">
+                    <div className="flex flex-col items-center justify-center gap-1">
                         <Button
                             variant="outline"
                             size="icon"
@@ -583,7 +582,7 @@ export default function FingeringChartsPage() {
                 </div>
 
                 {/* Staff */}
-                <div className="p-3 h-32">
+                <div className="p-3 h-24">
                   <Staff clef={selectedInstrument.clef} note={noteForStaff} />
                 </div>
               </div>
@@ -599,11 +598,11 @@ export default function FingeringChartsPage() {
                     </CardHeader>
                     <CardContent>
                       {currentFingering.keys && selectedInstrument.slug === 'clarinet' ? (
-                          <div className="w-full max-w-[100px] h-32 mx-auto">
+                          <div className="w-full max-w-[100px] h-24 mx-auto">
                               <ClarinetFingeringDiagram activeKeys={currentFingering.keys} />
                           </div>
                       ) : currentFingering.imageUrl ? (
-                        <div className="relative w-full max-w-[112px] h-32 mx-auto">
+                        <div className="relative w-full max-w-[112px] h-24 mx-auto">
                             <Image
                                 src={currentFingering.imageUrl}
                                 alt={`Fingering diagram for ${currentDisplayNote}`}
