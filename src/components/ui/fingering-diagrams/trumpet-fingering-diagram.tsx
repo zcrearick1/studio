@@ -41,7 +41,7 @@ const Valve = ({
       {/* Layer 3: The moving valve stem and cap. Drawn on top of the casing. */}
       <g transform={isActive ? 'translate(0, 10)' : 'translate(0, 0)'} className="transition-transform duration-100 ease-in-out">
           {/* Stem - shortened to stop at the center of the casing top */}
-          <rect x={x + 12} y="25" width="6" height="25" className={cn(valveClass)} strokeWidth="1.5" />
+          <rect x={x + 12} y="25" width="6" height={isActive ? 15 : 25} className={cn(valveClass)} strokeWidth="1.5" />
           {/* Cap */}
           <ellipse cx={x + 15} cy="25" rx="12" ry="5" className={cn(valveClass)} strokeWidth="1.5" />
       </g>
