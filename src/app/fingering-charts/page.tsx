@@ -111,6 +111,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
     const STAFF_WIDTH = 150;
     const LINE_SPACING = 10;
     const TOP_MARGIN = (STAFF_HEIGHT - 4 * LINE_SPACING) / 2;
+    const NOTE_X = 75;
 
     const getNoteYPosition = (pNote: ParsedNote) => {
         if (!pNote) return -1000;
@@ -518,7 +519,7 @@ export default function FingeringChartsPage() {
             <Card className="overflow-hidden">
               <div className="grid grid-cols-[auto_1fr] items-center h-full">
                 {/* Controls */}
-                <div className="flex flex-col items-center justify-center p-2 bg-secondary/50 h-24 gap-2 border-r">
+                <div className="flex flex-col items-center justify-center p-2 bg-secondary/50 h-full gap-4 border-r">
                     <div className="flex flex-col items-center gap-2">
                         <Button variant="outline" size="icon" onClick={() => changeNote('up')} disabled={!canGoUp}>
                             <ArrowUp className="h-4 w-4" />
@@ -582,7 +583,7 @@ export default function FingeringChartsPage() {
                 </div>
 
                 {/* Staff */}
-                <div className="p-3 h-24">
+                <div className="p-3 h-full">
                   <Staff clef={selectedInstrument.clef} note={noteForStaff} />
                 </div>
               </div>
@@ -598,7 +599,7 @@ export default function FingeringChartsPage() {
                     </CardHeader>
                     <CardContent>
                       {currentFingering.keys && selectedInstrument.slug === 'clarinet' ? (
-                          <div className="w-full max-w-[100px] h-24 mx-auto">
+                          <div className="w-full max-w-[100px] h-full mx-auto">
                               <ClarinetFingeringDiagram activeKeys={currentFingering.keys} />
                           </div>
                       ) : currentFingering.imageUrl ? (
