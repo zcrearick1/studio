@@ -33,12 +33,12 @@ const Valve = ({
   return (
     <g onClick={handleClick} className={interactiveClass}>
       {/* Valve Casing */}
-      <rect x={x} y="50" width="30" height="80" rx="3" fill="hsl(var(--muted))" stroke="hsl(var(--foreground))" strokeWidth="1" />
+      <rect x={x} y="50" width="30" height="40" rx="3" fill="hsl(var(--muted))" stroke="hsl(var(--foreground))" strokeWidth="1" />
 
       {/* Valve Stem and Cap */}
       <g transform={isActive ? 'translate(0, 10)' : 'translate(0, 0)'} className="transition-transform duration-100 ease-in-out">
         {/* Stem */}
-        <rect x={x + 12} y="25" width="6" height="40" className={cn(valveClass, 'stroke-0')} />
+        <rect x={x + 12} y="25" width="6" height="40" className={cn(valveClass)} strokeWidth="1.5" />
         {/* Cap */}
         <ellipse cx={x + 15} cy="25" rx="12" ry="5" className={cn(valveClass)} strokeWidth="1.5" />
       </g>
