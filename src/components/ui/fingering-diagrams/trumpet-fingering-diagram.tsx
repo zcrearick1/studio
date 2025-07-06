@@ -37,8 +37,10 @@ const Valve = ({
 
       {/* Valve Stem and Cap */}
       <g transform={isActive ? 'translate(0, 10)' : 'translate(0, 0)'} className="transition-transform duration-100 ease-in-out">
+        {/* Stem */}
         <rect x={x + 12} y="25" width="6" height="40" className={cn(valveClass, 'stroke-0')} />
-        <circle cx={x + 15} y="25" r="12" className={cn(valveClass)} strokeWidth="1.5" />
+        {/* Cap */}
+        <ellipse cx={x + 15} cy="25" rx="12" ry="5" className={cn(valveClass)} strokeWidth="1.5" />
       </g>
     </g>
   );
