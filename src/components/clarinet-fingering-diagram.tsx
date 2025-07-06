@@ -55,43 +55,43 @@ export const ClarinetFingeringDiagram: FC<ClarinetFingeringDiagramProps> = ({
 }) => {
   return (
     <svg
-      viewBox="0 0 100 400"
-      className={cn('w-full h-auto', className)}
+      viewBox="0 0 100 220"
+      className={cn('w-auto h-full', className)}
       xmlns="http://www.w3.org/2000/svg"
     >
       {/* Instrument Body */}
-      <rect x="35" y="10" width="30" height="380" rx="5" fill="hsl(var(--muted))" />
+      <rect x="35" y="10" width="30" height="200" rx="5" fill="hsl(var(--muted))" />
 
       {/* Keys */}
       {/* Register Key */}
-      <Key cx={25} cy={40} id="register" activeKeys={activeKeys} onClick={onClickKey} isSmall />
+      <Key cx={25} cy={25} id="register" activeKeys={activeKeys} onClick={onClickKey} isSmall />
 
       {/* Thumb Hole */}
-      <Key cx={50} cy={60} id="thumb" activeKeys={activeKeys} onClick={onClickKey} />
+      <Key cx={50} cy={37} id="thumb" activeKeys={activeKeys} onClick={onClickKey} />
       
       {/* Left Hand Keys */}
-      <Key cx={50} cy={100} id="L1" activeKeys={activeKeys} onClick={onClickKey} />
-      <Key cx={50} cy={130} id="L2" activeKeys={activeKeys} onClick={onClickKey} />
-      <Key cx={50} cy={160} id="L3" activeKeys={activeKeys} onClick={onClickKey} />
+      <Key cx={50} cy={61} id="L1" activeKeys={activeKeys} onClick={onClickKey} />
+      <Key cx={50} cy={79} id="L2" activeKeys={activeKeys} onClick={onClickKey} />
+      <Key cx={50} cy={97} id="L3" activeKeys={activeKeys} onClick={onClickKey} />
       
       {/* A Key */}
-      <Key cx={25} cy={115} id="A" activeKeys={activeKeys} isSmall />
+      <Key cx={25} cy={70} id="A" activeKeys={activeKeys} isSmall />
 
       {/* Right Hand Keys */}
-      <Key cx={50} cy={220} id="R1" activeKeys={activeKeys} onClick={onClickKey} />
-      <Key cx={50} cy={250} id="R2" activeKeys={activeKeys} onClick={onClickKey} />
-      <Key cx={50} cy={280} id="R3" activeKeys={activeKeys} onClick={onClickKey} />
+      <Key cx={50} cy={133} id="R1" activeKeys={activeKeys} onClick={onClickKey} />
+      <Key cx={50} cy={151} id="R2" activeKeys={activeKeys} onClick={onClickKey} />
+      <Key cx={50} cy={169} id="R3" activeKeys={activeKeys} onClick={onClickKey} />
 
       {/* Left Pinky Keys */}
-      <Key cx={20} cy={190} id="LP-E" activeKeys={activeKeys} onClick={onClickKey} isSide />
-      <Key cx={20} cy={205} id="LP-F-sharp" activeKeys={activeKeys} onClick={onClickKey} isSide />
+      <Key cx={20} cy={115} id="LP-E" activeKeys={activeKeys} onClick={onClickKey} isSide />
+      <Key cx={20} cy={124} id="LP-F-sharp" activeKeys={activeKeys} onClick={onClickKey} isSide />
 
       {/* Right Pinky Keys */}
-      <Key cx={80} cy={310} id="RP-F" activeKeys={activeKeys} onClick={onClickKey} isSide />
-      <Key cx={80} cy={325} id="RP-E-flat" activeKeys={activeKeys} onClick={onClickKey} isSide />
+      <Key cx={80} cy={187} id="RP-F" activeKeys={activeKeys} onClick={onClickKey} isSide />
+      <Key cx={80} cy={196} id="RP-E-flat" activeKeys={activeKeys} onClick={onClickKey} isSide />
       
       {/* G# key */}
-       <Key cx={25} cy={175} id="G-sharp" activeKeys={activeKeys} onClick={onClickKey} isSmall />
+       <Key cx={25} cy={106} id="G-sharp" activeKeys={activeKeys} onClick={onClickKey} isSmall />
 
     </svg>
   );
