@@ -32,19 +32,19 @@ const Valve = ({
 
   return (
     <g onClick={handleClick} className={interactiveClass}>
-      {/* Layer 1: The moving valve stem and cap. Drawn first so it appears behind the casing top. */}
+      {/* Layer 1: The static valve casing body */}
+      <rect x={x} y="50" width="30" height="20" rx="3" fill="hsl(var(--muted))" stroke="hsl(var(--foreground))" strokeWidth="1" />
+      
+      {/* Layer 2: The top of the casing. This is drawn before the stem. */}
+      <ellipse cx={x + 15} cy="50" rx="15" ry="5" fill="hsl(var(--muted))" stroke="hsl(var(--foreground))" strokeWidth="1" />
+      
+      {/* Layer 3: The moving valve stem and cap. Drawn on top of the casing. */}
       <g transform={isActive ? 'translate(0, 10)' : 'translate(0, 0)'} className="transition-transform duration-100 ease-in-out">
-          {/* Stem */}
-          <rect x={x + 12} y="25" width="6" height="30" className={cn(valveClass)} strokeWidth="1.5" />
+          {/* Stem - shortened to stop at the center of the casing top */}
+          <rect x={x + 12} y="25" width="6" height="25" className={cn(valveClass)} strokeWidth="1.5" />
           {/* Cap */}
           <ellipse cx={x + 15} cy="25" rx="12" ry="5" className={cn(valveClass)} strokeWidth="1.5" />
       </g>
-      
-      {/* Layer 2: The static valve casing body */}
-      <rect x={x} y="50" width="30" height="20" rx="3" fill="hsl(var(--muted))" stroke="hsl(var(--foreground))" strokeWidth="1" />
-
-      {/* Layer 3: The top of the casing. This is drawn on top of the stem to create the illusion of depth. */}
-      <ellipse cx={x + 15} cy="50" rx="15" ry="5" fill="hsl(var(--muted))" stroke="hsl(var(--foreground))" strokeWidth="1" />
       
       {/* Layer 4: A small, dark ellipse to create the illusion of a hole for the stem. Drawn last so it's on top. */}
       <ellipse cx={x + 15} cy="50" rx="4" ry="1.5" fill="hsl(var(--foreground))" opacity="0.6" />
