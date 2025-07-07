@@ -18,6 +18,7 @@ import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ClarinetFingeringDiagram } from "@/components/ui/fingering-diagrams/clarinet-fingering-diagram";
 import { TrumpetFingeringDiagram } from "@/components/ui/fingering-diagrams/trumpet-fingering-diagram";
+import { FluteFingeringDiagram } from "@/components/ui/fingering-diagrams/flute-fingering-diagram";
 
 
 type ParsedNote = {
@@ -606,6 +607,10 @@ export default function FingeringChartsPage() {
                         ) : currentFingering.keys && ['trumpet', 'baritone-bc', 'baritone-tc', 'tuba'].includes(selectedInstrument.slug) ? (
                             <div className="w-full max-w-[200px] mx-auto">
                                 <TrumpetFingeringDiagram activeKeys={currentFingering.keys} />
+                            </div>
+                        ) : currentFingering.keys && selectedInstrument.slug === 'flute' ? (
+                            <div className="w-full max-w-[400px] mx-auto">
+                                <FluteFingeringDiagram activeKeys={currentFingering.keys} />
                             </div>
                         ) : currentFingering.imageUrl ? (
                           <div className="relative w-full max-w-[112px] h-24 mx-auto">
