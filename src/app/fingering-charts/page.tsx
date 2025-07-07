@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { ClarinetFingeringDiagram } from "@/components/ui/fingering-diagrams/clarinet-fingering-diagram";
 import { TrumpetFingeringDiagram } from "@/components/ui/fingering-diagrams/trumpet-fingering-diagram";
 import { FluteFingeringDiagram } from "@/components/ui/fingering-diagrams/flute-fingering-diagram";
+import { SaxophoneFingeringDiagram } from "@/components/ui/fingering-diagrams/saxophone-fingering-diagram";
 
 
 type ParsedNote = {
@@ -460,6 +461,7 @@ export default function FingeringChartsPage() {
   const noteForStaff = parseNoteString(currentDisplayNote);
 
   const isTallLayout = selectedInstrument && ['clarinet', 'alto-saxophone', 'tenor-saxophone', 'baritone-saxophone'].includes(selectedInstrument.slug);
+  const isSaxophone = selectedInstrument && ['alto-saxophone', 'tenor-saxophone', 'baritone-saxophone'].includes(selectedInstrument.slug);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -611,6 +613,10 @@ export default function FingeringChartsPage() {
                         ) : currentFingering.keys && selectedInstrument.slug === 'flute' ? (
                             <div className="w-full max-w-[400px] mx-auto">
                                 <FluteFingeringDiagram activeKeys={currentFingering.keys} />
+                            </div>
+                        ) : currentFingering.keys && isSaxophone ? (
+                            <div className="w-full max-w-[120px] h-full mx-auto">
+                                <SaxophoneFingeringDiagram activeKeys={currentFingering.keys} />
                             </div>
                         ) : currentFingering.imageUrl ? (
                           <div className="relative w-full max-w-[112px] h-24 mx-auto">
