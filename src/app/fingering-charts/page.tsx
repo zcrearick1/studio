@@ -209,7 +209,7 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
             <g>
                 {renderLedgerLines()}
                 {renderAccidental()}
-                <ellipse cx={NOTE_X} cy={noteHeadY} rx="6.5" ry="5" fill="currentColor" />
+                <ellipse cx={NOTE_X} cy={noteHeadY} rx="6.5" ry="5" fill="currentColor" transform={`rotate(-10 ${NOTE_X} ${noteHeadY})`} />
                 <line x1={stemX} y1={noteHeadY} x2={stemX} y2={stemEndY} stroke="currentColor" strokeWidth="1.5" />
             </g>
         )
@@ -678,5 +678,7 @@ export default function FingeringChartsPage() {
     </div>
   );
 }
+
+    
 
     
