@@ -20,7 +20,7 @@ const Key = ({
     width?: number; height?: number; rx?: number;
 }) => {
     const isActive = activeKeys?.includes(id);
-    const keyClass = isActive ? 'fill-primary' : 'fill-card stroke-foreground';
+    const keyClass = isActive ? 'fill-primary stroke-foreground' : 'fill-card stroke-foreground';
     const interactiveClass = onClick ? 'cursor-pointer' : '';
 
     const handleClick = () => {
@@ -45,17 +45,18 @@ export const SaxophoneFingeringDiagram: FC<SaxophoneFingeringDiagramProps> = ({
 }) => {
   return (
     <svg
-      viewBox="0 0 120 400"
+      viewBox="0 0 140 400"
       className={cn('w-auto h-full', className)}
       xmlns="http://www.w3.org/2000/svg"
     >
       {/* Body */}
        <path
-        d="M 60,20 C 70,20 75,30 75,45 L 75,350 C 75,380 50,390 20,380 L 30,390 C 70,410 100,380 90,350 L 90,160 C 90,120 70,110 60,110 L 40,110 C 20,110 10,140 10,160 L 10,350 C 10,380 20,400 50,390 L 45,45 C 45,30 50,20 60,20 Z"
+        d="M45,0 l0 70 a10 10 180 0 0 22 0 s0 -20 3 -25 l-10 -5 s-4 1 -4 30 L50 5 L50 0 Z
+        M45 5, L50 5"
         fill="hsl(var(--muted))"
         stroke="hsl(var(--foreground))"
-        strokeWidth="1.5"
-        transform="scale(1.0) translate(2,0)"
+        strokeWidth=".5"
+        transform="scale(4) translate(-41,10)"
       />
       
       {/* Octave Key */}
