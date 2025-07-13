@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: { slug:string } }):
         return { title: 'Quiz Not Found' };
     }
     return {
-        title: `${instrument.name} Fingering Quiz | MusicMate`,
+        title: `${instrument.name} Fingering Quiz | Maestro`,
         description: `Test your knowledge of ${instrument.name} fingerings.`,
     };
 }

@@ -12,7 +12,7 @@ export default function Home() {
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none font-headline">
-                  Unlock Your Musical Potential with MusicMate
+                  Unlock Your Musical Potential with Maestro
                 </h1>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
                   Your essential companion for mastering any instrument. Explore comprehensive fingering charts and get helpful setup guides.
@@ -46,7 +46,7 @@ export default function Home() {
               <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm">Core Features</div>
               <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Everything a Musician Needs</h2>
               <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                From your first note to complex solos, MusicMate provides the tools you need to succeed on your musical journey.
+                From your first note to complex solos, Maestro provides the tools you need to succeed on your musical journey.
               </p>
             </div>
           </div>

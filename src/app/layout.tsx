@@ -5,7 +5,7 @@ import { Header } from '@/components/header';
 import { AuthProvider } from '@/contexts/auth-context';
 
 export const metadata: Metadata = {
-  title: 'MusicMate',
+  title: 'Maestro',
   description: 'Your companion for musical mastery. Fingering charts, AI setup guides, and more.',
 };
 

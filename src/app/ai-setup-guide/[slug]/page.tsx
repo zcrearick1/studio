@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: { slug:string } }):
     }
 
     return {
-        title: `${instrument.name} Startup Guide | MusicMate`,
+        title: `${instrument.name} Startup Guide | Maestro`,
         description: `Learn how to set up your ${instrument.name}.`,
     };
 }
