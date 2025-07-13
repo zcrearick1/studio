@@ -66,17 +66,17 @@ export const SaxophoneFingeringDiagram: FC<SaxophoneFingeringDiagramProps> = ({
       <Key cx={40} cy={100} id="low-a" activeKeys={activeKeys} onClick={onClickKey} isSmall r={5}/>
 
       {/* Left Hand Keys */}
-      <Key cx={60} cy={130} id="L1" activeKeys={activeKeys} onClick={onClickKey} r={12}/>
+      <Key cx={30} cy={130} id="L1" activeKeys={activeKeys} onClick={onClickKey} r={9}/>
+      <Key cx={30} cy={155} id="L2" activeKeys={activeKeys} onClick={onClickKey} r={9}/>
+      <Key cx={30} cy={180} id="L3" activeKeys={activeKeys} onClick={onClickKey} r={9}/>
       <Key cx={40} cy={155} id="bis" activeKeys={activeKeys} onClick={onClickKey} isSmall r={6}/>
-      <Key cx={60} cy={165} id="L2" activeKeys={activeKeys} onClick={onClickKey} r={12}/>
-      <Key cx={60} cy={200} id="L3" activeKeys={activeKeys} onClick={onClickKey} r={12}/>
 
       {/* Left Pinky Spatula */}
       <g>
-        <Key cx={25} cy={235} id="lp-g-sharp" activeKeys={activeKeys} onClick={onClickKey} isSpatula width={20} height={12} rx={3} />
-        <Key cx={25} cy={255} id="lp-c-sharp" activeKeys={activeKeys} onClick={onClickKey} isSpatula width={20} height={12} rx={3} />
-        <Key cx={25} cy={275} id="lp-b" activeKeys={activeKeys} onClick={onClickKey} isSpatula width={20} height={12} rx={3} />
-        <Key cx={25} cy={295} id="lp-b-flat" activeKeys={activeKeys} onClick={onClickKey} isSpatula width={20} height={12} rx={3} />
+        <Key cx={60} cy={235} id="lp-g-sharp" activeKeys={activeKeys} onClick={onClickKey} isSpatula width={15} height={8} rx={3} />
+        <Key cx={60} cy={255} id="lp-c-sharp" activeKeys={activeKeys} onClick={onClickKey} isSpatula width={7} height={8} rx={3} />
+        <Key cx={60} cy={275} id="lp-b" activeKeys={activeKeys} onClick={onClickKey} isSpatula width={7} height={8} rx={3} />
+        <Key cx={60} cy={295} id="lp-b-flat" activeKeys={activeKeys} onClick={onClickKey} isSpatula width={15} height={8} rx={3} />
       </g>
       
       {/* Palm Keys */}
@@ -87,9 +87,9 @@ export const SaxophoneFingeringDiagram: FC<SaxophoneFingeringDiagramProps> = ({
       </g>
       
       {/* Right Hand Keys */}
-      <Key cx={60} cy={260} id="R1" activeKeys={activeKeys} onClick={onClickKey} r={12}/>
-      <Key cx={60} cy={295} id="R2" activeKeys={activeKeys} onClick={onClickKey} r={12}/>
-      <Key cx={60} cy={330} id="R3" activeKeys={activeKeys} onClick={onClickKey} r={12}/>
+      <Key cx={30} cy={230} id="R1" activeKeys={activeKeys} onClick={onClickKey} r={9}/>
+      <Key cx={30} cy={255} id="R2" activeKeys={activeKeys} onClick={onClickKey} r={9}/>
+      <Key cx={30} cy={280} id="R3" activeKeys={activeKeys} onClick={onClickKey} r={9}/>
       
       {/* High F# key */}
       <Key cx={80} cy={235} id="high-f-sharp" activeKeys={activeKeys} onClick={onClickKey} isSmall r={5}/>
