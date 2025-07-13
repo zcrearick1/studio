@@ -29,7 +29,7 @@ const Key = ({
 }) => {
   const isActive = activeKeys?.includes(id);
   const r = isSmall ? 5 : 10;
-  const keyClass = isActive ? 'fill-primary' : 'fill-card stroke-foreground';
+  const keyClass = isActive ? 'fill-primary stroke-foreground' : 'fill-card stroke-foreground';
   const strokeWidth = isSide ? 1 : 1.5;
   const interactiveClass = onClick ? 'cursor-pointer' : '';
   
