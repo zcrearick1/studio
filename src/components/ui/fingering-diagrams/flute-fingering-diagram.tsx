@@ -34,7 +34,7 @@ const Key = ({
   height?: number;
 }) => {
   const isActive = activeKeys?.includes(id);
-  const keyClass = isActive ? 'fill-primary' : 'fill-card stroke-foreground';
+  const keyClass = isActive ? 'fill-primary stroke-foreground' : 'fill-card stroke-foreground';
   const interactiveClass = onClick ? 'cursor-pointer' : '';
 
   const handleClick = () => {
@@ -88,8 +88,6 @@ export const FluteFingeringDiagram: FC<FluteFingeringDiagramProps> = ({
     >
       {/* Instrument Body */}
       <path
-        transform="translate(0, 10)"
-        fill="hsl(var(--muted))"
         d="M2 48 h96 a6 5 180 0 1 0 4 h-96
         M2 48 a6 5 180 0 1 0 4
         M10 48 a6 5 180 0 1 0 4
@@ -97,7 +95,8 @@ export const FluteFingeringDiagram: FC<FluteFingeringDiagramProps> = ({
         M2 48 a6 5 180 0 0 0 4"
         stroke="hsl(var(--foreground))"
         strokeWidth=".2"
-        transform="scale(4) translate(0, -40)"
+        transform="scale (4) translate(0, -40)"
+        fill="hsl(var(--muted))"
       />
 
       {/* Thumb Keys */}
