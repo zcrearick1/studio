@@ -21,6 +21,7 @@ import { TrumpetFingeringDiagram } from "@/components/ui/fingering-diagrams/trum
 import { FluteFingeringDiagram } from "@/components/ui/fingering-diagrams/flute-fingering-diagram";
 import { SaxophoneFingeringDiagram } from "@/components/ui/fingering-diagrams/saxophone-fingering-diagram";
 import { BassoonFingeringDiagram } from "@/components/ui/fingering-diagrams/bassoon-fingering-diagram";
+import { PianoKeyboardDiagram } from "@/components/ui/fingering-diagrams/piano-keyboard-diagram";
 import { 
     TREBLE_CLEF_PATH, 
     BASS_CLEF_BODY_PATH, 
@@ -139,10 +140,10 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
     const renderClef = () => {
         switch (clef) {
             case "treble":
-                return <path d={TREBLE_CLEF_PATH} fill="currentColor" transform="translate(5, 77.5) scale(0.02, -0.02)" />;
+                return <path d={TREBLE_CLEF_PATH} fill="currentColor" transform="translate(5, 122) scale(0.028, -0.028)" />;
             case "bass":
                 return (
-                    <g transform="translate(15, 62.5) scale(0.005, -0.005)" fillRule="evenodd">
+                    <g transform="translate(15, 95) scale(0.007, -0.007)" fillRule="evenodd">
                         <path d={BASS_CLEF_BODY_PATH} fill="currentColor" />
                         <path d={BASS_CLEF_DOT1_PATH} fill="currentColor" />
                         <path d={BASS_CLEF_DOT2_PATH} fill="currentColor" />
@@ -150,14 +151,14 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
                 );
             case "alto":
                 return (
-                    <g transform="translate(5, 68) scale(0.015, -0.015)" fill="currentColor">
+                    <g transform="translate(5, 103.5) scale(0.021, -0.021)" fill="currentColor">
                         <path d={ALTO_CLEF_PATH_C} />
                         <path d={ALTO_CLEF_PATH_LEFT_BAR} />
                         <path d={ALTO_CLEF_PATH_RIGHT_BAR} />
                     </g>
                 );
             case "percussion":
-                return <path d={PERCUSSION_CLEF_PATH} fill="currentColor" transform="translate(5, 66) scale(0.018, -0.018)" />;
+                return <path d={PERCUSSION_CLEF_PATH} fill="currentColor" transform="translate(5, 101) scale(0.0263, -0.0263)" />;
             default:
                 return null;
         }
@@ -463,6 +464,7 @@ export default function FingeringChartsPage() {
 
   const isTallLayout = selectedInstrument && ['clarinet', 'alto-saxophone', 'tenor-saxophone', 'baritone-saxophone', 'bassoon'].includes(selectedInstrument.slug);
   const isSaxophone = selectedInstrument && ['alto-saxophone', 'tenor-saxophone', 'baritone-saxophone'].includes(selectedInstrument.slug);
+  const isKeyboard = selectedInstrument && ['piano', 'mallet-percussion'].includes(selectedInstrument.slug);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -623,6 +625,10 @@ export default function FingeringChartsPage() {
                             <div className="w-full max-w-[100px] h-full mx-auto">
                                 <BassoonFingeringDiagram activeKeys={currentFingering.keys} />
                             </div>
+                        ) : currentFingering.keys && isKeyboard ? (
+                            <div className="w-full max-w-[400px] mx-auto">
+                                <PianoKeyboardDiagram activeKeys={currentFingering.keys} startNote="C4" />
+                            </div>
                         ) : currentFingering.imageUrl ? (
                           <div className="relative w-full max-w-[112px] h-24 mx-auto">
                               <Image
@@ -652,6 +658,20 @@ export default function FingeringChartsPage() {
                           </div>
                         </div>
                       )
+                    }
+                     if (isKeyboard) {
+                      return (
+                        <div className="w-full">
+                          <Card className="mb-4">
+                            <CardHeader>
+                              <CardTitle className="text-primary text-4xl">{currentDisplayNote}</CardTitle>
+                            </CardHeader>
+                          </Card>
+                          <div className="h-full flex items-center justify-center">
+                            {diagramDisplay}
+                          </div>
+                        </div>
+                      );
                     }
 
                     return (

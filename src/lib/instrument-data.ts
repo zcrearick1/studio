@@ -1,3 +1,4 @@
+
 import type { Instrument } from './instrument-types';
 
 import { flute } from './instruments/flute';
@@ -18,6 +19,7 @@ import { cello } from './instruments/cello';
 import { doubleBass } from './instruments/double-bass';
 import { snareDrum } from './instruments/snare-drum';
 import { malletPercussion } from './instruments/mallet-percussion';
+import { piano } from './instruments/piano';
 
 export const instruments: Instrument[] = [
   flute,
@@ -36,6 +38,7 @@ export const instruments: Instrument[] = [
   viola,
   cello,
   doubleBass,
+  piano,
   snareDrum,
   malletPercussion,
 ];
