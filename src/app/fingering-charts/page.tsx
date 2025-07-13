@@ -22,6 +22,7 @@ import { FluteFingeringDiagram } from "@/components/ui/fingering-diagrams/flute-
 import { SaxophoneFingeringDiagram } from "@/components/ui/fingering-diagrams/saxophone-fingering-diagram";
 import { BassoonFingeringDiagram } from "@/components/ui/fingering-diagrams/bassoon-fingering-diagram";
 import { PianoKeyboardDiagram } from "@/components/ui/fingering-diagrams/piano-keyboard-diagram";
+import { MalletPercussionDiagram } from "@/components/ui/fingering-diagrams/mallet-percussion-diagram";
 import { 
     TREBLE_CLEF_PATH, 
     BASS_CLEF_BODY_PATH, 
@@ -625,9 +626,13 @@ export default function FingeringChartsPage() {
                             <div className="w-full max-w-[100px] h-full mx-auto">
                                 <BassoonFingeringDiagram activeKeys={currentFingering.keys} />
                             </div>
-                        ) : currentFingering.keys && isKeyboard ? (
+                        ) : currentFingering.keys && selectedInstrument.slug === 'piano' ? (
                             <div className="w-full max-w-[400px] mx-auto">
                                 <PianoKeyboardDiagram activeKeys={currentFingering.keys} startNote="C4" />
+                            </div>
+                        ) : currentFingering.keys && selectedInstrument.slug === 'mallet-percussion' ? (
+                            <div className="w-full max-w-[400px] mx-auto">
+                                <MalletPercussionDiagram activeKeys={currentFingering.keys} startNote="C4" />
                             </div>
                         ) : currentFingering.imageUrl ? (
                           <div className="relative w-full max-w-[112px] h-24 mx-auto">
