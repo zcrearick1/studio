@@ -20,6 +20,7 @@ import { ClarinetFingeringDiagram } from "@/components/ui/fingering-diagrams/cla
 import { TrumpetFingeringDiagram } from "@/components/ui/fingering-diagrams/trumpet-fingering-diagram";
 import { FluteFingeringDiagram } from "@/components/ui/fingering-diagrams/flute-fingering-diagram";
 import { SaxophoneFingeringDiagram } from "@/components/ui/fingering-diagrams/saxophone-fingering-diagram";
+import { BassoonFingeringDiagram } from "@/components/ui/fingering-diagrams/bassoon-fingering-diagram";
 import { 
     TREBLE_CLEF_PATH, 
     BASS_CLEF_BODY_PATH, 
@@ -460,7 +461,7 @@ export default function FingeringChartsPage() {
   
   const noteForStaff = parseNoteString(currentDisplayNote);
 
-  const isTallLayout = selectedInstrument && ['clarinet', 'alto-saxophone', 'tenor-saxophone', 'baritone-saxophone'].includes(selectedInstrument.slug);
+  const isTallLayout = selectedInstrument && ['clarinet', 'alto-saxophone', 'tenor-saxophone', 'baritone-saxophone', 'bassoon'].includes(selectedInstrument.slug);
   const isSaxophone = selectedInstrument && ['alto-saxophone', 'tenor-saxophone', 'baritone-saxophone'].includes(selectedInstrument.slug);
 
   return (
@@ -618,6 +619,10 @@ export default function FingeringChartsPage() {
                             <div className="w-full max-w-[120px] h-full mx-auto">
                                 <SaxophoneFingeringDiagram activeKeys={currentFingering.keys} />
                             </div>
+                        ) : currentFingering.keys && selectedInstrument.slug === 'bassoon' ? (
+                            <div className="w-full max-w-[100px] h-full mx-auto">
+                                <BassoonFingeringDiagram activeKeys={currentFingering.keys} />
+                            </div>
                         ) : currentFingering.imageUrl ? (
                           <div className="relative w-full max-w-[112px] h-24 mx-auto">
                               <Image
@@ -678,8 +683,3 @@ export default function FingeringChartsPage() {
     </div>
   );
 }
-
-    
-
-    
-

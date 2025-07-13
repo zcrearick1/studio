@@ -64,6 +64,8 @@ export const ClarinetFingeringDiagram: FC<ClarinetFingeringDiagramProps> = ({
         transform="translate(0, 10)"
         fill="hsl(var(--muted))"
         d="M50 0 s-6 -2 -6 6 l-2 26 v132 q-2 20 -10 30 Q32 200 50 200 M50 0 s6 -2 6 6 l2 26 v132 q2 20 10 30 Q68 200 50 200"
+        stroke="hsl(var(--foreground))"
+        strokeWidth=".2"
       />
 
       {/* Keys */}

@@ -2,6 +2,7 @@ import type { Instrument } from './instrument-types';
 
 import { flute } from './instruments/flute';
 import { clarinet } from './instruments/clarinet';
+import { bassoon } from './instruments/bassoon';
 import { altoSaxophone } from './instruments/alto-saxophone';
 import { tenorSaxophone } from './instruments/tenor-saxophone';
 import { baritoneSaxophone } from './instruments/baritone-saxophone';
@@ -21,6 +22,7 @@ import { malletPercussion } from './instruments/mallet-percussion';
 export const instruments: Instrument[] = [
   flute,
   clarinet,
+  bassoon,
   altoSaxophone,
   tenorSaxophone,
   baritoneSaxophone,

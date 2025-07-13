@@ -87,7 +87,18 @@ export const FluteFingeringDiagram: FC<FluteFingeringDiagramProps> = ({
       xmlns="http://www.w3.org/2000/svg"
     >
       {/* Instrument Body */}
-      <rect x="10" y="42" width="380" height="16" rx="8" fill="hsl(var(--muted))" />
+      <path
+        transform="translate(0, 10)"
+        fill="hsl(var(--muted))"
+        d="M2 48 h96 a6 5 180 0 1 0 4 h-96
+        M2 48 a6 5 180 0 1 0 4
+        M10 48 a6 5 180 0 1 0 4
+        M11 48 a6 5 180 0 1 0 4
+        M2 48 a6 5 180 0 0 0 4"
+        stroke="hsl(var(--foreground))"
+        strokeWidth=".2"
+        transform="scale(4) translate(0, -40)"
+      />
 
       {/* Thumb Keys */}
       <Key cx={80} cy={75} id="thumb-b" activeKeys={activeKeys} onClick={onClickKey} isLever width={10} height={20} />

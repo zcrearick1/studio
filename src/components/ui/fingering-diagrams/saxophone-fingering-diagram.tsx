@@ -55,7 +55,7 @@ export const SaxophoneFingeringDiagram: FC<SaxophoneFingeringDiagramProps> = ({
         M45 5, L50 5"
         fill="hsl(var(--muted))"
         stroke="hsl(var(--foreground))"
-        strokeWidth=".5"
+        strokeWidth=".2"
         transform="scale(4) translate(-41,10)"
       />
       
