@@ -23,6 +23,7 @@ import { SaxophoneFingeringDiagram } from "@/components/ui/fingering-diagrams/sa
 import { BassoonFingeringDiagram } from "@/components/ui/fingering-diagrams/bassoon-fingering-diagram";
 import { PianoKeyboardDiagram } from "@/components/ui/fingering-diagrams/piano-keyboard-diagram";
 import { MalletPercussionDiagram } from "@/components/ui/fingering-diagrams/mallet-percussion-diagram";
+import { TromboneFingeringDiagram } from "@/components/ui/fingering-diagrams/trombone-fingering-diagram";
 import { 
     TREBLE_CLEF_PATH, 
     BASS_CLEF_BODY_PATH, 
@@ -466,6 +467,7 @@ export default function FingeringChartsPage() {
   const isTallLayout = selectedInstrument && ['clarinet', 'alto-saxophone', 'tenor-saxophone', 'baritone-saxophone', 'bassoon'].includes(selectedInstrument.slug);
   const isSaxophone = selectedInstrument && ['alto-saxophone', 'tenor-saxophone', 'baritone-saxophone'].includes(selectedInstrument.slug);
   const isKeyboard = selectedInstrument && ['piano', 'mallet-percussion'].includes(selectedInstrument.slug);
+  const isTrombone = selectedInstrument?.slug === 'trombone';
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -614,8 +616,12 @@ export default function FingeringChartsPage() {
                             <div className="w-full max-w-[200px] mx-auto">
                                 <TrumpetFingeringDiagram activeKeys={currentFingering.keys} />
                             </div>
-                        ) : currentFingering.keys && selectedInstrument.slug === 'flute' ? (
+                        ) : currentFingering.positions && isTrombone ? (
                             <div className="w-full max-w-[400px] mx-auto">
+                                <TromboneFingeringDiagram activePosition={parseInt(currentFingering.positions[0])} />
+                            </div>
+                        ) : currentFingering.keys && selectedInstrument.slug === 'flute' ? (
+                             <div className="w-full max-w-[400px] mx-auto">
                                 <FluteFingeringDiagram activeKeys={currentFingering.keys} />
                             </div>
                         ) : currentFingering.keys && isSaxophone ? (
@@ -664,7 +670,7 @@ export default function FingeringChartsPage() {
                         </div>
                       )
                     }
-                     if (isKeyboard) {
+                     if (isKeyboard || isTrombone) {
                       return (
                         <div className="w-full">
                           <Card className="mb-4">

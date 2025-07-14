@@ -53,7 +53,7 @@ const Key = ({
         <path
             d={d}
             className={cn('transition-colors', keyClass, interactiveClass)}
-            strokeWidth="1.5"
+            strokeWidth="1"
             onClick={handleClick}
             transform={`translate(${cx}, ${cy})`}
         />
