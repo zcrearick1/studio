@@ -104,7 +104,7 @@ export const FluteFingeringDiagram: FC<FluteFingeringDiagramProps> = ({
       <Key cx={65} cy={75} id="thumb-csharp" activeKeys={activeKeys} onClick={onClickKey} isLever width={10} height={20} />
 
       {/* Left Hand Keys */}
-      <Key cx={110} cy={50} id="L1" activeKeys={activeKeys} onClick={onClickKey} />
+      <Key cx={110} cy={50} id="L1" activeKeys={activeKeys} onClick={onClickKey} r={6} />
       <Key cx={135} cy={50} id="L2" activeKeys={activeKeys} onClick={onClickKey} />
       <Key cx={160} cy={50} id="L3" activeKeys={activeKeys} onClick={onClickKey} />
 

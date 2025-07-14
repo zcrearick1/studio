@@ -56,8 +56,9 @@ export const SaxophoneFingeringDiagram: FC<SaxophoneFingeringDiagramProps> = ({
         fill="hsl(var(--muted))"
         stroke="hsl(var(--foreground))"
         strokeWidth=".2"
-        transform="scale(4) translate(-41,10)"
+        transform="scale(4) translate(-41,10)" 
       />
+      <ellipse cx="-130" cy="190" rx="20" ry="40" fill="hsl(var(--muted))" stroke="hsl(var(--foreground))" strokeWidth=".5" transform="rotate(-60 0 0)" />
       
       {/* Octave Key */}
       <Key cx={30} cy={100} id="octave" activeKeys={activeKeys} onClick={onClickKey} isPalm r={6} />

@@ -156,6 +156,9 @@ export function Header() {
                 <DropdownMenuContent>
                     <DropdownMenuLabel>{selectedInstrument.name}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                     <DropdownMenuItem asChild>
+                        <Link href={`/ai-setup-guide/${selectedInstrument.slug}`}>Startup Guide</Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                         <Link href={`/fingering-charts?instrument=${selectedInstrument.slug}`}>Fingering Chart</Link>
                     </DropdownMenuItem>
@@ -220,6 +223,7 @@ export function Header() {
                             My Instrument ({selectedInstrument.name})
                           </AccordionTrigger>
                           <AccordionContent className="pt-2 pl-6 flex flex-col gap-4">
+                            <NavLink href={`/ai-setup-guide/${selectedInstrument.slug}`}>Startup Guide</NavLink>
                             <NavLink href={`/fingering-charts?instrument=${selectedInstrument.slug}`}>Fingering Chart</NavLink>
                             <NavLink href={`/fingering-charts/quizzes/${selectedInstrument.slug}`}>Quiz Yourself</NavLink>
                           </AccordionContent>
