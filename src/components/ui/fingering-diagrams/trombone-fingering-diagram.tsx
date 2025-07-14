@@ -61,17 +61,13 @@ export const TromboneFingeringDiagram: FC<TromboneFingeringDiagramProps> = ({
         id="outer-slide" 
         transform={`translate(${slideX}, 0)`}
         className="transition-transform duration-300 ease-in-out"
-        fill="url(#brassGradient)"
+        fill="hsl(var(--primary))"
         stroke="hsl(var(--foreground))"
         strokeWidth="0.4"
       >
         {/* Outer Slide Tubes */}
-        <rect x="10" y="88.5" width="200" height="5" rx="1" />
-        <rect x="10" y="108.5" width="200" height="5" rx="1" />
-        
-        {/* Slide Brace & Water Key */}
-        <rect x="190" y="88.5" width="5" height="25" />
-        <circle cx="192.5" cy="118.5" r="2.5" />
+        <path d="M0 89 h200 a1 1 0 0 1 0 24 h-200 v-4 h200 a1 1 0 0 0 0 -16 h-200 Z
+        M10 93 v16 h3 v-16 Z" />
       </g>
 
       {/* Position Markers */}
