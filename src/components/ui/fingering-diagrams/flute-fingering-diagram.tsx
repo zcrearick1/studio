@@ -141,33 +141,35 @@ export const FluteFingeringDiagram: FC<FluteFingeringDiagramProps> = ({
         <Key cx={90} cy={5} id="thumb-bflat" activeKeys={activeKeys} onClick={onClickKey} d="M42 47 s-16 -2 -16 4 a1 1.4 180 0 0 7 -1 a1.5 1.5 0 0 1 1.5 -1.5 h7.5 Z" />
       </g>
 
-      {/* Left Hand Keys */}
-      <Key cx={130} cy={38} id="L1" activeKeys={activeKeys} onClick={onClickKey} radius={7} />
-      <Key cx={155} cy={38} id="L2" activeKeys={activeKeys} onClick={onClickKey} radius={7} />
-      <Key cx={180} cy={38} id="L3" activeKeys={activeKeys} onClick={onClickKey} radius={7} />
+      {/* Body Keys */}
+      <g transform="scale (1) translate (0, 0)">
+        {/* Left Hand */}
+        <Key cx={130} cy={38} id="L1" activeKeys={activeKeys} onClick={onClickKey} radius={7} />
+        <Key cx={155} cy={38} id="L2" activeKeys={activeKeys} onClick={onClickKey} radius={7} />
+        <Key cx={180} cy={38} id="L3" activeKeys={activeKeys} onClick={onClickKey} radius={7} />
+
+        {/* Right Hand */}
+        <Key cx={230} cy={38} id="R1" activeKeys={activeKeys} onClick={onClickKey} radius={7} />
+        <Key cx={255} cy={38} id="R2" activeKeys={activeKeys} onClick={onClickKey} radius={7} />
+        <Key cx={280} cy={38} id="R3" activeKeys={activeKeys} onClick={onClickKey} radius={7} />
+      
+        {/* G# Pinky Key */}
+        <Key cx={135} cy={-9} id="pinky-gsharp" activeKeys={activeKeys} onClick={onClickKey} d="M57 45 s2 -13 -5 -14 a2 1 180 0 0 1 7 s2 0 2 7 Z" />
+        
+        {/* Trill Keys */}
+        <Key cx={243} cy={42} id="trill-d" activeKeys={activeKeys} onClick={onClickKey} isEllipse width={3} height={5} />
+        <Key cx={268} cy={42} id="trill-dsharp" activeKeys={activeKeys} onClick={onClickKey} isEllipse width={3} height={5} />
+      </g>
 
       {/* Bb Lever */}
       <Key cx={120} cy={30} id="L1-b-flat" activeKeys={activeKeys} onClick={onClickKey} isLever width={25} height={8} />
 
-      {/* G# Pinky Key */}
-      <Key cx={135} cy={-9} id="pinky-gsharp" activeKeys={activeKeys} onClick={onClickKey} d="M57 45 s2 -13 -5 -14 a2 1 180 0 0 1 7 s2 0 2 7 Z" />
-
-      {/* Right Hand Keys */}
-      <Key cx={230} cy={38} id="R1" activeKeys={activeKeys} onClick={onClickKey} radius={7} />
-      <Key cx={255} cy={38} id="R2" activeKeys={activeKeys} onClick={onClickKey} radius={7} />
-      <Key cx={280} cy={38} id="R3" activeKeys={activeKeys} onClick={onClickKey} radius={7} />
-
-      {/* Trill Keys */}
-      <Key cx={243} cy={42} id="trill-d" activeKeys={activeKeys} onClick={onClickKey} isEllipse width={3} height={5} />
-      <Key cx={268} cy={42} id="trill-dsharp" activeKeys={activeKeys} onClick={onClickKey} isEllipse width={3} height={5} />
-      
       {/* Footjoint Keys (Pinky Keys) */}
-      <g>
-        <Key cx={320} cy={42} id="foot-dsharp" activeKeys={activeKeys} onClick={onClickKey} isLever width={8} height={15} />
-        <Key cx={330} cy={45} id="foot-csharp" activeKeys={activeKeys} onClick={onClickKey} isLever width={10} height={7} />
-        <Key cx={330} cy={37} id="foot-c" activeKeys={activeKeys} onClick={onClickKey} isLever width={10} height={5} />
+      <g transform="scale (.8) translate(20, -13)">
+        <Key cx={330} cy={37} id="foot-dsharp" activeKeys={activeKeys} onClick={onClickKey} d="M50 10 v22 a5 5 90 0 1 -5 5 c-5 0 -5 -3 -5 -10 c0 -7 7 -7 7 -10 v-7 Z" />
+        <Key cx={330} cy={37} id="foot-csharp" activeKeys={activeKeys} onClick={onClickKey} d="M70 28 h-17 a1 1 0 0 0 -1 1 c0 7 4 7 6 7 c7 0 5 -6 8 -6 h4 Z" />
+        <Key cx={330} cy={37} id="foot-c" activeKeys={activeKeys} onClick={onClickKey} d="M53 20 a1 1 0 0 0 -1 1 v4 a1 1 0 0 0 1 1 h12 a1 1 0 0 0 1 -1 v-4 a1 1 0 0 0 -1 -1 Z" />
       </g>
-
     </svg>
   );
 };

@@ -139,6 +139,7 @@ export function Header() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            <NavLink href="/pricing">Pricing</NavLink>
           </nav>
         </div>
 
@@ -211,7 +212,7 @@ export function Header() {
                       </Link>
                   </SheetHeader>
                   <nav className="flex flex-col gap-4 p-4 flex-1">
-                    
+                    <NavLink href="/pricing">Pricing</NavLink>
                     <Accordion type="single" collapsible className="w-full">
                        {user && selectedInstrument && (
                         <AccordionItem value="my-instrument" className="border-b-0">
