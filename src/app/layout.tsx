@@ -5,8 +5,8 @@ import { Header } from '@/components/header';
 import { AuthProvider } from '@/contexts/auth-context';
 
 export const metadata: Metadata = {
-  title: 'Maestro',
-  description: 'Your companion for musical mastery. Fingering charts, AI setup guides, and more.',
+  title: 'Upbeat Music Trainer',
+  description: 'Your companion for musical mastery. Fingering charts, setup guides, and more from Upbeat Music Trainer.',
 };
 
 export default function RootLayout({

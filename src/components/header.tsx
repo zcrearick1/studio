@@ -206,7 +206,7 @@ export function Header() {
                 <SheetContent side="right" className="w-[300px] sm:w-[400px] flex flex-col p-0">
                   <SheetHeader className="p-4 border-b">
                     <SheetTitle className="sr-only">Mobile Menu</SheetTitle>
-                    <SheetDescription className="sr-only">A list of navigation links for the Maestro app.</SheetDescription>
+                    <SheetDescription className="sr-only">A list of navigation links for the Upbeat Music Trainer app.</SheetDescription>
                       <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
                           <Logo />
                       </Link>
