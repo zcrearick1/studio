@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -82,8 +83,7 @@ export default function CustomChartGenerator() {
     const contentContainer = document.createElement('div');
     contentContainer.style.display = 'flex';
     contentContainer.style.flexWrap = 'wrap';
-    contentContainer.style.justifyContent = 'center';
-    contentContainer.style.gap = '0.25in';
+    contentContainer.style.justifyContent = 'flex-start';
     contentContainer.style.width = '100%';
     contentContainer.style.height = '100%';
 
@@ -96,7 +96,7 @@ export default function CustomChartGenerator() {
                 {selectedInstrument.name} Custom Fingering Chart
             </h1>
             {fingeringToRender.map(fingering => (
-                <div key={fingering.note} style={{ width: '1.5in', border: '1px solid #ddd' }}>
+                <div key={fingering.note} style={{ width: '1.3in', border: '1px solid #ddd' }}>
                     <FingeringCard instrument={selectedInstrument} fingering={fingering} />
                 </div>
             ))}
