@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { useSearchParams } from 'next/navigation';
 import { instruments } from '@/lib/instrument-data';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,9 +15,17 @@ import { Checkbox } from './ui/checkbox';
 import type { Fingering } from '@/lib/instrument-types';
 
 export default function CustomChartGenerator() {
+  const searchParams = useSearchParams();
   const [selectedInstrumentSlug, setSelectedInstrumentSlug] = useState<string>('');
   const [selectedFingerings, setSelectedFingerings] = useState<Record<string, boolean>>({});
   const [isGenerating, setIsGenerating] = useState(false);
+
+  useEffect(() => {
+    const instrumentSlug = searchParams.get('instrument');
+    if (instrumentSlug) {
+      setSelectedInstrumentSlug(instrumentSlug);
+    }
+  }, [searchParams]);
 
   const selectedInstrument = useMemo(
     () => instruments.find((i) => i.slug === selectedInstrumentSlug),

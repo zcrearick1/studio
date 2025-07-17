@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -8,7 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Sparkles } from 'lucide-react';
 import CustomChartGenerator from '@/components/custom-chart-generator';
 
-export default function CustomGeneratorPage() {
+function CustomGeneratorPageContent() {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -64,4 +65,12 @@ export default function CustomGeneratorPage() {
   }
 
   return <CustomChartGenerator />;
+}
+
+export default function CustomGeneratorPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CustomGeneratorPageContent />
+    </Suspense>
+  )
 }

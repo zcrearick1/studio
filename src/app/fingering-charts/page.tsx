@@ -481,7 +481,7 @@ export default function FingeringChartsPage() {
       
       <div className="flex justify-center mb-6">
         <Button asChild variant="outline">
-          <Link href="/fingering-charts/custom-generator">
+          <Link href={selectedInstrument ? `/fingering-charts/custom-generator?instrument=${selectedInstrument.slug}` : "/fingering-charts/custom-generator"}>
             <Sparkles className="mr-2 h-4 w-4" />
             Create Custom Fingering Chart
           </Link>
