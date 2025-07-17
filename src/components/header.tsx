@@ -16,12 +16,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 
 import {
   Sheet,
@@ -83,8 +77,6 @@ export function Header() {
     );
   };
   
-  const resourcesActive = isMounted && (pathname.startsWith('/ai-setup-guide') || pathname.startsWith('/fingering-charts'));
-
   return (
     <header className={cn(
         "sticky top-0 z-50 w-full transition-all duration-200",
@@ -184,15 +176,23 @@ export function Header() {
                     <div className="p-4 border-t">
                     {user ? (
                         <div className="flex flex-col gap-4">
-                            <Link href="/profile" className="flex items-center gap-2 font-medium" onClick={() => setIsMobileMenuOpen(false)}>
-                            <User className="h-5 w-5" />
-                            <span>Profile</span>
-                            </Link>
-                            <Link href="/settings" className="flex items-center gap-2 font-medium text-muted-foreground hover:text-primary" onClick={() => setIsMobileMenuOpen(false)}>
-                            <Settings className="h-5 w-5" />
-                            <span>Settings</span>
+                            <Link href="/profile" className="flex items-center gap-3 font-medium" onClick={() => setIsMobileMenuOpen(false)}>
+                                <Avatar className="h-8 w-8">
+                                    {user.photoURL && <AvatarImage src={user.photoURL} alt={user.displayName ?? 'User profile picture'} />}
+                                    <AvatarFallback>
+                                        <User className="h-5 w-5" />
+                                    </AvatarFallback>
+                                </Avatar>
+                                <div className="flex flex-col">
+                                    <span>{user.displayName || 'My Profile'}</span>
+                                    <span className="text-xs text-muted-foreground">{user.email}</span>
+                                </div>
                             </Link>
                             <DropdownMenuSeparator />
+                            <Link href="/settings" className="flex items-center gap-2 font-medium text-muted-foreground hover:text-primary" onClick={() => setIsMobileMenuOpen(false)}>
+                                <Settings className="h-5 w-5" />
+                                <span>Settings</span>
+                            </Link>
                             <Button variant="ghost" className="justify-start -ml-2 text-muted-foreground" onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}>Log Out</Button>
                         </div>
                     ) : (
