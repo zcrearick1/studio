@@ -132,7 +132,9 @@ export default function Home() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p>Select a range of notes to test yourself. A note appears on the staff, and you must select the correct keys on the fingering diagram before time runs out.</p>
+                  <p>Test your knowledge of intstrument fingerings with our interactive diagrams!
+                    Customize the quiz to your level to design the perfect challenge.
+                  </p>
                 </CardContent>
               </Card>
             </Link>
