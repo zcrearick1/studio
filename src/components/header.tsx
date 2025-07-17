@@ -98,7 +98,7 @@ export function Header() {
           ? "border-b bg-card shadow-sm" 
           : "border-b border-transparent"
       )}>
-      <div className="container flex h-14 items-center justify-between px-4 md:px-6">
+      <div className="flex h-14 items-center justify-between px-4 md:px-6">
         {/* Left and Nav Section */}
         <div className="flex items-center gap-x-6">
           <Link href="/" className="flex items-center space-x-2">
