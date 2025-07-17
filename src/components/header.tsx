@@ -91,10 +91,10 @@ export function Header() {
           ? "border-b bg-card shadow-sm" 
           : "border-b border-transparent"
       )}>
-      <div className="container flex h-14 items-center px-4 md:px-6">
+      <div className="flex h-14 items-center px-4 md:px-6">
         
-        {/* LEFT SIDE */}
-        <div className="flex items-center gap-x-6">
+        {/* LEFT & CENTER */}
+        <div className="flex flex-1 items-center gap-x-6">
           <Link href="/" className="flex items-center space-x-2">
             <Logo />
           </Link>
