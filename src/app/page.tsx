@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Music, BookOpen } from 'lucide-react';
+import { ArrowRight, Music, BookOpen, HelpCircle } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -12,10 +12,11 @@ export default function Home() {
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none font-headline">
-                  Unlock Your Musical Potential with Upbeat
+                  Unlock Your Musical Potential with the Upbeat Music Trainer!
                 </h1>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                  Your essential companion for mastering any instrument. Explore comprehensive fingering charts and get helpful setup guides.
+                  Your essential companion for mastering any instrument. Explore comprehensive fingering charts, and challenge your knowledge with interactive quizzes.
+                  Explore guides for every instrument!
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
@@ -27,7 +28,7 @@ export default function Home() {
                 </Button>
                 <Button asChild size="lg" variant="outline">
                   <Link href="/fingering-charts">
-                    Browse Charts
+                    Browse Fingering Charts
                   </Link>
                 </Button>
               </div>
@@ -50,7 +51,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-1 md:grid-cols-2 lg:gap-12 mt-12">
+          <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-1 lg:grid-cols-3 lg:gap-12 mt-12">
             <Link href="/fingering-charts">
               <Card className="h-full hover:shadow-lg transition-shadow duration-300">
                 <CardHeader className="flex flex-row items-center gap-4">
@@ -65,7 +66,9 @@ export default function Home() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p>Quickly look up fingerings for any note. Perfect for practice and learning new pieces. Our charts are clear, concise, and easy to read.</p>
+                  <p>Quickly look up fingerings for any note. 
+                    Perfect as a quick reference when learning new music. 
+                    Every note and fingering is clear, concise, and easy to read.</p>
                 </CardContent>
               </Card>
             </Link>
@@ -83,7 +86,26 @@ export default function Home() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p>Our guides provide step-by-step instructions for instrument setup and maintenance. Ideal for complete beginners.</p>
+                  <p>Our guides provide step-by-step instructions for instrument setup and maintenance. 
+                    Ideal for complete beginners.</p>
+                </CardContent>
+              </Card>
+            </Link>
+            <Link href="/fingering-charts/quizzes">
+              <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                <CardHeader className="flex flex-row items-center gap-4">
+                  <div className="bg-secondary/80 p-3 rounded-full">
+                    <HelpCircle className="h-6 w-6 text-secondary-foreground" />
+                  </div>
+                  <div className="grid gap-1">
+                    <CardTitle>Interactive Quizzes</CardTitle>
+                    <CardDescription>
+                      Test your knowledge and speed with fingering quizzes.
+                    </CardDescription>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <p>Select a range of notes to test yourself. A note appears on the staff, and you must select the correct keys on the fingering diagram before time runs out.</p>
                 </CardContent>
               </Card>
             </Link>
