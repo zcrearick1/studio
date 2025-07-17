@@ -179,7 +179,7 @@ export const FingeringCard = ({ instrument, fingering }: { instrument: Instrumen
                 <div className="w-full">
                     <MiniStaff clef={instrument.clef} note={noteForStaff} />
                 </div>
-                <div className={`w-full flex-grow flex items-center justify-center ${isKeyboard || isTrombone ? 'h-16' : isTall ? 'h-24' : 'h-20'}`}>
+                <div className="w-full flex-grow flex items-center justify-center min-h-[5rem]">
                     <FingeringDiagram />
                 </div>
             </CardContent>
