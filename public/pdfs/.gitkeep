@@ -1,0 +1,8 @@
+This directory is for your PDF files.
+
+Name your files using the instrument's slug, like so:
+`flute-fingering-chart.pdf`
+`clarinet-fingering-chart.pdf`
+etc.
+
+You can delete this .gitkeep file once you've added your own PDFs.
