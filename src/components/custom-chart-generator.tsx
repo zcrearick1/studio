@@ -1,7 +1,10 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { instruments, Instrument } from '@/lib/instrument-data';
+import ReactDOM from 'react-dom';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { instruments } from '@/lib/instrument-data';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -9,11 +12,6 @@ import { Sparkles, Download, Loader2 } from 'lucide-react';
 import { FingeringCard } from './fingering-card';
 import { Checkbox } from './ui/checkbox';
 import type { Fingering } from '@/lib/instrument-types';
-
-// Placeholder for PDF generation
-const generatePdf = async () => {
-  alert('PDF generation is coming soon!');
-};
 
 export default function CustomChartGenerator() {
   const [selectedInstrumentSlug, setSelectedInstrumentSlug] = useState<string>('');
@@ -49,12 +47,95 @@ export default function CustomChartGenerator() {
   }
   
   const selectedCount = Object.values(selectedFingerings).filter(Boolean).length;
-
+  
   const handleGenerateClick = async () => {
-      setIsGenerating(true);
-      await generatePdf();
-      setIsGenerating(false);
-  }
+    if (!selectedInstrument || selectedCount === 0) return;
+    setIsGenerating(true);
+    
+    const fingeringToRender = selectedInstrument.fingerings.filter(f => selectedFingerings[f.note]);
+
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'in',
+      format: 'letter' // 8.5 x 11 inches
+    });
+
+    const pageElement = document.createElement('div');
+    pageElement.style.width = '8.5in';
+    pageElement.style.height = '11in';
+    pageElement.style.padding = '1in';
+    pageElement.style.backgroundColor = 'white';
+    pageElement.style.boxSizing = 'border-box';
+    pageElement.style.position = 'absolute';
+    pageElement.style.left = '-9999px';
+    pageElement.style.top = '0px';
+
+    const contentContainer = document.createElement('div');
+    contentContainer.style.display = 'flex';
+    contentContainer.style.flexWrap = 'wrap';
+    contentContainer.style.justifyContent = 'center';
+    contentContainer.style.gap = '0.25in';
+    contentContainer.style.width = '100%';
+    contentContainer.style.height = '100%';
+
+    pageElement.appendChild(contentContainer);
+    document.body.appendChild(pageElement);
+
+    const cardsToRender = (
+        <>
+            <h1 style={{ width: '100%', textAlign: 'center', fontSize: '24pt', fontWeight: 'bold', marginBottom: '0.5in', color: 'black' }}>
+                {selectedInstrument.name} Custom Fingering Chart
+            </h1>
+            {fingeringToRender.map(fingering => (
+                <div key={fingering.note} style={{ width: '1.5in', border: '1px solid #ddd' }}>
+                    <FingeringCard instrument={selectedInstrument} fingering={fingering} />
+                </div>
+            ))}
+        </>
+    );
+
+    await new Promise<void>((resolve) => {
+        ReactDOM.render(
+            cardsToRender,
+            contentContainer,
+            () => resolve()
+        );
+    });
+
+    const canvas = await html2canvas(pageElement, {
+      scale: 3, // Higher scale for better resolution
+      useCORS: true,
+      logging: false,
+    });
+    
+    document.body.removeChild(pageElement);
+
+    const imgData = canvas.toDataURL('image/png');
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+
+    const imgWidth = pdfWidth;
+    const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+
+    let heightLeft = imgHeight;
+    let position = 0;
+    
+    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    heightLeft -= pdfHeight;
+
+    while (heightLeft > 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pdfHeight;
+    }
+
+    pdf.save(`${selectedInstrument.slug}-custom-chart.pdf`);
+
+    setIsGenerating(false);
+  };
+
 
   return (
     <div className="container mx-auto px-4 py-8">
