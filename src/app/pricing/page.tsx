@@ -95,7 +95,7 @@ export default function PricingPage() {
               className="w-full"
               onClick={handleFreeTierClick}
             >
-              {user ? 'Continue for Free' : 'Get Started'}
+              {user ? 'Continue for Free' : 'Get Started for Free'}
             </Button>
           </CardFooter>
         </Card>
