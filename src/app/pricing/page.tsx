@@ -27,8 +27,12 @@ export default function PricingPage() {
   const { user } = useAuth();
   const router = useRouter();
 
-  const handleSignUp = () => {
-    router.push('/signup');
+  const handleFreeTierClick = () => {
+    if (user) {
+      router.push('/');
+    } else {
+      router.push('/signup');
+    }
   };
 
   const handleUpgrade = () => {
@@ -89,9 +93,9 @@ export default function PricingPage() {
             <Button
               variant="outline"
               className="w-full"
-              onClick={handleSignUp}
+              onClick={handleFreeTierClick}
             >
-              Get Started
+              {user ? 'Continue for Free' : 'Get Started'}
             </Button>
           </CardFooter>
         </Card>
