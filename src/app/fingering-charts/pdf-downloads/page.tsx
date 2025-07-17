@@ -5,11 +5,33 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Download } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
-import { instruments } from '@/lib/instrument-data';
+import { instruments, Instrument } from '@/lib/instrument-data';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function PdfDownloadsPage() {
   const { user, loading } = useAuth();
+
+  const bandInstruments = instruments.filter(i => 
+    i.category === 'Woodwind' || i.category === 'Brass' || i.category === 'Percussion'
+  );
+
+  const orchestraInstruments = instruments.filter(i => i.category === 'String');
+
+  const renderInstrumentList = (instrumentList: Instrument[]) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {instrumentList.map((instrument) => {
+        const pdfPath = `/pdfs/${instrument.slug}-fingering-chart.pdf`;
+        return (
+          <Button asChild key={instrument.slug} variant="outline" className="justify-between">
+            <a href={pdfPath} download>
+              {instrument.name}
+              <Download className="h-4 w-4" />
+            </a>
+          </Button>
+        );
+      })}
+    </div>
+  );
 
   if (loading) {
     return (
@@ -73,29 +95,28 @@ export default function PdfDownloadsPage() {
             Downloadable fingering charts for offline use.
           </p>
         </div>
-        <Card>
-            <CardHeader>
-                <CardTitle>Fingering Charts</CardTitle>
-                <CardDescription>Click to download a printable PDF fingering chart for your instrument.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {instruments.map((instrument) => {
-                        const pdfPath = `/pdfs/${instrument.slug}-fingering-chart.pdf`;
-                        return (
-                            <Button asChild key={instrument.slug} variant="outline" className="justify-between">
-                                <a href={pdfPath} download>
-                                    {instrument.name}
-                                    <Download className="h-4 w-4" />
-                                </a>
-                            </Button>
-                        );
-                    })}
-                </div>
-            </CardContent>
-        </Card>
+        <div className="space-y-8">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Band Instruments</CardTitle>
+                    <CardDescription>Click to download a printable PDF fingering chart for your instrument.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {renderInstrumentList(bandInstruments)}
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Orchestra Instruments</CardTitle>
+                    <CardDescription>Click to download a printable PDF fingering chart for your instrument.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {renderInstrumentList(orchestraInstruments)}
+                </CardContent>
+            </Card>
+        </div>
         <div className="mt-6 text-center text-sm text-muted-foreground">
-            <p>Don't see your instrument? <Link href="/fingering-charts" className="underline hover:text-primary">Suggest one!</Link></p>
+            <p>Don't see your instrument? <Link href="/fingering-charts" className="underline hover:text-primary">Use the interactive charts!</Link></p>
         </div>
       </div>
     </div>
