@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Menu, ChevronDown, User } from "lucide-react";
+import { Menu, ChevronDown, User, Settings } from "lucide-react";
 import { signOut } from "firebase/auth";
 
 import { Button } from "@/components/ui/button";
@@ -35,7 +35,6 @@ import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/auth-context";
 import { auth } from "@/lib/firebase";
-import { instruments, type Instrument } from "@/lib/instrument-data";
 
 export function Header() {
   const pathname = usePathname();
@@ -45,7 +44,6 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [selectedInstrument, setSelectedInstrument] = useState<Instrument | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -61,23 +59,6 @@ export function Header() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  useEffect(() => {
-    if (user) {
-      const storedInstrumentSlug = localStorage.getItem('primaryInstrument');
-      if (storedInstrumentSlug) {
-        const foundInstrument = instruments.find(
-          (i) => i.slug === storedInstrumentSlug
-        );
-        setSelectedInstrument(foundInstrument || null);
-      } else {
-        setSelectedInstrument(null);
-      }
-    } else {
-      setSelectedInstrument(null);
-    }
-  }, [user, pathname]);
-
 
   const handleLogout = async () => {
     if (!auth) return;
@@ -125,7 +106,7 @@ export function Header() {
                   resourcesActive ? "text-primary" : "text-muted-foreground"
                 )}
               >
-                Instrument Resources
+                All Resources
                 <ChevronDown className="h-4 w-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -148,28 +129,6 @@ export function Header() {
         <div className="ml-auto flex items-center gap-2">
           {/* Desktop Auth */}
           <div className="hidden items-center gap-2 md:flex">
-            {user && selectedInstrument && (
-              <DropdownMenu>
-                <DropdownMenuTrigger className={cn(
-                    "flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary data-[state=open]:text-primary focus-visible:outline-none text-muted-foreground"
-                )}>
-                    My Resources <ChevronDown className="h-4 w-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                    <DropdownMenuLabel>{selectedInstrument.name}</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                     <DropdownMenuItem asChild>
-                        <Link href={`/ai-setup-guide/${selectedInstrument.slug}`}>Startup Guide</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                        <Link href={`/fingering-charts?instrument=${selectedInstrument.slug}`}>Fingering Chart</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                        <Link href={`/fingering-charts/quizzes/${selectedInstrument.slug}`}>Quiz Yourself</Link>
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -221,22 +180,6 @@ export function Header() {
                   <nav className="flex flex-col gap-4 p-4 flex-1">
                     <NavLink href="/pricing">Pricing</NavLink>
                     <Accordion type="single" collapsible className="w-full">
-                       {user && selectedInstrument && (
-                        <AccordionItem value="my-instrument" className="border-b-0">
-                          <AccordionTrigger
-                            className={cn(
-                              "py-1 text-sm font-medium transition-colors hover:text-primary hover:no-underline text-muted-foreground",
-                            )}
-                          >
-                            My Instrument ({selectedInstrument.name})
-                          </AccordionTrigger>
-                          <AccordionContent className="pt-2 pl-6 flex flex-col gap-4">
-                            <NavLink href={`/ai-setup-guide/${selectedInstrument.slug}`}>Startup Guide</NavLink>
-                            <NavLink href={`/fingering-charts?instrument=${selectedInstrument.slug}`}>Fingering Chart</NavLink>
-                            <NavLink href={`/fingering-charts/quizzes/${selectedInstrument.slug}`}>Quiz Yourself</NavLink>
-                          </AccordionContent>
-                        </AccordionItem>
-                      )}
                       <AccordionItem value="instrument-resources" className="border-b-0">
                         <AccordionTrigger
                           className={cn(
@@ -244,7 +187,7 @@ export function Header() {
                             resourcesActive ? "text-primary" : "text-muted-foreground"
                           )}
                         >
-                          Instrument Resources
+                          All Resources
                         </AccordionTrigger>
                         <AccordionContent className="pt-2 pl-6 flex flex-col gap-4">
                           <NavLink href="/ai-setup-guide">Startup Guides</NavLink>
@@ -263,7 +206,7 @@ export function Header() {
                             <span>Profile</span>
                           </Link>
                           <Link href="/settings" className="flex items-center gap-2 font-medium text-muted-foreground hover:text-primary" onClick={() => setIsMobileMenuOpen(false)}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 0 2l-.15.08a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1 0-2l.15-.08a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                            <Settings className="h-5 w-5" />
                             <span>Settings</span>
                           </Link>
                           <DropdownMenuSeparator />
