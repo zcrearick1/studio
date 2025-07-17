@@ -15,7 +15,7 @@ export default function Home() {
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none font-headline">
                   Unlock Your Musical Potential with the Upbeat Music Trainer!
                 </h1>
-                <p className="max-w-[600px] text-muted-foreground md:text-xl">
+                <p className="max-w-[600px] mx-auto text-muted-foreground md:text-xl">
                   Your essential companion for mastering any instrument. Explore comprehensive fingering charts, and challenge your knowledge with interactive quizzes.
                   Explore guides for every instrument!
                 </p>
