@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { instruments } from '@/lib/instrument-data';
@@ -95,11 +95,10 @@ export default function CustomChartGenerator() {
     );
 
     await new Promise<void>((resolve) => {
-        ReactDOM.render(
-            cardsToRender,
-            contentContainer,
-            () => resolve()
-        );
+        const root = createRoot(contentContainer);
+        root.render(cardsToRender);
+        // Give React a moment to render before capturing
+        setTimeout(resolve, 100);
     });
 
     const canvas = await html2canvas(pageElement, {
