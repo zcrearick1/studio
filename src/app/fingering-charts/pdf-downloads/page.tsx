@@ -18,7 +18,7 @@ export default function PdfDownloadsPage() {
   const orchestraInstruments = instruments.filter(i => i.category === 'String');
 
   const renderInstrumentList = (instrumentList: Instrument[]) => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       {instrumentList.map((instrument) => {
         const pdfPath = `/pdfs/${instrument.slug}-fingering-chart.pdf`;
         return (
@@ -87,7 +87,7 @@ export default function PdfDownloadsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <Download className="mx-auto h-12 w-12 text-primary mb-4" />
           <h1 className="text-4xl font-bold font-headline">PDF Downloads</h1>
