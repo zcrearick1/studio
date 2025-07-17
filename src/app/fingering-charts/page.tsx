@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Music, ArrowUp, ArrowDown } from "lucide-react";
+import { Music, ArrowUp, ArrowDown, Sparkles } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ClarinetFingeringDiagram } from "@/components/ui/fingering-diagrams/clarinet-fingering-diagram";
@@ -24,6 +24,7 @@ import { BassoonFingeringDiagram } from "@/components/ui/fingering-diagrams/bass
 import { PianoKeyboardDiagram } from "@/components/ui/fingering-diagrams/piano-keyboard-diagram";
 import { MalletPercussionDiagram } from "@/components/ui/fingering-diagrams/mallet-percussion-diagram";
 import { TromboneFingeringDiagram } from "@/components/ui/fingering-diagrams/trombone-fingering-diagram";
+import Link from "next/link";
 import { 
     TREBLE_CLEF_PATH, 
     BASS_CLEF_BODY_PATH, 
@@ -476,6 +477,15 @@ export default function FingeringChartsPage() {
         <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">
           Select an instrument and use the controls to find the fingering for any note.
         </p>
+      </div>
+      
+      <div className="flex justify-center mb-6">
+        <Button asChild variant="outline">
+          <Link href="/fingering-charts/custom-generator">
+            <Sparkles className="mr-2 h-4 w-4" />
+            Create Custom Fingering Chart
+          </Link>
+        </Button>
       </div>
 
       <Card className="max-w-4xl mx-auto">
