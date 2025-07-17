@@ -1,7 +1,8 @@
+
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Music, BookOpen, HelpCircle } from 'lucide-react';
+import { ArrowRight, Music, BookOpen } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -95,7 +96,33 @@ export default function Home() {
               <Card className="h-full hover:shadow-lg transition-shadow duration-300">
                 <CardHeader className="flex flex-row items-center gap-4">
                   <div className="bg-secondary/80 p-3 rounded-full">
-                    <HelpCircle className="h-6 w-6 text-secondary-foreground" />
+                    <svg
+                      className="h-6 w-6 text-secondary-foreground"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="8" y1="12" x2="16" y2="12"></line>
+                      <line x1="8" y1="16" x2="16" y2="16"></line>
+                      <text
+                        x="18"
+                        y="6"
+                        fill="currentColor"
+                        fontSize="6"
+                        fontFamily="Arial, sans-serif"
+                        fontWeight="bold"
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                      >
+                        A+
+                      </text>
+                    </svg>
                   </div>
                   <div className="grid gap-1">
                     <CardTitle>Interactive Quizzes</CardTitle>
