@@ -7,10 +7,10 @@ import { ArrowRight, Music, BookOpen } from 'lucide-react';
 export default function Home() {
   return (
     <div className="flex-1 w-full">
-      <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-br from-primary/10 to-background">
+      <section className="w-full py-12 md:py-24 bg-gradient-to-br from-primary/10 to-background">
         <div className="container px-4 md:px-6">
-          <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
-            <div className="flex flex-col justify-center space-y-4">
+          <div className="grid gap-6 lg:grid-cols-1 lg:gap-12">
+            <div className="flex flex-col justify-center items-center space-y-4 text-center">
               <div className="space-y-2">
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none font-headline">
                   Unlock Your Musical Potential with the Upbeat Music Trainer!
@@ -34,14 +34,11 @@ export default function Home() {
                 </Button>
               </div>
             </div>
-            <div className="hidden lg:flex items-center justify-center">
-                <Music size={200} className="text-primary/50" strokeWidth={1}/>
-            </div>
           </div>
         </div>
       </section>
 
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-background">
+      <section className="w-full py-12 md:py-24 bg-background">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
