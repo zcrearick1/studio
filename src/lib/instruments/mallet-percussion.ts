@@ -2,7 +2,7 @@
 import type { Instrument } from '../instrument-types';
 
 export const malletPercussion: Instrument = {
-    name: "Mallet Percussion (Xylophone/Marimba)",
+    name: "Mallet Percussion",
     slug: "mallet-percussion",
     category: "Percussion",
     clef: "treble",
