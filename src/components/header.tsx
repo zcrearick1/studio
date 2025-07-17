@@ -68,7 +68,7 @@ export function Header() {
   };
 
   const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
-    const isActive = isMounted && pathname === href;
+    const isActive = isMounted && (pathname === href || (href !== "/" && pathname.startsWith(href)));
     return (
       <Link
         href={href}
@@ -108,34 +108,17 @@ export function Header() {
 
         <div className="hidden md:flex flex-1 items-center justify-center">
             <div className="flex items-center gap-x-6">
-                <DropdownMenu>
-                    <DropdownMenuTrigger
-                    className={cn(
-                        "flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary data-[state=open]:text-primary focus-visible:outline-none",
-                        resourcesActive ? "text-primary" : "text-muted-foreground"
-                    )}
-                    >
-                    All Resources
-                    <ChevronDown className="h-4 w-4" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuItem asChild>
-                        <Link href="/ai-setup-guide">Startup Guides</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                        <Link href="/fingering-charts">Fingering Charts</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                        <Link href="/fingering-charts/quizzes">Quizzes</Link>
-                    </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-
-                <Link href="/" className="flex items-center space-x-2">
+                <NavLink href="/ai-setup-guide">Startup Guides</NavLink>
+                <NavLink href="/fingering-charts">Fingering Charts</NavLink>
+                <NavLink href="/fingering-charts/quizzes">Quizzes</NavLink>
+                
+                <Link href="/" className="flex items-center space-x-2 px-6">
                     <Logo />
                 </Link>
 
                 <NavLink href="/pricing">Pricing</NavLink>
+                <NavLink href="/fingering-charts/study">Study</NavLink>
+                <NavLink href="/fingering-charts/pdf-downloads">PDFs</NavLink>
             </div>
         </div>
 
@@ -191,25 +174,12 @@ export function Header() {
                         </Link>
                     </SheetHeader>
                     <nav className="flex flex-col gap-4 p-4 flex-1">
-                    <NavLink href="/pricing">Pricing</NavLink>
-                    <Accordion type="single" collapsible className="w-full">
-                        <AccordionItem value="instrument-resources" className="border-b-0">
-                        <AccordionTrigger
-                            className={cn(
-                            "py-1 text-sm font-medium transition-colors hover:text-primary hover:no-underline",
-                            resourcesActive ? "text-primary" : "text-muted-foreground"
-                            )}
-                        >
-                            All Resources
-                        </AccordionTrigger>
-                        <AccordionContent className="pt-2 pl-6 flex flex-col gap-4">
-                            <NavLink href="/ai-setup-guide">Startup Guides</NavLink>
-                            <NavLink href="/fingering-charts">Fingering Charts</NavLink>
-                            <NavLink href="/fingering-charts/quizzes">Quizzes</NavLink>
-                        </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-
+                        <NavLink href="/ai-setup-guide">Startup Guides</NavLink>
+                        <NavLink href="/fingering-charts">Fingering Charts</NavLink>
+                        <NavLink href="/fingering-charts/quizzes">Quizzes</NavLink>
+                        <NavLink href="/fingering-charts/study">Study</NavLink>
+                        <NavLink href="/fingering-charts/pdf-downloads">PDFs</NavLink>
+                        <NavLink href="/pricing">Pricing</NavLink>
                     </nav>
                     <div className="p-4 border-t">
                     {user ? (
