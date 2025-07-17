@@ -17,6 +17,30 @@ export default function PdfDownloadsPage() {
 
   const orchestraInstruments = instruments.filter(i => i.category === 'String');
 
+  // Reorder band instruments for column-first layout
+  const getColumnOrderedInstruments = (list: Instrument[], columns: number) => {
+    const total = list.length;
+    if (total === 0) return [];
+    
+    const rows = Math.ceil(total / columns);
+    const reordered: Instrument[] = [];
+    
+    for (let i = 0; i < total; i++) {
+        const col = Math.floor(i / rows);
+        const row = i % rows;
+        const newIndex = row * columns + col;
+        if (newIndex < total) {
+            reordered[newIndex] = list[i];
+        }
+    }
+    
+    // Fill in any gaps for uneven distributions
+    return reordered.filter(Boolean);
+  };
+  
+  const columnOrderedBandInstruments = getColumnOrderedInstruments(bandInstruments, 3);
+
+
   const renderInstrumentList = (instrumentList: Instrument[]) => (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       {instrumentList.map((instrument) => {
@@ -102,7 +126,7 @@ export default function PdfDownloadsPage() {
                     <CardDescription>Click to download a printable PDF fingering chart for your instrument.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    {renderInstrumentList(bandInstruments)}
+                    {renderInstrumentList(columnOrderedBandInstruments)}
                 </CardContent>
             </Card>
             <Card>
