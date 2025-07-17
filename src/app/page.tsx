@@ -6,7 +6,7 @@ import { ArrowRight, Music, BookOpen } from 'lucide-react';
 
 export default function Home() {
   return (
-    <div className="flex-1 w-full">
+    <>
       <section className="w-full py-12 md:py-24 bg-gradient-to-br from-primary/10 to-background">
         <div className="container px-4 md:px-6">
           <div className="grid gap-6 lg:grid-cols-1 lg:gap-12">
@@ -138,6 +138,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }
