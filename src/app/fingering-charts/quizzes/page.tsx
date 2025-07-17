@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo } from "react";
@@ -19,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { instruments } from "@/lib/instrument-data";
-import { HelpCircle, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type { Instrument } from "@/lib/instrument-types";
 
 
@@ -60,7 +61,35 @@ export default function QuizzesPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-8">
-            <HelpCircle className="mx-auto h-12 w-12 text-primary mb-4" />
+            <div className="flex justify-center mb-4">
+              <svg
+                className="h-12 w-12 text-accent"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+                <line x1="8" y1="16" x2="16" y2="16"></line>
+                <text
+                  x="18"
+                  y="6"
+                  fill="currentColor"
+                  fontSize="6"
+                  fontFamily="Arial, sans-serif"
+                  fontWeight="bold"
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                >
+                  A+
+                </text>
+              </svg>
+            </div>
             <h1 className="text-4xl font-bold font-headline">Fingering Quizzes</h1>
             <p className="text-muted-foreground mt-2">
                 Select an instrument to test your knowledge of its fingerings.
