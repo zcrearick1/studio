@@ -14,6 +14,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { Music, ArrowUp, ArrowDown, Sparkles } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -249,6 +251,7 @@ export default function FingeringChartsPage() {
   const [selectedInstrumentName, setSelectedInstrumentName] = useState<string>("");
   const [preferredAccidental, setPreferredAccidental] = useState<'sharp' | 'flat' | 'natural'>('natural');
   const [currentNote, setCurrentNote] = useState("C4");
+  const [hornSide, setHornSide] = useState<'F' | 'Bb'>('F');
 
   const instrumentCategories = [...new Set(instruments.map(i => i.category))];
   const categoryOrder = ["Woodwind", "Brass", "String", "Percussion"];
@@ -393,11 +396,25 @@ export default function FingeringChartsPage() {
     const currentMidi = getMidiValue(currentNote);
     if (currentMidi === -1) return null;
     
-    return selectedInstrument.fingerings.find(f => {
+    const foundFingering = selectedInstrument.fingerings.find(f => {
         const noteVariants = f.note.split('/');
         return noteVariants.some(variant => getMidiValue(variant) === currentMidi);
-    }) || null;
-  }, [selectedInstrument, currentNote]);
+    });
+
+    if (!foundFingering) return null;
+
+    if (selectedInstrument.slug === 'french-horn') {
+        const hornFingering = hornSide === 'F' ? foundFingering.fHorn : foundFingering.bbHorn;
+        if (!hornFingering) return null;
+        return {
+            ...foundFingering,
+            positions: [hornFingering.valves],
+            keys: hornFingering.keys,
+        };
+    }
+    
+    return foundFingering;
+  }, [selectedInstrument, currentNote, hornSide]);
 
   useEffect(() => {
     const instrumentSlug = searchParams.get('instrument');
@@ -476,6 +493,8 @@ export default function FingeringChartsPage() {
   const isSaxophone = selectedInstrument && ['alto-saxophone', 'tenor-saxophone', 'baritone-saxophone'].includes(selectedInstrument.slug);
   const isKeyboard = selectedInstrument && ['piano', 'mallet-percussion'].includes(selectedInstrument.slug);
   const isTrombone = selectedInstrument?.slug === 'trombone';
+  const isFrenchHorn = selectedInstrument?.slug === 'french-horn';
+
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -541,7 +560,20 @@ export default function FingeringChartsPage() {
       
       {selectedInstrument && (
         <div className="mt-8">
-          <h2 className="text-2xl font-bold text-center mb-6">{selectedInstrument.name} Fingerings</h2>
+            <div className="flex justify-center items-center mb-6 text-center">
+                <h2 className="text-2xl font-bold">{selectedInstrument.name} Fingerings</h2>
+                {isFrenchHorn && (
+                    <div className="flex items-center space-x-2 ml-4">
+                        <Label htmlFor="horn-side-switch" className={cn(hornSide === 'F' && 'text-primary')}>F Horn</Label>
+                        <Switch
+                            id="horn-side-switch"
+                            checked={hornSide === 'Bb'}
+                            onCheckedChange={(checked) => setHornSide(checked ? 'Bb' : 'F')}
+                        />
+                        <Label htmlFor="horn-side-switch" className={cn(hornSide === 'Bb' && 'text-primary')}>Bb Horn</Label>
+                    </div>
+                )}
+            </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {/* Left Card for Controls and Staff */}
@@ -626,7 +658,7 @@ export default function FingeringChartsPage() {
                             <div className="w-full max-w-[100px] h-full mx-auto">
                                 <ClarinetFingeringDiagram activeKeys={currentFingering.keys} />
                             </div>
-                        ) : currentFingering.keys && ['trumpet', 'baritone-bc', 'baritone-tc', 'tuba'].includes(selectedInstrument.slug) ? (
+                        ) : currentFingering.keys && ['trumpet', 'baritone-bc', 'baritone-tc', 'tuba', 'french-horn'].includes(selectedInstrument.slug) ? (
                             <div className="w-full max-w-[200px] mx-auto">
                                 <TrumpetFingeringDiagram activeKeys={currentFingering.keys} />
                             </div>

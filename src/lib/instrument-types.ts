@@ -3,6 +3,8 @@ export type Fingering = {
   positions: string[];
   imageUrl?: string;
   keys?: string[];
+  fHorn?: { valves: string; keys: string[] };
+  bbHorn?: { valves: string; keys: string[] };
 };
 
 export type SetupGuideSection = {
@@ -17,7 +19,6 @@ export type Instrument = {
   clef: "treble" | "bass" | "alto" | "percussion";
   transposition: "C" | "Bb" | "Eb" | "F";
   fingerings: Fingering[];
-  setupGuide: SetupGuideSection[];
   range: {
     low: string;
     high: string;

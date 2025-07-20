@@ -36,7 +36,7 @@ export const bassoon: Instrument = {
       { note: "C4/B#3", positions: ["R123"], keys: ['R1', 'R2', 'R3'] },
       { note: "C#4/Db4", positions: ["L-2-, R123"], keys: ['L2', 'R1', 'R2', 'R3'] }
     ],
-    range: { low: "Bb1", high: "C#4", default: "F3" },
+    range: { low: "Bb1", high: "C#4", default: "Bb2" },
     setupGuide: [
       {
         title: "Assembly",

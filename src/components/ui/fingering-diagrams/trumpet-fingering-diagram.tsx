@@ -16,12 +16,14 @@ const Valve = ({
   activeKeys,
   onClick,
   fill,
+  isThumb = false,
 }: {
   x: number;
   id: string;
   activeKeys?: string[];
   onClick?: (id: string) => void;
   fill?: string;
+  isThumb?: boolean;
 }) => {
   const isActive = activeKeys?.includes(id);
   const valveClass = isActive ? 'fill-primary stroke-foreground' : 'fill-card stroke-foreground';
@@ -33,6 +35,14 @@ const Valve = ({
       onClick(id);
     }
   };
+  
+  if (isThumb) {
+    return (
+       <g onClick={handleClick} className={interactiveClass}>
+        <rect x={x - 10} y={45} width={10} height={30} rx="3" className={cn(valveClass)} strokeWidth="1.5" />
+       </g>
+    )
+  }
 
   return (
     <g onClick={handleClick} className={interactiveClass}>
@@ -80,6 +90,7 @@ export const TrumpetFingeringDiagram: FC<TrumpetFingeringDiagramProps> = ({
         <Valve x={20} id="v1" activeKeys={activeKeys} onClick={onClickKey} fill={fill} />
         <Valve x={65} id="v2" activeKeys={activeKeys} onClick={onClickKey} fill={fill} />
         <Valve x={110} id="v3" activeKeys={activeKeys} onClick={onClickKey} fill={fill} />
+        {activeKeys?.includes('T') && <Valve x={0} id="T" activeKeys={activeKeys} isThumb />}
     </svg>
   );
 };

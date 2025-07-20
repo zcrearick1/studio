@@ -39,7 +39,7 @@ export const trombone: Instrument = {
       { note: "A4", positions: ["2"] },
       { note: "A#4/Bb4", positions: ["1"] }
     ],
-    range: { low: "E2", high: "Bb4", default: "Bb3" },
+    range: { low: "E2", high: "Bb4", default: "Bb2" },
     setupGuide: [
       {
         title: "Assembly",
