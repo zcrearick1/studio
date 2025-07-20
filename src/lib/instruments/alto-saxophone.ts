@@ -41,7 +41,7 @@ export const altoSaxophone: Instrument = {
       { note: "F6/E#6", positions: ["O, L:12, Palm F | R:---"], keys: ['octave', 'palm-f', 'L1', 'L2', 'L3', 'R1'] },
       { note: "F#6/Gb6", positions: ["L:1 | R:4--, High F#"], keys: ['octave', 'high-f-sharp', 'L1', 'L2', 'L3', 'R2'] }
     ],
-    range: { low: "Bb3", high: "F#6" },
+    range: { low: "Bb3", high: "F#6", default: "G4" },
     setupGuide: [
       {
         title: "Assembly",

@@ -32,7 +32,7 @@ export const malletPercussion: Instrument = {
       { note: "A#5/Bb5", positions: [], keys: ["A#5"] },
       { note: "B5", positions: [], keys: ["B5"] },
     ],
-    range: { low: "C4", high: "B5" }, // Typical beginner range, actual range varies
+    range: { low: "C4", high: "B5", default: "C4" },
     setupGuide: [
       {
         title: "Assembly",

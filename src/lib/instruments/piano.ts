@@ -32,7 +32,7 @@ export const piano: Instrument = {
       { note: "A#5/Bb5", positions: [], keys: ["A#5"] },
       { note: "B5", positions: [], keys: ["B5"] },
     ],
-    range: { low: "C4", high: "B5" }, // Simplified range for diagram
+    range: { low: "C4", high: "B5", default: "C4" },
     setupGuide: [
       {
         title: "Getting Started",

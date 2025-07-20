@@ -45,7 +45,7 @@ export const flute: Instrument = {
       { note: "B6/Cb7", positions: ["T 12- | 1-3 B trill"], keys: ['thumb-b', 'L1', 'L3', 'trill-dsharp'] },
       { note: "C7/B#6", positions: ["- 1-- | 1-- D trill"], keys: ['L1', 'L2', 'L3', 'pinky-gsharp', 'R1'] }
     ],
-    range: { low: "C4", high: "C7" },
+    range: { low: "C4", high: "C7", default: "Bb4" },
     setupGuide: [
       {
         title: "Assembly",

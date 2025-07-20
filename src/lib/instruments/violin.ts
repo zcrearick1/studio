@@ -37,7 +37,7 @@ export const violin: Instrument = {
         { note: "A#5/Bb5", positions: ["E String: High 3rd / Low 4th"] },
         { note: "B5/Cb6", positions: ["E String: 4th Finger"] }
     ],
-    range: { low: "G3", high: "B5" },
+    range: { low: "G3", high: "B5", default: "A4" },
     setupGuide: [
       {
         title: "Setup",

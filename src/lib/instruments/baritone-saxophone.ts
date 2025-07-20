@@ -33,7 +33,7 @@ export const baritoneSaxophone: Instrument = {
         { note: "G#5/Ab5", positions: ["O, L:123, G# | R:---"], keys: ['octave', 'L1', 'L2', 'L3', 'lp-g-sharp'] },
         { note: "A5", positions: ["O, L:12- | R:---"], keys: ['octave', 'L1', 'L2'] }
     ],
-    range: { low: "A3", high: "A5" },
+    range: { low: "A3", high: "A5", default: "G4" },
     setupGuide: [
       {
         title: "Assembly",

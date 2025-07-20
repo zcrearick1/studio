@@ -25,7 +25,7 @@ export const doubleBass: Instrument = {
         { note: "G2", positions: ["Open G String"] },
         { note: "G#2/Ab2", positions: ["G String: 1st Finger"] }
     ],
-    range: { low: "E1", high: "G2" },
+    range: { low: "E1", high: "G2", default: "A1" },
     setupGuide: [
       {
         title: "Setup",

@@ -242,17 +242,6 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
     );
 };
 
-const getDefaultNoteForInstrument = (instrument: Instrument): string => {
-  switch (instrument.transposition) {
-    case 'Bb': return 'C5';
-    case 'Eb': return 'G4';
-    case 'F': return 'F4';
-    case 'C':
-    default:
-      return 'Bb4';
-  }
-};
-
 
 export default function FingeringChartsPage() {
   const searchParams = useSearchParams();
@@ -430,7 +419,7 @@ export default function FingeringChartsPage() {
   
   useEffect(() => {
     if (selectedInstrument) {
-      const defaultNote = getDefaultNoteForInstrument(selectedInstrument);
+      const defaultNote = selectedInstrument.range.default;
       setCurrentNote(defaultNote);
       setPreferredAccidental('natural'); // Reset accidental preference
       
@@ -580,7 +569,7 @@ export default function FingeringChartsPage() {
                             variant="outline"
                             size="icon"
                             className={cn({
-                                'bg-accent hover:bg-accent/90 text-foreground': preferredAccidental === 'flat',
+                                'bg-accent text-foreground hover:bg-accent/90': preferredAccidental === 'flat',
                             })}
                             onClick={() => handleAccidentalChange('flat')}
                         >
@@ -595,7 +584,7 @@ export default function FingeringChartsPage() {
                             variant="outline"
                             size="icon"
                             className={cn({
-                                'bg-accent hover:bg-accent/90 text-foreground': preferredAccidental === 'natural',
+                                'bg-accent text-foreground hover:bg-accent/90': preferredAccidental === 'natural',
                             })}
                             onClick={() => handleAccidentalChange('natural')}
                         >
@@ -610,7 +599,7 @@ export default function FingeringChartsPage() {
                             variant="outline"
                             size="icon"
                             className={cn({
-                                'bg-accent hover:bg-accent/90 text-foreground': preferredAccidental === 'sharp',
+                                'bg-accent text-foreground hover:bg-accent/90': preferredAccidental === 'sharp',
                             })}
                             onClick={() => handleAccidentalChange('sharp')}
                         >

@@ -33,7 +33,7 @@ export const cello: Instrument = {
         { note: "B3/Cb4", positions: ["A String: 3rd Finger"] },
         { note: "C4/B#3", positions: ["A String: 4th Finger"] }
     ],
-    range: { low: "C2", high: "C4" },
+    range: { low: "C2", high: "C4", default: "A3" },
     setupGuide: [
       {
         title: "Setup",

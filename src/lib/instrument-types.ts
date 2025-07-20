@@ -21,5 +21,6 @@ export type Instrument = {
   range: {
     low: string;
     high: string;
+    default: string;
   };
 };

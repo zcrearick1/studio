@@ -41,7 +41,7 @@ export const tenorSaxophone: Instrument = {
         { note: "D#6/Eb6", positions: ["O, L:1, Palm D, Eb | R:---"], keys: ['octave', 'palm-d', 'palm-e-flat', 'L1', 'L2', 'L3', 'R1', 'R2', 'R3'] },
         { note: "E6/Fb6", positions: ["O, L:12, Palm D, Eb | R:---"], keys: ['octave', 'palm-d', 'palm-e-flat', 'L1', 'L2', 'L3', 'R1', 'R2'] }
     ],
-    range: { low: "Ab3", high: "E6" },
+    range: { low: "Ab3", high: "E6", default: "C5" },
     setupGuide: [
       {
         title: "Assembly",

@@ -7,7 +7,7 @@ export const snareDrum: Instrument = {
     clef: "percussion",
     transposition: "C",
     fingerings: [],
-    range: { low: "C4", high: "C4" },
+    range: { low: "C4", high: "C4", default: "C4" },
     setupGuide: [
       {
         title: "Assembly",

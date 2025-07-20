@@ -39,7 +39,7 @@ export const baritoneBC: Instrument = {
       { note: "A4", positions: ["1-2"], keys: ['v1', 'v2'] },
       { note: "A#4/Bb4", positions: ["1"], keys: ['v1'] }
     ],
-    range: { low: "E2", high: "Bb4" },
+    range: { low: "E2", high: "Bb4", default: "Bb3" },
     setupGuide: [
       {
         title: "Assembly & Oiling",

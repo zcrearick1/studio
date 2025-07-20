@@ -43,7 +43,7 @@ export const tuba: Instrument = {
       { note: "B3/Cb4", positions: ["2"], keys: ['v2'] },
       { note: "C4/B#3", positions: ["Open"], keys: [] }
     ],
-    range: { low: "D1", high: "C4" },
+    range: { low: "D1", high: "C4", default: "Bb2" },
     setupGuide: [
       {
         title: "Assembly",

@@ -48,7 +48,7 @@ export const clarinet: Instrument = {
         { note: "F#6/Gb6", positions: ["R 1--| 45- C#"], keys: ['register', 'L1', 'R2', 'RP-F'] }, // Simplified
         { note: "G6", positions: ["R 1--| 4-- C#"], keys: ['register', 'L1', 'R3', 'RP-F'] } // Simplified
     ],
-    range: { low: "E3", high: "G6" },
+    range: { low: "E3", high: "G6", default: "C5" },
     setupGuide: [
       {
         title: "Assembly",

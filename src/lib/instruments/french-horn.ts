@@ -52,7 +52,7 @@ export const frenchHorn: Instrument = {
       { note: "B5/Cb6", positions: ["Bb: T-2"] },
       { note: "C6/B#5", positions: ["Bb: T-0"] }
     ],
-    range: { low: "F2", high: "C6" },
+    range: { low: "F2", high: "C6", default: "F4" },
     setupGuide: [
       {
         title: "Assembly & Hand Position",

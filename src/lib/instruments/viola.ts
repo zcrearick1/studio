@@ -37,7 +37,7 @@ export const viola: Instrument = {
         { note: "D#5/Eb5", positions: ["A String: High 3rd / Low 4th"] },
         { note: "E5/Fb5", positions: ["A String: 4th Finger"] }
     ],
-    range: { low: "C3", high: "E5" },
+    range: { low: "C3", high: "E5", default: "D4" },
     setupGuide: [
       {
         title: "Setup",
