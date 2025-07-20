@@ -564,7 +564,7 @@ export default function FingeringChartsPage() {
                             variant="outline"
                             size="icon"
                             className={cn({
-                                'bg-accent hover:bg-accent/90 text-accent-foreground': preferredAccidental === 'flat',
+                                'bg-accent hover:bg-accent/90 text-foreground': preferredAccidental === 'flat',
                             })}
                             onClick={() => handleAccidentalChange('flat')}
                             disabled={preferredAccidental === 'flat'}
@@ -580,7 +580,7 @@ export default function FingeringChartsPage() {
                             variant="outline"
                             size="icon"
                             className={cn({
-                                'bg-accent hover:bg-accent/90 text-accent-foreground': preferredAccidental === 'natural',
+                                'bg-accent hover:bg-accent/90 text-foreground': preferredAccidental === 'natural',
                             })}
                             onClick={() => handleAccidentalChange('natural')}
                             disabled={preferredAccidental === 'natural'}
@@ -596,7 +596,7 @@ export default function FingeringChartsPage() {
                             variant="outline"
                             size="icon"
                             className={cn({
-                                'bg-accent hover:bg-accent/90 text-accent-foreground': preferredAccidental === 'sharp',
+                                'bg-accent hover:bg-accent/90 text-foreground': preferredAccidental === 'sharp',
                             })}
                             onClick={() => handleAccidentalChange('sharp')}
                             disabled={preferredAccidental === 'sharp'}
