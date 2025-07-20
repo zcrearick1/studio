@@ -5,6 +5,7 @@ export const frenchHorn: Instrument = {
     slug: "french-horn",
     category: "Brass",
     clef: "treble",
+    transposition: "F",
     fingerings: [
       { note: "F2/E#2", positions: ["F: 1"] },
       { note: "F#2/Gb2", positions: ["F: 2"] },

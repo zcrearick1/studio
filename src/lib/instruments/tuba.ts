@@ -5,6 +5,7 @@ export const tuba: Instrument = {
     slug: "tuba",
     category: "Brass",
     clef: "bass",
+    transposition: "C",
     fingerings: [
       { note: "D1", positions: ["1-3"], keys: ['v1', 'v3'] },
       { note: "D#1/Eb1", positions: ["2-3"], keys: ['v2', 'v3'] },

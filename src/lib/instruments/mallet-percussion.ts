@@ -1,4 +1,3 @@
-
 import type { Instrument } from '../instrument-types';
 
 export const malletPercussion: Instrument = {
@@ -6,6 +5,7 @@ export const malletPercussion: Instrument = {
     slug: "mallet-percussion",
     category: "Percussion",
     clef: "treble",
+    transposition: "C",
     fingerings: [
       { note: "C4", positions: [], keys: ["C4"] },
       { note: "C#4/Db4", positions: [], keys: ["C#4"] },

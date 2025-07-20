@@ -5,6 +5,7 @@ export const doubleBass: Instrument = {
     slug: "double-bass",
     category: "String",
     clef: "bass",
+    transposition: "C",
     fingerings: [
         { note: "E1/Fb1", positions: ["Open E String"] },
         { note: "F1/E#1", positions: ["E String: 1st Finger"] },

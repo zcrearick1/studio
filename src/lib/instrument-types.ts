@@ -15,6 +15,7 @@ export type Instrument = {
   slug: string;
   category: "Woodwind" | "String" | "Brass" | "Percussion";
   clef: "treble" | "bass" | "alto" | "percussion";
+  transposition: "C" | "Bb" | "Eb" | "F";
   fingerings: Fingering[];
   setupGuide: SetupGuideSection[];
   range: {

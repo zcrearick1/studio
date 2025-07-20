@@ -5,6 +5,7 @@ export const snareDrum: Instrument = {
     slug: "snare-drum",
     category: "Percussion",
     clef: "percussion",
+    transposition: "C",
     fingerings: [],
     range: { low: "C4", high: "C4" },
     setupGuide: [

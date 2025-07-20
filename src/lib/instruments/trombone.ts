@@ -5,6 +5,7 @@ export const trombone: Instrument = {
     slug: "trombone",
     category: "Brass",
     clef: "bass",
+    transposition: "C",
     fingerings: [
       { note: "E2/Fb2", positions: ["7"] },
       { note: "F2/E#2", positions: ["6"] },

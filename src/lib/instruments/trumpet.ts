@@ -5,6 +5,7 @@ export const trumpet: Instrument = {
     slug: "trumpet",
     category: "Brass",
     clef: "treble",
+    transposition: "Bb",
     fingerings: [
       { note: "F#3/Gb3", positions: ["1-2-3"], keys: ['v1', 'v2', 'v3'] },
       { note: "G3", positions: ["1-3"], keys: ['v1', 'v3'] },

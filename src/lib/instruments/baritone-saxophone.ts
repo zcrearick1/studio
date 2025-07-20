@@ -5,6 +5,7 @@ export const baritoneSaxophone: Instrument = {
     slug: "baritone-saxophone",
     category: "Woodwind",
     clef: "treble",
+    transposition: "Eb",
     fingerings: [
         { note: "A3/G##3", positions: ["L:1 | R:4, Low A"], keys: ['L1', 'L2', 'L3', 'R1', 'R2', 'R3', 'low-a'] },
         { note: "A#3/Bb3", positions: ["L:1, B | R:4"], keys: ['L1', 'L2', 'L3', 'R1', 'R2', 'R3', 'lp-b-flat'] },

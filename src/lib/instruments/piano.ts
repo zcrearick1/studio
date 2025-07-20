@@ -1,4 +1,3 @@
-
 import type { Instrument } from '../instrument-types';
 
 export const piano: Instrument = {
@@ -6,6 +5,7 @@ export const piano: Instrument = {
     slug: "piano",
     category: "Percussion",
     clef: "treble", // Can be both, but treble is fine for this context
+    transposition: "C",
     fingerings: [
       { note: "C4", positions: ["Middle C"], keys: ["C4"] },
       { note: "C#4/Db4", positions: [], keys: ["C#4"] },

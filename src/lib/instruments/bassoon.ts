@@ -5,6 +5,7 @@ export const bassoon: Instrument = {
     slug: "bassoon",
     category: "Woodwind",
     clef: "bass",
+    transposition: "C",
     fingerings: [
       { note: "Bb1", positions: ["Whisper Key, C# Key, All Fingers, Low Bb Key"], keys: ['whisper', 'lt-csharp', 'L1', 'L2', 'L3', 'R1', 'R2', 'R3', 'rt-bb'] },
       { note: "B1/Cb2", positions: ["Whisper Key, All Fingers, Low B Key"], keys: ['whisper', 'L1', 'L2', 'L3', 'R1', 'R2', 'R3', 'rt-b'] },

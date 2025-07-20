@@ -5,6 +5,7 @@ export const tenorSaxophone: Instrument = {
     slug: "tenor-saxophone",
     category: "Woodwind",
     clef: "treble",
+    transposition: "Bb",
     fingerings: [
         { note: "G#3/Ab3", positions: ["L:123 G# | R:456 Eb"], keys: ['L1', 'L2', 'L3', 'R1', 'R2', 'R3', 'rp-e-flat', 'lp-g-sharp'] },
         { note: "A3", positions: ["L:1, B | R:456"], keys: ['L1', 'bis', 'R1', 'R2', 'R3'] },

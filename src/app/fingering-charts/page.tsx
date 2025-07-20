@@ -242,6 +242,17 @@ const Staff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote }) =
     );
 };
 
+const getDefaultNoteForInstrument = (instrument: Instrument): string => {
+  switch (instrument.transposition) {
+    case 'Bb': return 'C5';
+    case 'Eb': return 'G4';
+    case 'F': return 'F4';
+    case 'C':
+    default:
+      return 'Bb4';
+  }
+};
+
 
 export default function FingeringChartsPage() {
   const searchParams = useSearchParams();
@@ -401,31 +412,34 @@ export default function FingeringChartsPage() {
 
   useEffect(() => {
     const instrumentSlug = searchParams.get('instrument');
-    const targetInstrument = instruments.find(i => i.slug === instrumentSlug);
-
+    let targetInstrument: Instrument | undefined;
+    
+    if (instrumentSlug) {
+      targetInstrument = instruments.find(i => i.slug === instrumentSlug);
+    }
+    
     if (targetInstrument) {
       setActiveCategory(targetInstrument.category);
       setSelectedInstrumentName(targetInstrument.name);
-    } else if (!selectedInstrumentName) {
-      const firstWoodwind = instruments.find(i => i.category === "Woodwind");
-      if (firstWoodwind) {
-        setSelectedInstrumentName(firstWoodwind.name);
-      }
+    } else if (!selectedInstrumentName && instruments.length > 0) {
+      const firstWoodwind = instruments.find(i => i.category === "Woodwind") || instruments[0];
+      setSelectedInstrumentName(firstWoodwind.name);
+      targetInstrument = firstWoodwind;
     }
   }, [searchParams, selectedInstrumentName]);
   
   useEffect(() => {
-    if (selectedInstrument?.range) {
-      const lowNoteMidi = getMidiValue(selectedInstrument.range.low);
-      const highNoteMidi = getMidiValue(selectedInstrument.range.high);
-      const currentNoteMidi = getMidiValue(currentNote);
+    if (selectedInstrument) {
+      const defaultNote = getDefaultNoteForInstrument(selectedInstrument);
+      setCurrentNote(defaultNote);
+      setPreferredAccidental('natural'); // Reset accidental preference
       
-      if (currentNoteMidi < lowNoteMidi || currentNoteMidi > highNoteMidi) {
-         setCurrentNote(selectedInstrument.range.low);
-         setPreferredAccidental('natural');
+      const parsedNote = parseNoteString(defaultNote);
+      if (parsedNote?.accidental !== 'natural') {
+          setPreferredAccidental(parsedNote.accidental);
       }
     }
-  }, [selectedInstrument, currentNote]);
+  }, [selectedInstrument]);
   
   useEffect(() => {
     const displayMidi = getMidiValue(currentDisplayNote);
@@ -458,7 +472,9 @@ export default function FingeringChartsPage() {
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
     const firstInstrumentInCategory = instruments.find(i => i.category === category);
-    setSelectedInstrumentName(firstInstrumentInCategory?.name || "");
+    if (firstInstrumentInCategory) {
+        setSelectedInstrumentName(firstInstrumentInCategory.name);
+    }
   };
   
   const handleInstrumentChange = (instrumentName: string) => {
@@ -567,7 +583,6 @@ export default function FingeringChartsPage() {
                                 'bg-accent hover:bg-accent/90 text-foreground': preferredAccidental === 'flat',
                             })}
                             onClick={() => handleAccidentalChange('flat')}
-                            disabled={preferredAccidental === 'flat'}
                         >
                             <svg viewBox="0 0 2250 2250" className="w-auto h-4" fillRule="evenodd">
                                 <g transform="scale(1, -1) translate(0, -2250)">
@@ -583,7 +598,6 @@ export default function FingeringChartsPage() {
                                 'bg-accent hover:bg-accent/90 text-foreground': preferredAccidental === 'natural',
                             })}
                             onClick={() => handleAccidentalChange('natural')}
-                            disabled={preferredAccidental === 'natural'}
                         >
                              <svg viewBox="0 0 117 117" className="w-auto h-4" fillRule="evenodd">
                                <g transform="scale(1, 1) translate(8, 0) translate(0, 0)">
@@ -599,7 +613,6 @@ export default function FingeringChartsPage() {
                                 'bg-accent hover:bg-accent/90 text-foreground': preferredAccidental === 'sharp',
                             })}
                             onClick={() => handleAccidentalChange('sharp')}
-                            disabled={preferredAccidental === 'sharp'}
                         >
                              <svg viewBox="0 0 2250 2250" className="w-auto h-4" fillRule="evenodd">
                                 <g transform="scale(1, -1) translate(0, -2250)">

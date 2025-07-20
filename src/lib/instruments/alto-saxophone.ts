@@ -5,6 +5,7 @@ export const altoSaxophone: Instrument = {
     slug: "alto-saxophone",
     category: "Woodwind",
     clef: "treble",
+    transposition: "Eb",
     fingerings: [
       { note: "A#3/Bb3", positions: ["L:1 B | R:4"], keys: ['L1', 'bis'] },
       { note: "B3/Cb4", positions: ["L:1 | R:4"], keys: ['L1'] },

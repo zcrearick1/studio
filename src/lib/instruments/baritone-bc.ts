@@ -5,6 +5,7 @@ export const baritoneBC: Instrument = {
     slug: "baritone-bc",
     category: "Brass",
     clef: "bass",
+    transposition: "C",
     fingerings: [
       { note: "E2/Fb2", positions: ["1-2"], keys: ['v1', 'v2'] },
       { note: "F2/E#2", positions: ["1"], keys: ['v1'] },

@@ -5,6 +5,7 @@ export const viola: Instrument = {
     slug: "viola",
     category: "String",
     clef: "alto",
+    transposition: "C",
     fingerings: [
         { note: "C3/B#2", positions: ["Open C String"] },
         { note: "C#3/Db3", positions: ["C String: Low 1st Finger"] },

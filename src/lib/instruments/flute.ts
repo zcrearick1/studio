@@ -5,6 +5,7 @@ export const flute: Instrument = {
     slug: "flute",
     category: "Woodwind",
     clef: "treble",
+    transposition: "C",
     fingerings: [
       { note: "C4/B#3", positions: ["T 123 | 123 C"], keys: ['thumb-b', 'L1', 'L2', 'L3', 'R1', 'R2', 'R3', 'foot-c', 'foot-csharp'] },
       { note: "C#4/Db4", positions: ["T 123 | 123 C#"], keys: ['thumb-b', 'L1', 'L2', 'L3', 'R1', 'R2', 'R3', 'foot-csharp'] },

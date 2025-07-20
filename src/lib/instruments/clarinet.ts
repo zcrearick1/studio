@@ -5,6 +5,7 @@ export const clarinet: Instrument = {
     slug: "clarinet",
     category: "Woodwind",
     clef: "treble",
+    transposition: "Bb",
     fingerings: [
         { note: "E3/Fb3", positions: ["T 123 | 456 + Low E Key"], keys: ['thumb', 'L1', 'L2', 'L3', 'R1', 'R2', 'R3', 'LP-E'] },
         { note: "F3/E#3", positions: ["T 123 | 456"], keys: ['thumb', 'L1', 'L2', 'L3', 'R1', 'R2', 'R3', 'RP-F'] },
