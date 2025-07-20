@@ -385,6 +385,7 @@ export default function FingeringChartsPage() {
   };
   
   const currentDisplayNote = getDisplayNote(currentNote, preferredAccidental);
+  const displayNoteWithoutOctave = currentDisplayNote.replace(/[0-9]/g, '');
   
   const currentFingering = useMemo(() => {
     if (!selectedInstrument || !currentNote) return null;
@@ -654,7 +655,7 @@ export default function FingeringChartsPage() {
                           <div className="relative w-full max-w-[112px] h-24 mx-auto">
                               <Image
                                   src={currentFingering.imageUrl}
-                                  alt={`Fingering diagram for ${currentDisplayNote}`}
+                                  alt={`Fingering diagram for ${displayNoteWithoutOctave}`}
                                   fill
                                   className="object-contain rounded-md"
                                   data-ai-hint="fingering diagram"
@@ -671,7 +672,7 @@ export default function FingeringChartsPage() {
                         <div className="grid grid-cols-2 gap-4 w-full items-center">
                           <Card>
                             <CardHeader>
-                              <CardTitle className="text-primary text-4xl">{currentDisplayNote}</CardTitle>
+                              <CardTitle className="text-primary text-4xl">{displayNoteWithoutOctave}</CardTitle>
                             </CardHeader>
                           </Card>
                           <div className="h-full flex items-center justify-center">
@@ -685,7 +686,7 @@ export default function FingeringChartsPage() {
                         <div className="w-full">
                           <Card className="mb-4">
                             <CardHeader>
-                              <CardTitle className="text-primary text-4xl">{currentDisplayNote}</CardTitle>
+                              <CardTitle className="text-primary text-4xl">{displayNoteWithoutOctave}</CardTitle>
                             </CardHeader>
                           </Card>
                           <div className="h-full flex items-center justify-center">
@@ -698,7 +699,7 @@ export default function FingeringChartsPage() {
                     return (
                       <Card className="w-full">
                         <CardHeader>
-                          <CardTitle className="text-primary text-4xl">{currentDisplayNote}</CardTitle>
+                          <CardTitle className="text-primary text-4xl">{displayNoteWithoutOctave}</CardTitle>
                         </CardHeader>
                         <CardContent>
                           {diagramDisplay}
@@ -709,7 +710,7 @@ export default function FingeringChartsPage() {
                 ) : (
                   <Card className="bg-muted">
                     <CardHeader>
-                      <CardTitle className="text-2xl">{currentDisplayNote}</CardTitle>
+                      <CardTitle className="text-2xl">{displayNoteWithoutOctave}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <p className="text-muted-foreground">Fingering not available for this instrument.</p>

@@ -136,7 +136,7 @@ const MiniStaff = ({ clef, note }: { clef: Instrument['clef']; note: ParsedNote 
 
 export const FingeringCard = ({ instrument, fingering }: { instrument: Instrument, fingering: Fingering }) => {
     const noteForStaff = parseNoteString(fingering.note);
-    const displayNote = fingering.note.split('/')[0];
+    const displayNote = fingering.note.split('/')[0].replace(/[0-9]/g, '');
     const isKeyboard = ['piano', 'mallet-percussion'].includes(instrument.slug);
     const isTrombone = instrument.slug === 'trombone';
     const isTall = ['clarinet', 'alto-saxophone', 'tenor-saxophone', 'baritone-saxophone', 'bassoon'].includes(instrument.slug);
