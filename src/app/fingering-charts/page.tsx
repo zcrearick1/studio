@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
@@ -558,17 +559,17 @@ export default function FingeringChartsPage() {
                             <span className="sr-only">Note Down</span>
                         </Button>
                     </div>
-                    <div className="flex flex-col items-center justify-center gap-1">
+                    <div className="flex flex-col items-center justify-center gap-2">
                         <Button
                             variant="outline"
                             size="icon"
-                            className={cn('h-6 w-6', {
+                            className={cn({
                                 'bg-accent hover:bg-accent/90 text-accent-foreground': preferredAccidental === 'flat',
                             })}
                             onClick={() => handleAccidentalChange('flat')}
                             disabled={preferredAccidental === 'flat'}
                         >
-                            <svg viewBox="0 0 2250 2250" className="w-auto h-3" fillRule="evenodd">
+                            <svg viewBox="0 0 2250 2250" className="w-auto h-4" fillRule="evenodd">
                                 <g transform="scale(1, -1) translate(0, -2250)">
                                     <path d={FLAT_PATH} fill="currentColor" />
                                 </g>
@@ -578,13 +579,13 @@ export default function FingeringChartsPage() {
                         <Button
                             variant="outline"
                             size="icon"
-                            className={cn('h-6 w-6', {
+                            className={cn({
                                 'bg-accent hover:bg-accent/90 text-accent-foreground': preferredAccidental === 'natural',
                             })}
                             onClick={() => handleAccidentalChange('natural')}
                             disabled={preferredAccidental === 'natural'}
                         >
-                             <svg viewBox="0 0 117 117" className="w-auto h-3" fillRule="evenodd">
+                             <svg viewBox="0 0 117 117" className="w-auto h-4" fillRule="evenodd">
                                <g transform="scale(1, 1) translate(8, 0) translate(0, 0)">
                                 <path d={NATURAL_PATH} fill="currentColor" />
                                </g>
@@ -594,13 +595,13 @@ export default function FingeringChartsPage() {
                         <Button
                             variant="outline"
                             size="icon"
-                            className={cn('h-6 w-6', {
+                            className={cn({
                                 'bg-accent hover:bg-accent/90 text-accent-foreground': preferredAccidental === 'sharp',
                             })}
                             onClick={() => handleAccidentalChange('sharp')}
                             disabled={preferredAccidental === 'sharp'}
                         >
-                             <svg viewBox="0 0 2250 2250" className="w-auto h-3" fillRule="evenodd">
+                             <svg viewBox="0 0 2250 2250" className="w-auto h-4" fillRule="evenodd">
                                 <g transform="scale(1, -1) translate(0, -2250)">
                                   <path d={SHARP_PATH} fill="currentColor" />
                                 </g>
