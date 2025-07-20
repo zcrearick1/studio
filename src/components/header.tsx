@@ -110,7 +110,7 @@ export function Header() {
             <NavLink href="/fingering-charts/quizzes">Quizzes</NavLink>
             <NavLink href="/pricing">Pricing</NavLink>
             <NavLink href="/fingering-charts/study">Study</NavLink>
-            <NavLink href="/fingering-charts/pdf-downloads">PDFs</NavLink>
+            <NavLink href="/fingering-charts/pdf-downloads">PDF Downloads</NavLink>
           </nav>
         </div>
 

@@ -539,9 +539,14 @@ export default function FingeringChartsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {/* Left Card for Controls and Staff */}
             <Card className="overflow-hidden">
-              <div className="grid grid-cols-[auto_1fr] items-center h-full">
+              <div className="grid grid-cols-[1fr_auto] items-center h-full">
+                {/* Staff */}
+                <div className="p-3 h-full flex items-center">
+                  <Staff clef={selectedInstrument.clef} note={noteForStaff} />
+                </div>
+
                 {/* Controls */}
-                <div className="flex flex-col items-center justify-center p-2 bg-secondary/50 h-full gap-4 border-r">
+                <div className="flex flex-col items-center justify-center p-2 bg-secondary/50 h-full gap-4 border-l">
                     <div className="flex flex-col items-center gap-2">
                         <Button variant="outline" size="icon" onClick={() => changeNote('up')} disabled={!canGoUp}>
                             <ArrowUp className="h-4 w-4" />
@@ -602,11 +607,6 @@ export default function FingeringChartsPage() {
                             <span className="sr-only">Sharp</span>
                         </Button>
                     </div>
-                </div>
-
-                {/* Staff */}
-                <div className="p-3 h-full flex items-center">
-                  <Staff clef={selectedInstrument.clef} note={noteForStaff} />
                 </div>
               </div>
             </Card>
