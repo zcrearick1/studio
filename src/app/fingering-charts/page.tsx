@@ -569,6 +569,7 @@ export default function FingeringChartsPage() {
                             id="horn-side-switch"
                             checked={hornSide === 'Bb'}
                             onCheckedChange={(checked) => setHornSide(checked ? 'Bb' : 'F')}
+                            className="data-[state=unchecked]:bg-accent/50"
                         />
                         <Label htmlFor="horn-side-switch" className={cn(hornSide === 'Bb' && 'text-primary')}>Bb Horn</Label>
                     </div>
