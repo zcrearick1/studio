@@ -74,7 +74,6 @@ export function Header() {
   const handleLogout = async () => {
     if (!auth) return;
     await signOut(auth);
-    setFingeringChartHref('/fingering-charts'); // Reset on logout
     router.push('/');
   };
 
