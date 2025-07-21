@@ -45,15 +45,11 @@ export function Header() {
   useEffect(() => {
     setIsMounted(true);
     
-    if (user) {
-      const instrumentSlug = localStorage.getItem("primaryInstrument");
-      const isValidSlug = instruments.some(inst => inst.slug === instrumentSlug);
-      
-      if (instrumentSlug && isValidSlug) {
-        setFingeringChartHref(`/fingering-charts?instrument=${instrumentSlug}`);
-      } else {
-        setFingeringChartHref('/fingering-charts');
-      }
+    const instrumentSlug = typeof window !== 'undefined' ? localStorage.getItem("primaryInstrument") : null;
+    const isValidSlug = instruments.some(inst => inst.slug === instrumentSlug);
+    
+    if (user && instrumentSlug && isValidSlug) {
+      setFingeringChartHref(`/fingering-charts?instrument=${instrumentSlug}`);
     } else {
       setFingeringChartHref('/fingering-charts');
     }
