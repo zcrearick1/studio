@@ -30,6 +30,7 @@ import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/auth-context";
 import { auth } from "@/lib/firebase";
+import { instruments } from "@/lib/instrument-data";
 
 export function Header() {
   const pathname = usePathname();
@@ -45,9 +46,11 @@ export function Header() {
     setIsMounted(true);
     
     if (user) {
-      const primaryInstrument = localStorage.getItem("primaryInstrument");
-      if (primaryInstrument) {
-        setFingeringChartHref(`/fingering-charts?instrument=${primaryInstrument}`);
+      const instrumentSlug = localStorage.getItem("primaryInstrument");
+      const isValidSlug = instruments.some(inst => inst.slug === instrumentSlug);
+      
+      if (instrumentSlug && isValidSlug) {
+        setFingeringChartHref(`/fingering-charts?instrument=${instrumentSlug}`);
       } else {
         setFingeringChartHref('/fingering-charts');
       }
